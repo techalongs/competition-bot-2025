@@ -6,8 +6,9 @@ import com.seattlesolvers.solverslib.gamepad.GamepadEx;
 
 import org.firstinspires.ftc.teamcode.Robot;
 
-@TeleOp
+@TeleOp(name = "Drive Robot-Centric", group = "Test")
 public class RobotCentricDrive extends OpMode {
+
     private GamepadEx driver1;
     private GamepadEx driver2;
     private Robot robot;

@@ -1,5 +1,12 @@
-## Techalongs Team Code
+# Techalongs Team Code
 
+## Running
+
+This projects has `TeamCode` and `SlothLoad` run configurations saved as project files.
+
+- TeamCode: Build and deploy the code to the robot.
+- SlothLoad: After deploying the code to the robot, run this to update just the changed code.  
+             You do not need to restart the robot but you do need to stop and start the OpMode.
 
 ## SolversLib / FTCLib
 

@@ -6,7 +6,7 @@ import com.seattlesolvers.solverslib.gamepad.GamepadEx;
 
 import org.firstinspires.ftc.teamcode.Robot;
 
-@TeleOp(name = "Field Centric Drive")
+@TeleOp(name = "Drive Field-Centric", group = "Test")
 public class FieldCentricDrive extends OpMode {
 
     private GamepadEx driver1;

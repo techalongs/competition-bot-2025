@@ -1,6 +1,7 @@
 repositories {
     mavenCentral()
     google() // Needed for androidx
+    maven { url = "https://mymaven.bylazar.com/releases" }
 }
 
 dependencies {
@@ -15,5 +16,11 @@ dependencies {
     implementation 'org.firstinspires.ftc:Vision:11.0.0'
     //noinspection GradleDependency
     implementation 'androidx.appcompat:appcompat:1.2.0'
+
+    // Pedro Pathing
+    implementation 'com.pedropathing:ftc:2.0.2'
+    implementation 'com.pedropathing:telemetry:1.0.0'
+    // Panels
+    implementation 'com.bylazar:fullpanels:1.0.6'
 }
 

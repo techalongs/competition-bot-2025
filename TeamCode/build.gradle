@@ -11,9 +11,22 @@
 
 // Custom definitions may go here
 
+buildscript {
+    repositories {
+        mavenCentral()
+        maven {
+            url "https://repo.dairy.foundation/releases"
+        }
+    }
+    dependencies {
+        classpath "dev.frozenmilk:Load:0.2.4"
+    }
+}
+
 // Include common definitions from above.
 apply from: '../build.common.gradle'
 apply from: '../build.dependencies.gradle'
+apply plugin: 'dev.frozenmilk.sinister.sloth.load'
 
 android {
     namespace = 'org.firstinspires.ftc.teamcode'
@@ -26,26 +39,16 @@ android {
 repositories {
     mavenCentral()
     google()
-    // Pedro Pathing
-    maven { url = 'https://maven.pedropathing.com' }
-    maven { url = "https://mymaven.bylazar.com/releases" }
-    // FTCLib (SolversLib)
     maven { url = "https://repo.dairy.foundation/releases" }
     maven { url = "https://repo.dairy.foundation/snapshots" }
-    // FTC Dashboard
-    maven { url = 'https://maven.brott.dev/' }
 }
 
 dependencies {
     implementation project(':FtcRobotController')
     annotationProcessor files('lib/OpModeAnnotationProcessor.jar')
-    // Pedro Pathing
-    implementation 'com.pedropathing:ftc:2.0.1'
-    implementation 'com.pedropathing:telemetry:0.0.6'
-    implementation 'com.bylazar:fullpanels:1.0.2'
-    // FTCLib (SolversLib)
+    // Sloth - Fast Loading
+    implementation "dev.frozenmilk.sinister:Sloth:0.2.4"
+    // SolversLib (FTCLib)
     implementation "org.solverslib:core:SNAPSHOT-7cdcc66"
     implementation "org.solverslib:pedroPathing:SNAPSHOT-7cdcc66"
-    // FTC Dashboard
-    implementation "com.acmerobotics.dashboard:dashboard:0.4.17"
 }
