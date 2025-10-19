@@ -18,6 +18,7 @@ public class CompBotBasic extends OpMode {
     private CommandScheduler commandScheduler;
     private ToggleButtonReader toggleDriveSlow;
     private ToggleButtonReader toggleFieldCentric;
+    private ToggleButtonReader toggleIntakeLift;
     private double driveFastSpeedLimit = 1.0;
     private double driveSlowSpeedLimit = 0.5;
 
@@ -28,12 +29,15 @@ public class CompBotBasic extends OpMode {
         robot = new Robot(hardwareMap, telemetry);
         commandScheduler = CommandScheduler.getInstance();
 
+        // with multi button toggles there is and enter berfore the .and
         // Drive Slow Toggle = X + Right Bumper
         toggleDriveSlow = new ToggleButtonReader(driver1.getGamepadButton(GamepadKeys.Button.X)
                 .and(driver1.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER))::get);
         // Drive Field Centric Toggle = Options + X
         toggleFieldCentric = new ToggleButtonReader(driver1.getGamepadButton(GamepadKeys.Button.OPTIONS)
                 .and(driver1.getGamepadButton(GamepadKeys.Button.X))::get);
+        // Intake Lift the artifacts up = Y
+        toggleIntakeLift = new ToggleButtonReader(driver1.getGamepadButton(GamepadKeys.Button.Y)::get);
     }
 
     @Override
@@ -42,6 +46,7 @@ public class CompBotBasic extends OpMode {
 
         double driveSpeedLimit = getDriveSpeedLimit();
         Robot.DriveState driveState = getDriveState();
+        runIntakeLiftLoop();
 
         robot.drive(driveState, driver1, driveSpeedLimit);
 
@@ -65,11 +70,20 @@ public class CompBotBasic extends OpMode {
         }
     }
 
+    public void runIntakeLiftLoop() {
+        if (toggleIntakeLift.getState()){
+            robot.runIntakeLift(1.0);
+        }else {
+            robot.runIntakeLift(0.0);
+        }
+    }
+
     public void loopReadStuff() {
         commandScheduler.run();
         driver1.readButtons();
         driver2.readButtons();
         toggleDriveSlow.readValue();
         toggleFieldCentric.readValue();
+        toggleIntakeLift.readValue();
     }
 }
