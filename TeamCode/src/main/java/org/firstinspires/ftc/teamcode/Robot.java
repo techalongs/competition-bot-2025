@@ -13,6 +13,7 @@ public class Robot {
     private final MecanumDrive drivetrain;
     private final Telemetry telemetry;
     private final NewIMU imu;
+    private MotorEx intakeLift;
 
     public enum DriveState {
         ROBOT_CENTRIC,
@@ -24,26 +25,31 @@ public class Robot {
         MotorEx frontRight = new MotorEx(hardwareMap, "frontRight", Motor.GoBILDA.RPM_312);
         MotorEx backLeft = new MotorEx(hardwareMap, "backLeft", Motor.GoBILDA.RPM_312);
         MotorEx backRight = new MotorEx(hardwareMap, "backRight", Motor.GoBILDA.RPM_312);
+        intakeLift = new MotorEx(hardwareMap, "intakeLift");
 
         frontLeft.setInverted(true);
         frontRight.setInverted(false);
         backLeft.setInverted(true);
         backRight.setInverted(false);
+        intakeLift.setInverted(false);
 
         frontLeft.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
         frontRight.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
         backLeft.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
         backRight.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
+        intakeLift.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
 
         frontLeft.stopAndResetEncoder();
         frontRight.stopAndResetEncoder();
         backLeft.stopAndResetEncoder();
         backRight.stopAndResetEncoder();
+        intakeLift.stopAndResetEncoder();
 
         frontLeft.setRunMode(Motor.RunMode.VelocityControl);
         frontRight.setRunMode(Motor.RunMode.VelocityControl);
         backLeft.setRunMode(Motor.RunMode.VelocityControl);
         backRight.setRunMode(Motor.RunMode.VelocityControl);
+        intakeLift.setRunMode(Motor.RunMode.RawPower);
 
         drivetrain = new MecanumDrive(false, frontLeft, frontRight, backLeft, backRight);
         this.telemetry = telemetry;
@@ -54,6 +60,10 @@ public class Robot {
         if (state == DriveState.ROBOT_CENTRIC) driveRobotCentric(gamepad, limiter);
         else if (state == DriveState.FIELD_CENTRIC) driveFieldCentric(gamepad, limiter);
         else throw new IllegalArgumentException("Not a valid Drive State");
+    }
+
+    public void runIntakeLift(double power) {
+        intakeLift.set(power);
     }
 
     private void driveRobotCentric(GamepadEx gamepad, double limiter) {
