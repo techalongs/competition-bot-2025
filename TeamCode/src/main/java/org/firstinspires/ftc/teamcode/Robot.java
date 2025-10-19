@@ -31,7 +31,7 @@ public class Robot {
         frontRight.setInverted(false);
         backLeft.setInverted(true);
         backRight.setInverted(false);
-        intakeLift.setInverted(false);
+        intakeLift.setInverted(true);
 
         frontLeft.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
         frontRight.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);

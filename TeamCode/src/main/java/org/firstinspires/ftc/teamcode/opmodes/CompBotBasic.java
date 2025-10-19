@@ -84,5 +84,6 @@ public class CompBotBasic extends OpMode {
         driver2.readButtons();
         toggleDriveSlow.readValue();
         toggleFieldCentric.readValue();
+        toggleIntakeLift.readValue();
     }
 }
