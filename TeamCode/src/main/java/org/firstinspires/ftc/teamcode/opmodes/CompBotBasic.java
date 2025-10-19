@@ -19,6 +19,7 @@ public class CompBotBasic extends OpMode {
     private ToggleButtonReader toggleDriveSlow;
     private ToggleButtonReader toggleFieldCentric;
     private ToggleButtonReader toggleIntakeLift;
+    private ToggleButtonReader toggleTelemetry;
     private double driveFastSpeedLimit = 1.0;
     private double driveSlowSpeedLimit = 0.5;
 
@@ -29,6 +30,7 @@ public class CompBotBasic extends OpMode {
         robot = new Robot(hardwareMap, telemetry);
         commandScheduler = CommandScheduler.getInstance();
 
+
         // with multi button toggles there is and enter berfore the .and
         // Drive Slow Toggle = X + Right Bumper
         toggleDriveSlow = new ToggleButtonReader(driver1.getGamepadButton(GamepadKeys.Button.X)
@@ -38,15 +40,20 @@ public class CompBotBasic extends OpMode {
                 .and(driver1.getGamepadButton(GamepadKeys.Button.X))::get);
         // Intake Lift the artifacts up = Y
         toggleIntakeLift = new ToggleButtonReader(driver1.getGamepadButton(GamepadKeys.Button.Y)::get);
+        //
     }
 
     @Override
     public void loop() {
         loopReadStuff();
 
+        if (driver1.getButton(GamepadKeys.Button.RIGHT_BUMPER)) {
+            robot.servoLifter();
+        }
+
         double driveSpeedLimit = getDriveSpeedLimit();
         Robot.DriveState driveState = getDriveState();
-        runIntakeLiftLoop();
+        runMotorIntakeLiftLoop();
 
         robot.drive(driveState, driver1, driveSpeedLimit);
 
@@ -70,12 +77,16 @@ public class CompBotBasic extends OpMode {
         }
     }
 
-    public void runIntakeLiftLoop() {
+    public void runMotorIntakeLiftLoop() {
         if (toggleIntakeLift.getState()){
             robot.runIntakeLift(1.0);
         }else {
             robot.runIntakeLift(0.0);
         }
+    }
+
+    public void runServoIntakeLift() {
+
     }
 
     public void loopReadStuff() {
