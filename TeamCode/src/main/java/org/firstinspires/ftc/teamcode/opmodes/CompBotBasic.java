@@ -19,6 +19,7 @@ public class CompBotBasic extends OpMode {
     private ToggleButtonReader toggleDriveSlow;
     private ToggleButtonReader toggleFieldCentric;
     private ToggleButtonReader toggleIntakeLift;
+    private ToggleButtonReader toggleIntakeLifter;
     private double driveFastSpeedLimit = 1.0;
     private double driveSlowSpeedLimit = 0.5;
 
@@ -38,6 +39,7 @@ public class CompBotBasic extends OpMode {
                 .and(driver1.getGamepadButton(GamepadKeys.Button.X))::get);
         // Intake Lift the artifacts up = Y
         toggleIntakeLift = new ToggleButtonReader(driver1.getGamepadButton(GamepadKeys.Button.Y)::get);
+        toggleIntakeLifter = new ToggleButtonReader(driver1.getGamepadButton(GamepadKeys.Button.B)::get);
     }
 
     @Override
@@ -49,6 +51,8 @@ public class CompBotBasic extends OpMode {
         runIntakeLiftLoop();
 
         robot.drive(driveState, driver1, driveSpeedLimit);
+        if (gamepad1.b) robot.raiseLifter();
+        else if (gamepad1.a) robot.resetLifter();
 
         telemetry.addData("Drive Mode", driveState.name());
         telemetry.update();
@@ -73,8 +77,10 @@ public class CompBotBasic extends OpMode {
     public void runIntakeLiftLoop() {
         if (toggleIntakeLift.getState()){
             robot.runIntakeLift(1.0);
+            robot.turnOnGrabber();
         }else {
             robot.runIntakeLift(0.0);
+            robot.turnOffGrabber();
         }
     }
 

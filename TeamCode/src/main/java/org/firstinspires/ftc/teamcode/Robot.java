@@ -3,6 +3,8 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.seattlesolvers.solverslib.drivebase.MecanumDrive;
 import com.seattlesolvers.solverslib.gamepad.GamepadEx;
+import com.seattlesolvers.solverslib.hardware.ServoEx;
+import com.seattlesolvers.solverslib.hardware.motors.CRServoEx;
 import com.seattlesolvers.solverslib.hardware.motors.Motor;
 import com.seattlesolvers.solverslib.hardware.motors.MotorEx;
 
@@ -13,7 +15,11 @@ public class Robot {
     private final MecanumDrive drivetrain;
     private final Telemetry telemetry;
     private final NewIMU imu;
-    private MotorEx intakeLift;
+    private final MotorEx intakeLift;
+    private final ServoEx lifter;
+    private final CRServoEx grabber;
+    private final double RAISE_LIFTER_POS = 0.65;
+    private final double RESET_LIFTER_POS = 1;
 
     public enum DriveState {
         ROBOT_CENTRIC,
@@ -26,12 +32,16 @@ public class Robot {
         MotorEx backLeft = new MotorEx(hardwareMap, "backLeft", Motor.GoBILDA.RPM_312);
         MotorEx backRight = new MotorEx(hardwareMap, "backRight", Motor.GoBILDA.RPM_312);
         intakeLift = new MotorEx(hardwareMap, "intakeLift");
+        lifter = new ServoEx(hardwareMap, "liftToIntake");
+        grabber = new CRServoEx(hardwareMap, "grabber");
 
         frontLeft.setInverted(true);
         frontRight.setInverted(false);
         backLeft.setInverted(true);
         backRight.setInverted(false);
         intakeLift.setInverted(true);
+        lifter.setInverted(false);
+        grabber.setInverted(false);
 
         frontLeft.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
         frontRight.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
@@ -50,10 +60,11 @@ public class Robot {
         backLeft.setRunMode(Motor.RunMode.VelocityControl);
         backRight.setRunMode(Motor.RunMode.VelocityControl);
         intakeLift.setRunMode(Motor.RunMode.RawPower);
+        grabber.setRunMode(Motor.RunMode.RawPower);
 
         drivetrain = new MecanumDrive(false, frontLeft, frontRight, backLeft, backRight);
         this.telemetry = telemetry;
-        imu = new NewIMU(hardwareMap, "imu"); // TODO - Verify String id
+        imu = new NewIMU(hardwareMap, "imu");
     }
 
     public void drive(DriveState state, GamepadEx gamepad, double limiter) {
@@ -80,5 +91,21 @@ public class Robot {
         double turnSpeed = gamepad.getRightX() * limiter;
 
         drivetrain.driveFieldCentric(strafeSpeed, forwardSpeed, turnSpeed, imu.getRotation2d().getDegrees(), false);
+    }
+
+    public void raiseLifter() {
+        lifter.set(RAISE_LIFTER_POS);
+    }
+
+    public void resetLifter() {
+        lifter.set(RESET_LIFTER_POS);
+    }
+
+    public void turnOnGrabber() {
+        grabber.set(1);
+    }
+
+    public void turnOffGrabber() {
+        grabber.set(0);
     }
 }
