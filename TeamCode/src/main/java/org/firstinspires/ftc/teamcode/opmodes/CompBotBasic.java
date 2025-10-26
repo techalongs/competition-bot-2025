@@ -73,8 +73,10 @@ public class CompBotBasic extends OpMode {
     public void runIntakeLiftLoop() {
         if (toggleIntakeLift.getState()){
             robot.runIntakeLift(1.0);
+            robot.runGrabber();
         }else {
             robot.runIntakeLift(0.0);
+            robot.stopGrabber();
         }
     }
 
