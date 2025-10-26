@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.seattlesolvers.solverslib.drivebase.MecanumDrive;
 import com.seattlesolvers.solverslib.gamepad.GamepadEx;
+import com.seattlesolvers.solverslib.hardware.motors.CRServoEx;
 import com.seattlesolvers.solverslib.hardware.motors.Motor;
 import com.seattlesolvers.solverslib.hardware.motors.MotorEx;
 
@@ -13,7 +14,8 @@ public class Robot {
     private final MecanumDrive drivetrain;
     private final Telemetry telemetry;
     private final NewIMU imu;
-    private MotorEx intakeLift;
+    private MotorEx intakeBubbler;
+    private CRServoEx servoGrabber;
 
     public enum DriveState {
         ROBOT_CENTRIC,
@@ -25,31 +27,35 @@ public class Robot {
         MotorEx frontRight = new MotorEx(hardwareMap, "frontRight", Motor.GoBILDA.RPM_312);
         MotorEx backLeft = new MotorEx(hardwareMap, "backLeft", Motor.GoBILDA.RPM_312);
         MotorEx backRight = new MotorEx(hardwareMap, "backRight", Motor.GoBILDA.RPM_312);
-        intakeLift = new MotorEx(hardwareMap, "intakeLift");
+        intakeBubbler = new MotorEx(hardwareMap, "intakeLift");
 
         frontLeft.setInverted(true);
         frontRight.setInverted(false);
         backLeft.setInverted(true);
         backRight.setInverted(false);
-        intakeLift.setInverted(true);
+        intakeBubbler.setInverted(true);
 
         frontLeft.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
         frontRight.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
         backLeft.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
         backRight.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
-        intakeLift.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
+        intakeBubbler.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
 
         frontLeft.stopAndResetEncoder();
         frontRight.stopAndResetEncoder();
         backLeft.stopAndResetEncoder();
         backRight.stopAndResetEncoder();
-        intakeLift.stopAndResetEncoder();
+        intakeBubbler.stopAndResetEncoder();
 
         frontLeft.setRunMode(Motor.RunMode.VelocityControl);
         frontRight.setRunMode(Motor.RunMode.VelocityControl);
         backLeft.setRunMode(Motor.RunMode.VelocityControl);
         backRight.setRunMode(Motor.RunMode.VelocityControl);
-        intakeLift.setRunMode(Motor.RunMode.RawPower);
+        intakeBubbler.setRunMode(Motor.RunMode.RawPower);
+
+        servoGrabber = new CRServoEx(hardwareMap, "grabber");
+        servoGrabber.setRunMode(CRServoEx.RunMode.RawPower);
+        servoGrabber.setInverted(false);
 
         drivetrain = new MecanumDrive(false, frontLeft, frontRight, backLeft, backRight);
         this.telemetry = telemetry;
@@ -63,7 +69,15 @@ public class Robot {
     }
 
     public void runIntakeLift(double power) {
-        intakeLift.set(power);
+        intakeBubbler.set(power);
+    }
+
+    public void runGrabber() {
+        servoGrabber.set(1.0);
+    }
+
+    public void stopGrabber() {
+        servoGrabber.set(0.0);
     }
 
     private void driveRobotCentric(GamepadEx gamepad, double limiter) {
