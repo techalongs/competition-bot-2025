@@ -18,7 +18,7 @@ public class StartIntake implements Command {
 
     @Override
     public void initialize() {
-        intake.lowerLifter();
+        intake.lowerServoLifter();
     }
 
     @Override
@@ -29,6 +29,9 @@ public class StartIntake implements Command {
 
     @Override
     public void end(boolean interrupted) {
+        intake.stopBubbler();
+        intake.stopGrabber();
+        intake.lowerServoLifter();
     }
 
     @Override

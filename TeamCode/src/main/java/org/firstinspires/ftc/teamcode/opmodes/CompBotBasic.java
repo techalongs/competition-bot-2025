@@ -20,6 +20,10 @@ public class CompBotBasic extends OpMode {
     private ToggleButtonReader toggleDriveSlow;
     private ToggleButtonReader toggleFieldCentric;
     private ToggleButtonReader toggleIntakeLift;
+    private ToggleButtonReader toggleTelemetry;
+    private ToggleButtonReader toggleIntakeBubbler;
+    private ToggleButtonReader toggleIntakeLifterServo;
+    private StartIntake startIntake;
     private double driveFastSpeedLimit = 1.0;
     private double driveSlowSpeedLimit = 0.5;
 
@@ -38,20 +42,29 @@ public class CompBotBasic extends OpMode {
         toggleFieldCentric = new ToggleButtonReader(driver1.getGamepadButton(GamepadKeys.Button.OPTIONS)
                 .and(driver1.getGamepadButton(GamepadKeys.Button.X))::get);
         // Intake Lift the artifacts up = Y
-        toggleIntakeLift = new ToggleButtonReader(driver1.getGamepadButton(GamepadKeys.Button.Y)::get);
+//        toggleIntakeLift = new ToggleButtonReader(driver1.getGamepadButton(GamepadKeys.Button.Y)::get);
+//        toggleIntakeBubbler = new ToggleButtonReader(driver1.getGamepadButton(GamepadKeys.Button.Y)::get);
+        // Intake lifter servo = A
+        toggleIntakeLifterServo = new ToggleButtonReader(driver1.getGamepadButton(GamepadKeys.Button.A)::get);
 
-
-        StartIntake startIntake = new StartIntake(robot.getIntake());
+        startIntake = new StartIntake(robot.getIntake());
         driver1.getGamepadButton(GamepadKeys.Button.A).whenPressed(startIntake);
+        // TODO - next time - if A is on execute, if A is off/pressed again we call end
+
     }
 
     @Override
     public void loop() {
         loopReadStuff();
 
+        if (driver1.getButton(GamepadKeys.Button.RIGHT_BUMPER)) {
+            robot.getIntake().raiseServoLifter();
+        }
+
+
         double driveSpeedLimit = getDriveSpeedLimit();
         Robot.DriveState driveState = getDriveState();
-        runIntakeLiftLoop();
+
 
         robot.drive(driveState, driver1, driveSpeedLimit);
 
@@ -75,11 +88,11 @@ public class CompBotBasic extends OpMode {
         }
     }
 
-    public void runIntakeLiftLoop() {
-        if (toggleIntakeLift.getState()){
-            robot.runIntakeLift(1.0);
-        }else {
-            robot.runIntakeLift(0.0);
+    public void runIntakeLifterLoop() {
+        if (toggleIntakeLifterServo.getState()) {
+            robot.getIntake().raiseServoLifter();
+        } else {
+            robot.getIntake().lowerServoLifter();
         }
     }
 
@@ -89,6 +102,7 @@ public class CompBotBasic extends OpMode {
         driver2.readButtons();
         toggleDriveSlow.readValue();
         toggleFieldCentric.readValue();
-        toggleIntakeLift.readValue();
+        toggleIntakeBubbler.readValue();
+        toggleIntakeLifterServo.readValue();
     }
 }
