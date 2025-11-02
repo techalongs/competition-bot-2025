@@ -8,6 +8,7 @@ import com.seattlesolvers.solverslib.gamepad.GamepadKeys;
 import com.seattlesolvers.solverslib.gamepad.ToggleButtonReader;
 
 import org.firstinspires.ftc.teamcode.Robot;
+import org.firstinspires.ftc.teamcode.commands.StartIntake;
 
 @TeleOp(name = "Comp Basic")
 public class CompBotBasic extends OpMode {
@@ -38,6 +39,10 @@ public class CompBotBasic extends OpMode {
                 .and(driver1.getGamepadButton(GamepadKeys.Button.X))::get);
         // Intake Lift the artifacts up = Y
         toggleIntakeLift = new ToggleButtonReader(driver1.getGamepadButton(GamepadKeys.Button.Y)::get);
+
+
+        StartIntake startIntake = new StartIntake(robot.getIntake());
+        driver1.getGamepadButton(GamepadKeys.Button.A).whenPressed(startIntake);
     }
 
     @Override

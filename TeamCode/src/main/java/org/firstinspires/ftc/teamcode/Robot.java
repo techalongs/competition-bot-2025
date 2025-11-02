@@ -7,6 +7,7 @@ import com.seattlesolvers.solverslib.hardware.motors.Motor;
 import com.seattlesolvers.solverslib.hardware.motors.MotorEx;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.util.NewIMU;
 
 public class Robot {
@@ -14,6 +15,8 @@ public class Robot {
     private final Telemetry telemetry;
     private final NewIMU imu;
     private MotorEx intakeLift;
+
+    private final Intake intake;
 
     public enum DriveState {
         ROBOT_CENTRIC,
@@ -51,6 +54,8 @@ public class Robot {
         backRight.setRunMode(Motor.RunMode.VelocityControl);
         intakeLift.setRunMode(Motor.RunMode.RawPower);
 
+        intake = new Intake();
+
         drivetrain = new MecanumDrive(false, frontLeft, frontRight, backLeft, backRight);
         this.telemetry = telemetry;
         imu = new NewIMU(hardwareMap, "imu"); // TODO - Verify String id
@@ -81,4 +86,9 @@ public class Robot {
 
         drivetrain.driveFieldCentric(strafeSpeed, forwardSpeed, turnSpeed, imu.getRotation2d().getDegrees(), false);
     }
+
+    public Intake getIntake() {
+        return intake;
+    }
+
 }
