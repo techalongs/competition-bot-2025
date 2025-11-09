@@ -9,12 +9,12 @@ import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import java.util.Collections;
 import java.util.Set;
 
-public class ControlBotLifters implements Command {
+public class EndBotLifters implements Command {
 
 
     private BotLifters botLifters;
 
-    public ControlBotLifters(BotLifters botLifters) {
+    public EndBotLifters(BotLifters botLifters) {
         this.botLifters = botLifters;
     }
 
@@ -22,12 +22,10 @@ public class ControlBotLifters implements Command {
     public void initialize() {
     }
 
-    @Override
     public void execute(BotLifters botLifters) {
         botLifters.move2(1.0);
     }
 
-    @Override
     public void end(boolean interrupted, BotLifters botLifters) {
         botLifters.move2(0.0);
     }

@@ -9,6 +9,9 @@ import com.seattlesolvers.solverslib.gamepad.ToggleButtonReader;
 
 import org.firstinspires.ftc.teamcode.Robot;
 import org.firstinspires.ftc.teamcode.commands.ControlBotLifters;
+import org.firstinspires.ftc.teamcode.commands.EndBotLifters;
+import org.firstinspires.ftc.teamcode.commands.EndIntake;
+import org.firstinspires.ftc.teamcode.commands.StartBotLifters;
 import org.firstinspires.ftc.teamcode.commands.StartIntake;
 
 @TeleOp(name = "Comp Basic")
@@ -25,7 +28,9 @@ public class CompBotBasic extends OpMode {
     private ToggleButtonReader toggleIntakeBubbler;
     private ToggleButtonReader toggleIntakeLifterServo;
     private StartIntake startIntake;
-    private ControlBotLifters controlBotLifters;
+    private EndIntake endIntake;
+    private StartBotLifters startBotLifters;
+    private EndBotLifters endBotLifters;
     private double driveFastSpeedLimit = 1.0;
     private double driveSlowSpeedLimit = 0.5;
 
@@ -49,10 +54,12 @@ public class CompBotBasic extends OpMode {
         // Intake lifter servo = A
 //        toggleIntakeLifterServo = new ToggleButtonReader(driver1.getGamepadButton(GamepadKeys.Button.A)::get);
         startIntake = new StartIntake(robot.getIntake());
-        controlBotLifters = new ControlBotLifters(robot.getBotLifters());
+        startBotLifters = new StartBotLifters(robot.getBotLifters());
 
         driver1.getGamepadButton(GamepadKeys.Button.A).whenPressed(startIntake);
-        driver2.getGamepadButton(GamepadKeys.Button.A).whenPressed(controlBotLifters);
+        driver1.getGamepadButton(GamepadKeys.Button.A).whenReleased(endIntake);
+        driver2.getGamepadButton(GamepadKeys.Button.DPAD_UP).whenPressed(startBotLifters);
+        driver2.getGamepadButton(GamepadKeys.Button.DPAD_DOWN).whenPressed(endBotLifters);
 // TODO - next time - if A is on execute, if A is off/pressed again we call end
 
     }
