@@ -8,6 +8,7 @@ import com.seattlesolvers.solverslib.hardware.motors.Motor;
 import com.seattlesolvers.solverslib.hardware.motors.MotorEx;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.subsystems.BotLifters;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.util.NewIMU;
@@ -21,6 +22,7 @@ public class Robot {
     private Servo servoLiftArtifactToLiftIntakeMotor;
 
     private final Intake intake;
+    private final BotLifters botLifters;
 
     public enum DriveState {
         ROBOT_CENTRIC,
@@ -54,6 +56,7 @@ public class Robot {
         motorBackRight.setRunMode(Motor.RunMode.VelocityControl);
 
         intake = new Intake(hardwareMap, telemetry);
+        botLifters = new BotLifters(hardwareMap, telemetry);
 
         drivetrain = new MecanumDrive(false, motorFrontLeft, motorFrontRight, motorBackLeft, motorBackRight);
         this.telemetry = telemetry;
@@ -84,6 +87,9 @@ public class Robot {
 
     public Intake getIntake() {
         return intake;
+    }
+    public BotLifters getBotLifters() {
+        return botLifters;
     }
 
     //    private void runIntakeLift(double power) {
