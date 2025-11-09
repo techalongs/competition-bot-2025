@@ -1,6 +1,6 @@
 # Techalongs Auto Bases
 
-This package contains a base auto that can be shared at competition to teams who may want them. We have multiple files for different drivetrains and circumstances.
+This package contains base autos designed to move the robot off the LAUNCH line and gain LEAVE points. We intend for these to be shared at competition to teams who may want them. We have multiple files for different drivetrains and circumstances.
 
 ## Files
 - Mecanum Drivetrain: `MecanumAuto.java`
@@ -8,3 +8,4 @@ This package contains a base auto that can be shared at competition to teams who
 ## Mecanum Drivetrain
 - File: `MecanumAuto.java`
 - Bot: 4-motor mecanum drivetrain
+- Notes: No encoders are needed for this auto (time-based)
