@@ -15,6 +15,7 @@ public class BotLifters extends SubsystemBase {
 
     private DcMotor leftMotor;
     private DcMotor rightMotor;
+    private Telemetry telemetry;
 //    private TouchSensor topLimitSensor;
 //    private TouchSensor bottomLimitSensor;
     private double upSpeedLimiter = 0.5;
@@ -35,6 +36,7 @@ public class BotLifters extends SubsystemBase {
         setRunMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER, true);
         setRunMode(DcMotor.RunMode.RUN_USING_ENCODER, true);
         setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        this.telemetry = telemetry;
     }
 
     private DcMotor initBasicDcMotor(String name,HardwareMap hardwareMap) {
@@ -243,6 +245,7 @@ public class BotLifters extends SubsystemBase {
     }
 
     public void move2(double power) {
+        telemetry.addLine("hello world! I'm move2.");
         double adjustedPower = 0.0;
         if (power < 0.0) { //&& !atBottomLimit()) {
             adjustedPower = power * downSpeedLimiter;
@@ -259,6 +262,7 @@ public class BotLifters extends SubsystemBase {
             adjustedPower = power * upSpeedLimiter;
             setRunMode(DcMotor.RunMode.RUN_USING_ENCODER);
             holdTargetPosition = getCurrentPosition();
+            telemetry.addLine("hello, this is elseIfPower>0.0!");
 
             leftMotor.setPower(adjustedPower);
             rightMotor.setPower(adjustedPower);
