@@ -4,6 +4,8 @@ This package contains base autos designed to move the robot off the LAUNCH line 
 
 All files in this package are intended to move the robot forward until it is on the next game tile.
 
+Please note: Teams *will* have to change the code slightly to fit their bot. All lines that should be changed are labeled by TODO comments.
+
 ## Files
 - Mecanum Drivetrain: `MecanumAuto.java`
 - Tank Drivetrain: `TankAuto.java`
