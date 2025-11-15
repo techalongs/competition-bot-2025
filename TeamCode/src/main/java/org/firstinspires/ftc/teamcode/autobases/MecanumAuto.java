@@ -48,7 +48,7 @@ public class MecanumAuto extends LinearOpMode {
     }
 
     @Override
-    public void runOpMode() throws InterruptedException {
+    public void runOpMode() {
         // Initialize all motors
         initMotors();
 
@@ -84,7 +84,7 @@ public class MecanumAuto extends LinearOpMode {
         telemetry.addData("Back Right Power", backRight.getPower());
         telemetry.update();
 
-        // Allow for a 3 second pause to read telemetry as needed
+        // Allow for a 3 second pause to read telemetry if needed
         sleep(3000);
     }
 }
