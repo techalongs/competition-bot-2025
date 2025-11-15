@@ -23,6 +23,10 @@ buildscript {
     }
 }
 
+plugins {
+    id "io.franzbecker.gradle-lombok" version "5.0.0"
+}
+
 // Include common definitions from above.
 apply from: '../build.common.gradle'
 apply from: '../build.dependencies.gradle'
@@ -51,4 +55,10 @@ dependencies {
     // SolversLib (FTCLib)
     implementation "org.solverslib:core:SNAPSHOT-7cdcc66"
     implementation "org.solverslib:pedroPathing:SNAPSHOT-7cdcc66"
+    compileOnly "org.projectlombok:lombok:1.18.42"
+    annotationProcessor "org.projectlombok:lombok:1.18.42"
+}
+
+lombok {
+    version = "1.18.42"
 }

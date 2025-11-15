@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.opmodes;
 
+import static java.lang.Thread.sleep;
+
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.seattlesolvers.solverslib.command.CommandScheduler;
@@ -54,7 +56,20 @@ public class CompBotBasic extends OpMode {
         if (gamepad1.b) robot.raiseLifter();
         else if (gamepad1.a) robot.resetLifter();
 
+        if (gamepad1.dpad_up) robot.raiseLifts();
+        else if (gamepad1.dpad_down) robot.lowerLifts();
+        else robot.stopLifts();
+
+        if (gamepad1.x) {
+            try {
+                robot.launchBack();
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
         telemetry.addData("Drive Mode", driveState.name());
+        telemetry.addData("Voltage", robot.getPot().getVoltage());
         telemetry.update();
     }
 
@@ -78,7 +93,7 @@ public class CompBotBasic extends OpMode {
         if (toggleIntakeLift.getState()){
             robot.runIntakeLift(1.0);
             robot.turnOnGrabber();
-        }else {
+        } else {
             robot.runIntakeLift(0.0);
             robot.turnOffGrabber();
         }
