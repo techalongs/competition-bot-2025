@@ -49,11 +49,12 @@ public class TankAuto extends LinearOpMode {
         ElapsedTime timer = new ElapsedTime();
         timer.reset();
 
-        // Keep motors running for 3 seconds
-        while (timer.time(TimeUnit.SECONDS) <= 3) {
-            setMotors(1);
+        // Go forward for half a second
+        while (timer.time(TimeUnit.SECONDS) <= 0.5) {
+            setMotors(0.5);
 
             // Update telemetry
+            telemetry.addData("Time left", 1000 - timer.time(TimeUnit.MILLISECONDS));
             telemetry.addData("Front Right Power", rightMotor.getPower());
             telemetry.addData("Front Left Power", leftMotor.getPower());
             telemetry.update();
