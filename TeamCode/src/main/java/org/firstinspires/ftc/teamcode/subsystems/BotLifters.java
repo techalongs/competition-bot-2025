@@ -24,11 +24,11 @@ public class BotLifters extends SubsystemBase {
     private int holdTargetPosition;
     private DcMotor.RunMode currentRunMode;
     private String status = "None";
-    private String statusDetail = "";
+    private String statusDetail = " ";
 
     public BotLifters(HardwareMap hardwareMap, Telemetry telemetry) { //, TouchSensor topLimitSensor, TouchSensor bottomLimitSensor) {
-        leftMotor = initBasicDcMotor("leftLifterMotor", hardwareMap);
-        rightMotor = initBasicDcMotor("rightLifterMotor", hardwareMap);
+        leftMotor = initBasicDcMotor("leftLift", hardwareMap);
+        rightMotor = initBasicDcMotor("rightLift", hardwareMap);
 //        this.topLimitSensor = topLimitSensor;
 //        this.bottomLimitSensor = bottomLimitSensor;
         setTargetPosition(0);
