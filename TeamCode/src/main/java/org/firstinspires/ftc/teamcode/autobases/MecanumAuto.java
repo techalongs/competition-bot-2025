@@ -61,11 +61,12 @@ public class MecanumAuto extends LinearOpMode {
         ElapsedTime timer = new ElapsedTime();
         timer.reset();
 
-        // Keep motors running for 3 seconds
-        while (timer.time(TimeUnit.SECONDS) <= 3) {
-            setMotors(1);
+        // Go forward for half a second
+        while (timer.time(TimeUnit.SECONDS) <= 0.5 && opModeIsActive()) {
+            setMotors(0.5);
 
             // Update telemetry
+            telemetry.addData("Time left", 1000 - timer.time(TimeUnit.MILLISECONDS));
             telemetry.addData("Front Left Power", frontLeft.getPower());
             telemetry.addData("Front Right Power", frontRight.getPower());
             telemetry.addData("Back Left Power", backLeft.getPower());
