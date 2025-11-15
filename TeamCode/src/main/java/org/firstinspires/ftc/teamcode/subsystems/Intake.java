@@ -17,8 +17,8 @@ public class Intake extends SubsystemBase {
     public Intake(HardwareMap hardwareMap, Telemetry telemetry) {
 
         motorIntakeBubbler = new MotorEx(hardwareMap, "intakeLift");
-        servoArtifactLifter = hardwareMap.get(Servo.class, "liftToIntake");
-        servoIntakeGrabber = hardwareMap.get(CRServoEx.class, "intakeGrabber");
+        servoIntakeGrabber = new CRServoEx(hardwareMap, "intakeGrabber");servoArtifactLifter = hardwareMap.get(Servo.class, "liftToIntake");
+
 //        TODO - Check device name for servoIntakeGrabber
 
         motorIntakeBubbler.setInverted(true);

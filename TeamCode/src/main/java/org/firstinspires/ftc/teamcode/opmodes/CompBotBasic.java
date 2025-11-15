@@ -2,15 +2,14 @@ package org.firstinspires.ftc.teamcode.opmodes;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.seattlesolvers.solverslib.command.CommandScheduler;
 import com.seattlesolvers.solverslib.gamepad.GamepadEx;
 import com.seattlesolvers.solverslib.gamepad.GamepadKeys;
 import com.seattlesolvers.solverslib.gamepad.ToggleButtonReader;
 
 import org.firstinspires.ftc.teamcode.Robot;
-import org.firstinspires.ftc.teamcode.commands.EndBotLifters;
+import org.firstinspires.ftc.teamcode.commands.LowerBotLifters;
 import org.firstinspires.ftc.teamcode.commands.EndIntake;
-import org.firstinspires.ftc.teamcode.commands.StartBotLifters;
+import org.firstinspires.ftc.teamcode.commands.RaiseBotLifters;
 import org.firstinspires.ftc.teamcode.commands.StartIntake;
 
 @TeleOp(name = "Comp Basic")
@@ -19,17 +18,14 @@ public class CompBotBasic extends OpMode {
     private GamepadEx driver1;
     private GamepadEx driver2;
     private Robot robot;
-    private CommandScheduler commandScheduler;
+    //private CommandScheduler commandScheduler;
     private ToggleButtonReader toggleDriveSlow;
     private ToggleButtonReader toggleFieldCentric;
-    private ToggleButtonReader toggleIntakeLift;
-    private ToggleButtonReader toggleTelemetry;
-    private ToggleButtonReader toggleIntakeBubbler;
-    private ToggleButtonReader toggleIntakeLifterServo;
+  //  private ToggleButtonReader toggleTelemetry;
     private StartIntake startIntake;
     private EndIntake endIntake;
-    private StartBotLifters startBotLifters;
-    private EndBotLifters endBotLifters;
+    private RaiseBotLifters startBotLifters;
+    private LowerBotLifters endBotLifters;
     private double driveFastSpeedLimit = 1.0;
     private double driveSlowSpeedLimit = 0.5;
 
@@ -38,7 +34,7 @@ public class CompBotBasic extends OpMode {
         driver1 = new GamepadEx(gamepad1);
         driver2 = new GamepadEx(gamepad2);
         robot = new Robot(hardwareMap, telemetry);
-        commandScheduler = CommandScheduler.getInstance();
+//        commandScheduler = CommandScheduler.getInstance();
 
         // with multi button toggles there is and enter berfore the .and
         // Drive Slow Toggle = X + Right Bumper
@@ -53,12 +49,12 @@ public class CompBotBasic extends OpMode {
         // Intake lifter servo = A
 //        toggleIntakeLifterServo = new ToggleButtonReader(driver1.getGamepadButton(GamepadKeys.Button.A)::get);
         startIntake = new StartIntake(robot.getIntake());
-        startBotLifters = new StartBotLifters(robot.getBotLifters());
+        startBotLifters = new RaiseBotLifters(robot.getBotLifters());
 
         driver1.getGamepadButton(GamepadKeys.Button.A).whenPressed(startIntake);
         driver1.getGamepadButton(GamepadKeys.Button.A).whenReleased(endIntake);
-        driver2.getGamepadButton(GamepadKeys.Button.DPAD_UP).whenPressed(startBotLifters);
-        driver2.getGamepadButton(GamepadKeys.Button.DPAD_DOWN).whenPressed(endBotLifters);
+        driver2.getGamepadButton(GamepadKeys.Button.DPAD_UP).whileHeld(startBotLifters);
+        driver2.getGamepadButton(GamepadKeys.Button.DPAD_DOWN).whileHeld(endBotLifters);
 // TODO - next time - if A is on execute, if A is off/pressed again we call end
 
     }
@@ -79,6 +75,7 @@ public class CompBotBasic extends OpMode {
         robot.drive(driveState, driver1, driveSpeedLimit);
 
         telemetry.addData("Drive Mode", driveState.name());
+        telemetry.addData("Bot Lifting?", robot.getBotLifters().getStatus());
         telemetry.update();
     }
 
@@ -98,22 +95,21 @@ public class CompBotBasic extends OpMode {
         }
     }
 
-    public void runIntakeLifterLoop() {
-        if (toggleIntakeLifterServo.getState()) {
-            robot.getIntake().raiseServoLifter();
-        } else {
-            robot.getIntake().lowerServoLifter();
-        }
-    }
+//    public void runIntakeLifterLoop() {
+//        if (toggleIntakeLifterServo.getState()) {
+//            robot.getIntake().raiseServoLifter();
+//        } else {
+//            robot.getIntake().lowerServoLifter();
+//        }
+//    }
 
     public void loopReadStuff() {
-        commandScheduler.run();
+//        commandScheduler.run();
         driver1.readButtons();
         driver2.readButtons();
         toggleDriveSlow.readValue();
         toggleFieldCentric.readValue();
-        toggleIntakeBubbler.readValue();
-        toggleIntakeLifterServo.readValue();
+        //toggleIntakeLifterServo.readValue();
 
     }
 }

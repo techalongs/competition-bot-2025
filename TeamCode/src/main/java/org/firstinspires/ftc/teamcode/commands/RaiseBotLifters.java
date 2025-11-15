@@ -4,17 +4,16 @@ import com.seattlesolvers.solverslib.command.Command;
 import com.seattlesolvers.solverslib.command.Subsystem;
 
 import org.firstinspires.ftc.teamcode.subsystems.BotLifters;
-import org.firstinspires.ftc.teamcode.subsystems.Intake;
 
 import java.util.Collections;
 import java.util.Set;
 
-public class StartBotLifters implements Command {
+public class RaiseBotLifters implements Command {
 
 
     private BotLifters botLifters;
 
-    public StartBotLifters(BotLifters botLifters) {
+    public RaiseBotLifters(BotLifters botLifters) {
         this.botLifters = botLifters;
     }
 
@@ -32,7 +31,7 @@ public class StartBotLifters implements Command {
 
     @Override
     public boolean isFinished() {
-        return true;
+        return false;
     }
 
     @Override
