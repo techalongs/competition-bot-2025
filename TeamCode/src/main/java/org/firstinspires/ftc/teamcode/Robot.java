@@ -115,14 +115,6 @@ public class Robot {
         drivetrain.driveFieldCentric(strafeSpeed, forwardSpeed, turnSpeed, imu.getRotation2d().getDegrees(), false);
     }
 
-    public Command raiseLifts() {
-        return new InstantCommand(lifts::raise, lifts);
-    }
-
-    public Command lowerLifts() {
-        return new InstantCommand(lifts::lower, lifts);
-    }
-
     public void raiseLifter() {
         lifter.set(RAISE_LIFTER_POS);
     }
@@ -139,7 +131,15 @@ public class Robot {
         grabber.set(0);
     }
 
-    public void launchBack() throws InterruptedException {
-        backLauncher.launch();
+    public Command launchBack() {
+        return backLauncher.launch();
+    }
+
+    public Command raiseLifts() {
+        return new InstantCommand(lifts::raise, lifts);
+    }
+
+    public Command lowerLifts() {
+        return new InstantCommand(lifts::lower, lifts);
     }
 }

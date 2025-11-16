@@ -8,12 +8,14 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.seattlesolvers.solverslib.command.Command;
 import com.seattlesolvers.solverslib.command.CommandBase;
+import com.seattlesolvers.solverslib.command.SequentialCommandGroup;
 import com.seattlesolvers.solverslib.command.Subsystem;
 import com.seattlesolvers.solverslib.command.SubsystemBase;
 import com.seattlesolvers.solverslib.hardware.motors.CRServoEx;
 import com.seattlesolvers.solverslib.util.Timing;
 
 import org.firstinspires.ftc.teamcode.util.RevPotentiometer;
+import org.firstinspires.ftc.teamcode.util.SleepCommand;
 
 import java.util.Collections;
 import java.util.Set;
@@ -31,8 +33,33 @@ public class Launcher extends SubsystemBase {
 
         final double val;
 
-        private Position(double v) {
+        Position(double v) {
             this.val = v;
+        }
+    }
+
+    private class MoveTo extends CommandBase {
+        Position pos;
+
+        MoveTo(Position pos) {
+            this.pos = pos;
+            addRequirements(Launcher.this);
+        }
+
+        @Override
+        public void initialize() {
+            if (potentiometer.getVoltage() > pos.val) launcher.set(1);
+            else launcher.set(-1);
+        }
+
+        @Override
+        public boolean isFinished() {
+            return inRange(pos.val);
+        }
+
+        @Override
+        public void end(boolean interrupted) {
+            launcher.set(0);
         }
     }
 
@@ -49,22 +76,15 @@ public class Launcher extends SubsystemBase {
                 && potentiometer.getVoltage() < value + TOLERANCE;
     }
 
-    private void moveTo(Position pos) {
-        if (potentiometer.getVoltage() > pos.val) launcher.set(1);
-        else launcher.set(-1);
-
-        while (!inRange(pos.val)) {}
-
-        launcher.set(0);
-    }
-
-    public void launch() throws InterruptedException {
-        moveTo(Position.READY);
-        sleep(500);
-        moveTo(Position.FIRE);
-        sleep(500);
-        moveTo(Position.LOAD);
-        sleep(500);
-        moveTo(Position.READY);
+    public Command launch() {
+        return new SequentialCommandGroup(
+                new MoveTo(Position.READY),
+                new SleepCommand(500),
+                new MoveTo(Position.FIRE),
+                new SleepCommand(500),
+                new MoveTo(Position.LOAD),
+                new SleepCommand(500),
+                new MoveTo(Position.READY)
+        );
     }
 }

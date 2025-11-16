@@ -4,7 +4,9 @@ import static java.lang.Thread.sleep;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.seattlesolvers.solverslib.command.CommandBase;
 import com.seattlesolvers.solverslib.command.CommandScheduler;
+import com.seattlesolvers.solverslib.command.InstantCommand;
 import com.seattlesolvers.solverslib.gamepad.GamepadEx;
 import com.seattlesolvers.solverslib.gamepad.GamepadKeys;
 import com.seattlesolvers.solverslib.gamepad.ToggleButtonReader;
@@ -32,19 +34,26 @@ public class CompBotBasic extends OpMode {
         robot = new Robot(hardwareMap, telemetry);
         commandScheduler = CommandScheduler.getInstance();
 
-        // with multi button toggles there is and enter berfore the .and
-        // Drive Slow Toggle = X + Right Bumper
+        // With multi button toggles there is and enter before the .and
+
+        //  Drive Slow Toggle = X + Right Bumper
         toggleDriveSlow = new ToggleButtonReader(driver1.getGamepadButton(GamepadKeys.Button.X)
                 .and(driver1.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER))::get);
+
         // Drive Field Centric Toggle = Options + X
         toggleFieldCentric = new ToggleButtonReader(driver1.getGamepadButton(GamepadKeys.Button.OPTIONS)
                 .and(driver1.getGamepadButton(GamepadKeys.Button.X))::get);
+
         // Intake Lift the artifacts up = Y
         toggleIntakeLift = new ToggleButtonReader(driver1.getGamepadButton(GamepadKeys.Button.Y)::get);
         toggleIntakeLifter = new ToggleButtonReader(driver1.getGamepadButton(GamepadKeys.Button.B)::get);
 
-        driver1.getGamepadButton(GamepadKeys.Button.DPAD_UP).whileHeld(robot::raiseLifts);
-        driver1.getGamepadButton(GamepadKeys.Button.DPAD_DOWN).whileHeld(robot::lowerLifts);
+        // Launchers - X
+        driver1.getGamepadButton(GamepadKeys.Button.X).whenPressed(robot.launchBack());
+
+        // Ascent Lifts - Dpad Up and Dpad Down
+        driver1.getGamepadButton(GamepadKeys.Button.DPAD_UP).whileHeld(robot.raiseLifts());
+        driver1.getGamepadButton(GamepadKeys.Button.DPAD_DOWN).whileHeld(robot.lowerLifts());
     }
 
     @Override
@@ -58,14 +67,6 @@ public class CompBotBasic extends OpMode {
         robot.drive(driveState, driver1, driveSpeedLimit);
         if (gamepad1.b) robot.raiseLifter();
         else if (gamepad1.a) robot.resetLifter();
-
-        if (gamepad1.x) {
-            try {
-                robot.launchBack();
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-        }
 
         telemetry.addData("Drive Mode", driveState.name());
         telemetry.update();
