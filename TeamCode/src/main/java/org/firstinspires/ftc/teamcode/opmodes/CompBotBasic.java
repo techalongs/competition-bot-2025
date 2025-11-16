@@ -1,17 +1,15 @@
 package org.firstinspires.ftc.teamcode.opmodes;
 
-import static java.lang.Thread.sleep;
-
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.seattlesolvers.solverslib.command.CommandBase;
 import com.seattlesolvers.solverslib.command.CommandScheduler;
-import com.seattlesolvers.solverslib.command.InstantCommand;
+import com.seattlesolvers.solverslib.command.ConditionalCommand;
 import com.seattlesolvers.solverslib.gamepad.GamepadEx;
 import com.seattlesolvers.solverslib.gamepad.GamepadKeys;
 import com.seattlesolvers.solverslib.gamepad.ToggleButtonReader;
 
 import org.firstinspires.ftc.teamcode.Robot;
+import org.firstinspires.ftc.teamcode.util.RevPotentiometer;
 
 @TeleOp(name = "Comp Basic")
 public class CompBotBasic extends OpMode {
@@ -22,13 +20,14 @@ public class CompBotBasic extends OpMode {
     private CommandScheduler commandScheduler;
     private ToggleButtonReader toggleDriveSlow;
     private ToggleButtonReader toggleFieldCentric;
-    private ToggleButtonReader toggleIntakeLift;
-    private ToggleButtonReader toggleIntakeLifter;
+    private boolean intakeState = false;
+    private RevPotentiometer pot;
     private double driveFastSpeedLimit = 1.0;
     private double driveSlowSpeedLimit = 0.5;
 
     @Override
     public void init() {
+        pot = new RevPotentiometer(hardwareMap, "pot3");
         driver1 = new GamepadEx(gamepad1);
         driver2 = new GamepadEx(gamepad2);
         robot = new Robot(hardwareMap, telemetry);
@@ -44,9 +43,15 @@ public class CompBotBasic extends OpMode {
         toggleFieldCentric = new ToggleButtonReader(driver1.getGamepadButton(GamepadKeys.Button.OPTIONS)
                 .and(driver1.getGamepadButton(GamepadKeys.Button.X))::get);
 
-        // Intake Lift the artifacts up = Y
-        toggleIntakeLift = new ToggleButtonReader(driver1.getGamepadButton(GamepadKeys.Button.Y)::get);
-        toggleIntakeLifter = new ToggleButtonReader(driver1.getGamepadButton(GamepadKeys.Button.B)::get);
+        // Intake - Y
+        driver1.getGamepadButton(GamepadKeys.Button.Y).whenPressed(new ConditionalCommand(
+                robot.runIntake(),
+                robot.stopIntake(),
+                () -> {
+                    intakeState = !intakeState;
+                    return intakeState;
+                }
+        ));
 
         // Launchers - X
         driver1.getGamepadButton(GamepadKeys.Button.X).whenPressed(robot.launchBack());
@@ -62,13 +67,10 @@ public class CompBotBasic extends OpMode {
 
         double driveSpeedLimit = getDriveSpeedLimit();
         Robot.DriveState driveState = getDriveState();
-        runIntakeLiftLoop();
-
         robot.drive(driveState, driver1, driveSpeedLimit);
-        if (gamepad1.b) robot.raiseLifter();
-        else if (gamepad1.a) robot.resetLifter();
 
         telemetry.addData("Drive Mode", driveState.name());
+        telemetry.addData("Voltage", pot.getVoltage());
         telemetry.update();
     }
 
@@ -88,22 +90,11 @@ public class CompBotBasic extends OpMode {
         }
     }
 
-    public void runIntakeLiftLoop() {
-        if (toggleIntakeLift.getState()){
-            robot.runIntakeLift(1.0);
-            robot.turnOnGrabber();
-        } else {
-            robot.runIntakeLift(0.0);
-            robot.turnOffGrabber();
-        }
-    }
-
     public void loopReadStuff() {
         commandScheduler.run();
         driver1.readButtons();
         driver2.readButtons();
         toggleDriveSlow.readValue();
         toggleFieldCentric.readValue();
-        toggleIntakeLift.readValue();
     }
 }

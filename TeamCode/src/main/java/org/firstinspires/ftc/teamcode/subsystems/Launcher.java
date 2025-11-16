@@ -78,12 +78,10 @@ public class Launcher extends SubsystemBase {
 
     public Command launch() {
         return new SequentialCommandGroup(
-                new MoveTo(Position.READY),
-                new SleepCommand(500),
                 new MoveTo(Position.FIRE),
-                new SleepCommand(500),
+                new SleepCommand(250),
                 new MoveTo(Position.LOAD),
-                new SleepCommand(500),
+                new SleepCommand(250),
                 new MoveTo(Position.READY)
         );
     }

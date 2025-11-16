@@ -7,23 +7,23 @@ import com.seattlesolvers.solverslib.hardware.motors.CRServoEx;
 import com.seattlesolvers.solverslib.hardware.motors.Motor;
 import com.seattlesolvers.solverslib.hardware.motors.MotorEx;
 
-public class IntakeSubsystem extends SubsystemBase {
+public class Intake extends SubsystemBase {
     private final MotorEx intake;
-    private final CRServoEx bubbler;
-    private final ServoEx lifter;
 
-    public IntakeSubsystem(HardwareMap hardwareMap, String intakeName, String bubblerName, String lifterName) {
+    public Intake(HardwareMap hardwareMap, String intakeName) {
         intake = new MotorEx(hardwareMap, intakeName);
-        bubbler = new CRServoEx(hardwareMap, bubblerName);
-        lifter = new ServoEx(hardwareMap, lifterName);
 
         intake.setInverted(true);
-        bubbler.setInverted(false);
-        lifter.setInverted(false);
-
         intake.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
         intake.stopAndResetEncoder();
         intake.setRunMode(Motor.RunMode.RawPower);
-        bubbler.setRunMode(CRServoEx.RunMode.RawPower);
+    }
+
+    public void run() {
+        intake.set(1);
+    }
+
+    public void stop() {
+        intake.set(0);
     }
 }
