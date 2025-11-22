@@ -11,8 +11,8 @@ import com.seattlesolvers.solverslib.gamepad.ToggleButtonReader;
 import org.firstinspires.ftc.teamcode.Robot;
 import org.firstinspires.ftc.teamcode.util.RevPotentiometer;
 
-@TeleOp(name = "Comp Basic")
-public class CompBotBasic extends OpMode {
+@TeleOp(name = "One Controller TeleOp")
+public class OneController extends OpMode {
 
     private GamepadEx driver1;
     private GamepadEx driver2;
@@ -34,7 +34,6 @@ public class CompBotBasic extends OpMode {
         commandScheduler = CommandScheduler.getInstance();
 
         // With multi button toggles there is and enter before the .and
-
         //  Drive Slow Toggle = X + Right Bumper
         toggleDriveSlow = new ToggleButtonReader(driver1.getGamepadButton(GamepadKeys.Button.X)
                 .and(driver1.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER))::get);
@@ -44,17 +43,24 @@ public class CompBotBasic extends OpMode {
                 .and(driver1.getGamepadButton(GamepadKeys.Button.X))::get);
 
         // Intake - Y
-        driver1.getGamepadButton(GamepadKeys.Button.Y).whenPressed(new ConditionalCommand(
-                robot.runIntake(),
-                robot.stopIntake(),
-                () -> {
-                    intakeState = !intakeState;
-                    return intakeState;
-                }
-        ));
+        driver1.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).negate()
+                .and(driver1.getGamepadButton(GamepadKeys.Button.Y))
+                .whenActive(new ConditionalCommand(
+                        robot.runIntake(),
+                        robot.stopIntake(),
+                        () -> {
+                            intakeState = !intakeState;
+                            return intakeState;
+                        }
+                ));
 
         // Launchers - X
         driver1.getGamepadButton(GamepadKeys.Button.X).whenPressed(robot.launchBack());
+        driver1.getGamepadButton(GamepadKeys.Button.A).whenPressed(robot.launchMid());
+        driver1.getGamepadButton(GamepadKeys.Button.B).whenPressed(robot.launchFront());
+        driver1.getGamepadButton(GamepadKeys.Button.Y)
+                .and(driver1.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER))
+                .whenActive(robot.launchAll());
 
         // Ascent Lifts - Dpad Up and Dpad Down
         driver1.getGamepadButton(GamepadKeys.Button.DPAD_UP).whileHeld(robot.raiseLifts());

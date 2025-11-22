@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.seattlesolvers.solverslib.command.Command;
 import com.seattlesolvers.solverslib.command.InstantCommand;
+import com.seattlesolvers.solverslib.command.ParallelCommandGroup;
 import com.seattlesolvers.solverslib.command.PerpetualCommand;
 import com.seattlesolvers.solverslib.command.RunCommand;
 import com.seattlesolvers.solverslib.gamepad.GamepadEx;
@@ -16,6 +17,8 @@ import org.firstinspires.ftc.teamcode.subsystems.Lifter;
 public class Robot {
     private final Drivetrain drivetrain;
     private final Intake intake;
+    private final Launcher frontLauncher;
+    private final Launcher midLauncher;
     private final Launcher backLauncher;
     private final Lifter lifts;
     private final Telemetry telemetry;
@@ -28,6 +31,8 @@ public class Robot {
     public Robot(HardwareMap hardwareMap, Telemetry telemetry) {
         drivetrain = new Drivetrain(hardwareMap, "frontLeft", "frontRight", "backLeft", "backRight");
         intake = new Intake(hardwareMap, "intakeLift");
+        frontLauncher = new Launcher(hardwareMap, "frontLauncher", "pot1");
+        midLauncher = new Launcher(hardwareMap, "midLauncher", "pot2");
         backLauncher = new Launcher(hardwareMap, "backLauncher", "pot3");
         lifts = new Lifter(hardwareMap, "leftLift", "rightLift");
         lifts.setDefaultCommand(new PerpetualCommand(new RunCommand(lifts::stop, lifts)));
@@ -47,8 +52,20 @@ public class Robot {
         return new InstantCommand(intake::stop);
     }
 
+    public Command launchFront() {
+        return frontLauncher.launch();
+    }
+
+    public Command launchMid() {
+        return midLauncher.launch();
+    }
+
     public Command launchBack() {
         return backLauncher.launch();
+    }
+
+    public Command launchAll() {
+        return new ParallelCommandGroup(launchFront(), launchMid(), launchBack());
     }
 
     public Command raiseLifts() {
