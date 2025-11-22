@@ -10,6 +10,7 @@ import com.seattlesolvers.solverslib.gamepad.ToggleButtonReader;
 import org.firstinspires.ftc.teamcode.Robot;
 import org.firstinspires.ftc.teamcode.commands.EndBotLifters;
 import org.firstinspires.ftc.teamcode.commands.EndIntake;
+import org.firstinspires.ftc.teamcode.commands.RunIntake;
 import org.firstinspires.ftc.teamcode.commands.StartBotLifters;
 import org.firstinspires.ftc.teamcode.commands.StartIntake;
 
@@ -22,10 +23,9 @@ public class CompBotBasic extends OpMode {
     private CommandScheduler commandScheduler;
     private ToggleButtonReader toggleDriveSlow;
     private ToggleButtonReader toggleFieldCentric;
-    private ToggleButtonReader toggleIntakeLift;
-    private ToggleButtonReader toggleTelemetry;
-    private ToggleButtonReader toggleIntakeBubbler;
-    private ToggleButtonReader toggleIntakeLifterServo;
+    private ToggleButtonReader toggleIntake;
+    private ToggleButtonReader toggleHelpTelemetry;
+    private RunIntake runIntake;
     private StartIntake startIntake;
     private EndIntake endIntake;
     private StartBotLifters startBotLifters;
@@ -47,12 +47,11 @@ public class CompBotBasic extends OpMode {
         // Drive Field Centric Toggle = Options + X
         toggleFieldCentric = new ToggleButtonReader(driver1.getGamepadButton(GamepadKeys.Button.OPTIONS)
                 .and(driver1.getGamepadButton(GamepadKeys.Button.X))::get);
-        // Intake Lift the artifacts up = Y
-//        toggleIntakeLift = new ToggleButtonReader(driver1.getGamepadButton(GamepadKeys.Button.Y)::get);
-//        toggleIntakeBubbler = new ToggleButtonReader(driver1.getGamepadButton(GamepadKeys.Button.Y)::get);
-        // Intake lifter servo = A
-//        toggleIntakeLifterServo = new ToggleButtonReader(driver1.getGamepadButton(GamepadKeys.Button.A)::get);
-        startIntake = new StartIntake(robot.getIntake());
+        // Intake the artifacts up = Y
+        toggleIntake = new ToggleButtonReader(driver1.getGamepadButton(GamepadKeys.Button.Y)::get);
+        runIntake = new RunIntake(robot.getIntake(), toggleIntake);
+        commandScheduler.schedule(runIntake);
+
         startBotLifters = new StartBotLifters(robot.getBotLifters());
 
         driver1.getGamepadButton(GamepadKeys.Button.A).whenPressed(startIntake);
@@ -98,22 +97,13 @@ public class CompBotBasic extends OpMode {
         }
     }
 
-    public void runIntakeLifterLoop() {
-        if (toggleIntakeLifterServo.getState()) {
-            robot.getIntake().raiseServoLifter();
-        } else {
-            robot.getIntake().lowerServoLifter();
-        }
-    }
-
     public void loopReadStuff() {
         commandScheduler.run();
         driver1.readButtons();
         driver2.readButtons();
         toggleDriveSlow.readValue();
         toggleFieldCentric.readValue();
-        toggleIntakeBubbler.readValue();
-        toggleIntakeLifterServo.readValue();
+        toggleIntake.readValue();
 
     }
 }
