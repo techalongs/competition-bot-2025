@@ -1,16 +1,17 @@
 package org.firstinspires.ftc.teamcode.commands;
 
 import com.seattlesolvers.solverslib.command.CommandBase;
-import com.seattlesolvers.solverslib.gamepad.ToggleButtonReader;
 
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
+
+import java.util.function.Supplier;
 
 public class RunIntake extends CommandBase {
 
     private Intake intake;
-    private ToggleButtonReader toggleIntake;
+    private Supplier<Boolean> toggleIntake;
 
-    public RunIntake(Intake intake, ToggleButtonReader toggleIntake) {
+    public RunIntake(Intake intake, Supplier<Boolean> toggleIntake) {
         this.toggleIntake = toggleIntake;
         this.intake = intake;
         this.addRequirements(intake);
@@ -18,15 +19,15 @@ public class RunIntake extends CommandBase {
 
     @Override
     public void execute() {
-        if (toggleIntake.getState()) {
-//            intake.run();
+        if (toggleIntake.get()) {
+            intake.run();
         } else {
-//            intake.stop();
+            intake.stop();
         }
     }
 
     @Override
     public void end(boolean interrupted) {
-//     intake.stop();
+    intake.stop();
     }
 }

@@ -1,9 +1,7 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.hardware.Servo;
 import com.seattlesolvers.solverslib.command.SubsystemBase;
-import com.seattlesolvers.solverslib.hardware.motors.CRServoEx;
 import com.seattlesolvers.solverslib.hardware.motors.Motor;
 import com.seattlesolvers.solverslib.hardware.motors.MotorEx;
 
@@ -11,58 +9,30 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 public class Intake extends SubsystemBase {
 
-    private MotorEx motorIntakeBubbler;
-    private CRServoEx servoIntakeGrabber;
-    private Servo servoArtifactLifter;
-    public Intake(HardwareMap hardwareMap, Telemetry telemetry) {
+    private MotorEx motorIntake;
+    private Telemetry telemetry;
 
-        motorIntakeBubbler = new MotorEx(hardwareMap, "intakeLift");
-        servoArtifactLifter = hardwareMap.get(Servo.class, "liftToIntake");
-        servoIntakeGrabber = hardwareMap.get(CRServoEx.class, "intakeGrabber");
-//        TODO - Check device name for servoIntakeGrabber
+    public Intake(HardwareMap hardwareMap, Telemetry telemetry, String intakeName) {
 
-        motorIntakeBubbler.setInverted(true);
-        servoIntakeGrabber.setInverted(false);
+        motorIntake = new MotorEx(hardwareMap, intakeName);
 
-        motorIntakeBubbler.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
+        motorIntake.setInverted(true);
 
-        motorIntakeBubbler.stopAndResetEncoder();
+        motorIntake.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
 
-        motorIntakeBubbler.setRunMode(Motor.RunMode.RawPower);
-        servoIntakeGrabber.setRunMode(CRServoEx.RunMode.RawPower);
+        motorIntake.stopAndResetEncoder();
 
-        servoArtifactLifter.setPosition(1.0);
+        motorIntake.setRunMode(Motor.RunMode.RawPower);
 
     }
 
-    public void raiseServoLifter() {
-        servoArtifactLifter.setPosition(0.65);
+
+    public void run() {
+        motorIntake.set(1);
     }
 
-    public void lowerServoLifter() {
-        servoArtifactLifter.setPosition(0.0);
-    }
-
-
-    public void startGrabber() {
-        servoIntakeGrabber.set(1.0);
-    }
-
-    public void stopGrabber() {
-        servoIntakeGrabber.set(0.0);
-    }
-
-    public void startBubbler() {
-        motorIntakeBubbler.set(1.0);
-    }
-
-    public void stopBubbler() {
-        motorIntakeBubbler.set(0.0);
-    }
-
-    public void startElevator() {
-        this.startBubbler();
-        this.raiseServoLifter();
+    public void stop() {
+        motorIntake.set(0);
     }
 
 }

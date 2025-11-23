@@ -55,7 +55,7 @@ public class Robot {
         motorBackLeft.setRunMode(Motor.RunMode.VelocityControl);
         motorBackRight.setRunMode(Motor.RunMode.VelocityControl);
 
-        intake = new Intake(hardwareMap, telemetry);
+        intake = new Intake(hardwareMap, telemetry, "intakeLift");
         botLifters = new BotLifters(hardwareMap, telemetry);
 
         drivetrain = new MecanumDrive(false, motorFrontLeft, motorFrontRight, motorBackLeft, motorBackRight);

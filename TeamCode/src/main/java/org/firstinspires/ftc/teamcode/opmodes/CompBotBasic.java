@@ -9,10 +9,9 @@ import com.seattlesolvers.solverslib.gamepad.ToggleButtonReader;
 
 import org.firstinspires.ftc.teamcode.Robot;
 import org.firstinspires.ftc.teamcode.commands.EndBotLifters;
-import org.firstinspires.ftc.teamcode.commands.EndIntake;
+import org.firstinspires.ftc.teamcode.commands.RunBotLifter;
 import org.firstinspires.ftc.teamcode.commands.RunIntake;
 import org.firstinspires.ftc.teamcode.commands.StartBotLifters;
-import org.firstinspires.ftc.teamcode.commands.StartIntake;
 
 @TeleOp(name = "Comp Basic")
 public class CompBotBasic extends OpMode {
@@ -26,8 +25,9 @@ public class CompBotBasic extends OpMode {
     private ToggleButtonReader toggleIntake;
     private ToggleButtonReader toggleHelpTelemetry;
     private RunIntake runIntake;
-    private StartIntake startIntake;
-    private EndIntake endIntake;
+    private RunBotLifter runBotLifter;
+    private RunBotLifter upBotLifter;
+    private RunBotLifter downBotLifter;
     private StartBotLifters startBotLifters;
     private EndBotLifters endBotLifters;
     private double driveFastSpeedLimit = 1.0;
@@ -40,7 +40,7 @@ public class CompBotBasic extends OpMode {
         robot = new Robot(hardwareMap, telemetry);
         commandScheduler = CommandScheduler.getInstance();
 
-        // with multi button toggles there is and enter berfore the .and
+        // with multi button toggles there is an enter berfore the .and/.or
         // Drive Slow Toggle = X + Right Bumper
         toggleDriveSlow = new ToggleButtonReader(driver1.getGamepadButton(GamepadKeys.Button.X)
                 .and(driver1.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER))::get);
@@ -48,28 +48,19 @@ public class CompBotBasic extends OpMode {
         toggleFieldCentric = new ToggleButtonReader(driver1.getGamepadButton(GamepadKeys.Button.OPTIONS)
                 .and(driver1.getGamepadButton(GamepadKeys.Button.X))::get);
         // Intake the artifacts up = Y
-        toggleIntake = new ToggleButtonReader(driver1.getGamepadButton(GamepadKeys.Button.Y)::get);
-        runIntake = new RunIntake(robot.getIntake(), toggleIntake);
+        toggleIntake = new ToggleButtonReader(driver1.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER)::get);
+        runIntake = new RunIntake(robot.getIntake(), toggleIntake::getState);
         commandScheduler.schedule(runIntake);
-
-        startBotLifters = new StartBotLifters(robot.getBotLifters());
-
-        driver1.getGamepadButton(GamepadKeys.Button.A).whenPressed(startIntake);
-        driver1.getGamepadButton(GamepadKeys.Button.A).whenReleased(endIntake);
-        driver2.getGamepadButton(GamepadKeys.Button.DPAD_UP).whenPressed(startBotLifters);
-        driver2.getGamepadButton(GamepadKeys.Button.DPAD_DOWN).whenPressed(endBotLifters);
-// TODO - next time - if A is on execute, if A is off/pressed again we call end
+        // Lift the bot up =
+//        upBotLifter = new RunBotLifter(driver1.getGamepadButton(GamepadKeys.Button.DPAD_UP).whileHeld(runBotLifter)::get);
+//        driver1.getGamepadButton(GamepadKeys.Button.DPAD_DOWN).whileHeld(runBotLifter);
+//        commandScheduler.schedule(runBotLifter);
 
     }
 
     @Override
     public void loop() {
         loopReadStuff();
-
-        if (driver1.getButton(GamepadKeys.Button.RIGHT_BUMPER)) {
-            robot.getIntake().raiseServoLifter();
-        }
-
 
         double driveSpeedLimit = getDriveSpeedLimit();
         Robot.DriveState driveState = getDriveState();
