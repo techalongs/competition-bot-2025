@@ -21,7 +21,6 @@ public class Robot {
     private final Launcher midLauncher;
     private final Launcher backLauncher;
     private final Lifter lifts;
-    private final Telemetry telemetry;
 
     public enum DriveState {
         ROBOT_CENTRIC,
@@ -31,13 +30,11 @@ public class Robot {
     public Robot(HardwareMap hardwareMap, Telemetry telemetry) {
         drivetrain = new Drivetrain(hardwareMap, "frontLeft", "frontRight", "backLeft", "backRight");
         intake = new Intake(hardwareMap, "intakeLift");
-        frontLauncher = new Launcher(hardwareMap, "frontLauncher", "pot1");
-        midLauncher = new Launcher(hardwareMap, "midLauncher", "pot2");
-        backLauncher = new Launcher(hardwareMap, "backLauncher", "pot3");
+        frontLauncher = new Launcher(hardwareMap, "frontLauncher", "pot1", "sensor1");
+        midLauncher = new Launcher(hardwareMap, "midLauncher", "pot2", "sensor2");
+        backLauncher = new Launcher(hardwareMap, "backLauncher", "pot3", "sensor3");
         lifts = new Lifter(hardwareMap, "leftLift", "rightLift");
         lifts.setDefaultCommand(new PerpetualCommand(new RunCommand(lifts::stop, lifts)));
-
-        this.telemetry = telemetry;
     }
 
     public void drive(Robot.DriveState state, GamepadEx gamepad, double limiter) {
@@ -52,20 +49,15 @@ public class Robot {
         return new InstantCommand(intake::stop);
     }
 
-    public Command launchFront() {
-        return frontLauncher.launch();
-    }
-
-    public Command launchMid() {
-        return midLauncher.launch();
-    }
-
-    public Command launchBack() {
-        return backLauncher.launch();
+    public Command launchColor(Launcher.Color color) {
+        if (frontLauncher.getColor() == color) return frontLauncher.launch();
+        if (midLauncher.getColor() == color) return midLauncher.launch();
+        if (backLauncher.getColor() == color) return backLauncher.launch();
+        return new InstantCommand();
     }
 
     public Command launchAll() {
-        return new ParallelCommandGroup(launchFront(), launchMid(), launchBack());
+        return new ParallelCommandGroup(frontLauncher.launch(), midLauncher.launch(), backLauncher.launch());
     }
 
     public Command raiseLifts() {

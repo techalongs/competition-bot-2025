@@ -9,6 +9,7 @@ import com.seattlesolvers.solverslib.gamepad.GamepadKeys;
 import com.seattlesolvers.solverslib.gamepad.ToggleButtonReader;
 
 import org.firstinspires.ftc.teamcode.Robot;
+import org.firstinspires.ftc.teamcode.subsystems.Launcher;
 import org.firstinspires.ftc.teamcode.util.RevPotentiometer;
 
 @TeleOp(name = "Two Controller TeleOp")
@@ -43,22 +44,20 @@ public class TwoControllers extends OpMode {
                 .and(driver1.getGamepadButton(GamepadKeys.Button.X))::get);
 
         // Intake - Y
-        driver1.getGamepadButton(GamepadKeys.Button.Y).whenPressed(new ConditionalCommand(
-                robot.runIntake(),
-                robot.stopIntake(),
-                () -> {
-                    intakeState = !intakeState;
-                    return intakeState;
-                }
-        ));
+        driver1.getGamepadButton(GamepadKeys.Button.Y)
+                .whenPressed(new ConditionalCommand(
+                    robot.runIntake(),
+                    robot.stopIntake(),
+                    () -> {
+                        intakeState = !intakeState;
+                        return intakeState;
+                    }
+            ));
 
         // Launchers - X
-        driver2.getGamepadButton(GamepadKeys.Button.X).whenPressed(robot.launchBack());
-        driver2.getGamepadButton(GamepadKeys.Button.A).whenPressed(robot.launchMid());
-        driver2.getGamepadButton(GamepadKeys.Button.B).whenPressed(robot.launchFront());
-        driver2.getGamepadButton(GamepadKeys.Button.Y)
-                .and(driver2.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER))
-                .whenActive(robot.launchAll());
+        driver1.getGamepadButton(GamepadKeys.Button.X).whenPressed(robot.launchColor(Launcher.Color.PURPLE));
+        driver1.getGamepadButton(GamepadKeys.Button.B).whenPressed(robot.launchColor(Launcher.Color.GREEN));
+        driver1.getGamepadButton(GamepadKeys.Button.A).whenPressed(robot.launchAll());
 
         // Ascent Lifts - Dpad Up and Dpad Down
         driver1.getGamepadButton(GamepadKeys.Button.DPAD_UP).whileHeld(robot.raiseLifts());

@@ -1,30 +1,21 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
-import static java.lang.Thread.sleep;
-
-import android.telephony.TelephonyCallback;
-
-import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.seattlesolvers.solverslib.command.Command;
 import com.seattlesolvers.solverslib.command.CommandBase;
 import com.seattlesolvers.solverslib.command.SequentialCommandGroup;
-import com.seattlesolvers.solverslib.command.Subsystem;
 import com.seattlesolvers.solverslib.command.SubsystemBase;
 import com.seattlesolvers.solverslib.hardware.motors.CRServoEx;
-import com.seattlesolvers.solverslib.util.Timing;
 
+import org.firstinspires.ftc.teamcode.util.REVColorSensor;
 import org.firstinspires.ftc.teamcode.util.RevPotentiometer;
 import org.firstinspires.ftc.teamcode.util.SleepCommand;
-
-import java.util.Collections;
-import java.util.Set;
-import java.util.concurrent.TimeUnit;
 
 public class Launcher extends SubsystemBase {
     private final CRServoEx launcher;
     private final RevPotentiometer potentiometer;
-    private final double TOLERANCE = 0.01;
+    private final REVColorSensor sensor;
+    private final double SERVO_TOLERANCE = 0.01;
 
     private enum Position {
         LOAD(0.2),
@@ -35,6 +26,16 @@ public class Launcher extends SubsystemBase {
 
         Position(double v) {
             this.val = v;
+        }
+    }
+
+    public enum Color {
+        GREEN(new float[] {60, 190}),
+        PURPLE(new float[] {190, 360});
+
+        final float[] range;
+        Color (float[] range) {
+            this.range = range;
         }
     }
 
@@ -63,17 +64,24 @@ public class Launcher extends SubsystemBase {
         }
     }
 
-    public Launcher(HardwareMap hardwareMap, String launch, String pot) {
-        launcher = new CRServoEx(hardwareMap, launch);
-        potentiometer = new RevPotentiometer(hardwareMap, pot);
+    public Launcher(HardwareMap hardwareMap, String launch, String pot, String sensor) {
+        this.launcher = new CRServoEx(hardwareMap, launch);
+        this.potentiometer = new RevPotentiometer(hardwareMap, pot);
+        this.sensor = new REVColorSensor(hardwareMap, sensor);
 
         launcher.setInverted(false);
         launcher.setRunMode(CRServoEx.RunMode.RawPower);
     }
 
     private boolean inRange(double value) {
-        return value - TOLERANCE < potentiometer.getVoltage()
-                && potentiometer.getVoltage() < value + TOLERANCE;
+        return value - SERVO_TOLERANCE < potentiometer.getVoltage()
+                && potentiometer.getVoltage() < value + SERVO_TOLERANCE;
+    }
+
+    public Color getColor() {
+        float hue = sensor.RGBtoHSV(sensor.red(), sensor.green(), sensor.blue(), new float[3])[0];
+        if (Color.GREEN.range[0] < hue && hue < Color.GREEN.range[1]) return Color.GREEN;
+        else return Color.PURPLE;
     }
 
     public Command launch() {

@@ -1,7 +1,11 @@
 package org.firstinspires.ftc.teamcode.opmodes;
 
+import android.health.connect.AggregateRecordsGroupedByDurationResponse;
+
+import com.qualcomm.hardware.rev.RevColorSensorV3;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
 import com.seattlesolvers.solverslib.command.CommandScheduler;
 import com.seattlesolvers.solverslib.command.ConditionalCommand;
 import com.seattlesolvers.solverslib.gamepad.GamepadEx;
@@ -9,6 +13,8 @@ import com.seattlesolvers.solverslib.gamepad.GamepadKeys;
 import com.seattlesolvers.solverslib.gamepad.ToggleButtonReader;
 
 import org.firstinspires.ftc.teamcode.Robot;
+import org.firstinspires.ftc.teamcode.subsystems.Launcher;
+import org.firstinspires.ftc.teamcode.util.REVColorSensor;
 import org.firstinspires.ftc.teamcode.util.RevPotentiometer;
 
 @TeleOp(name = "One Controller TeleOp")
@@ -21,13 +27,24 @@ public class OneController extends OpMode {
     private ToggleButtonReader toggleDriveSlow;
     private ToggleButtonReader toggleFieldCentric;
     private boolean intakeState = false;
-    private RevPotentiometer pot;
+    private RevPotentiometer pot1;
+    private RevPotentiometer pot2;
+    private RevPotentiometer pot3;
+    private REVColorSensor sensor1;
+    private REVColorSensor sensor2;
+    private REVColorSensor sensor3;
     private double driveFastSpeedLimit = 1.0;
     private double driveSlowSpeedLimit = 0.5;
 
     @Override
     public void init() {
-        pot = new RevPotentiometer(hardwareMap, "pot3");
+        pot1 = new RevPotentiometer(hardwareMap, "pot1");
+        pot2 = new RevPotentiometer(hardwareMap, "pot2");
+        pot3 = new RevPotentiometer(hardwareMap, "pot3");
+        sensor1 = new REVColorSensor(hardwareMap, "sensor1");
+        sensor2 = new REVColorSensor(hardwareMap, "sensor2");
+        sensor3 = new REVColorSensor(hardwareMap, "sensor3");
+
         driver1 = new GamepadEx(gamepad1);
         driver2 = new GamepadEx(gamepad2);
         robot = new Robot(hardwareMap, telemetry);
@@ -43,9 +60,8 @@ public class OneController extends OpMode {
                 .and(driver1.getGamepadButton(GamepadKeys.Button.X))::get);
 
         // Intake - Y
-        driver1.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).negate()
-                .and(driver1.getGamepadButton(GamepadKeys.Button.Y))
-                .whenActive(new ConditionalCommand(
+        driver1.getGamepadButton(GamepadKeys.Button.Y)
+                .whenPressed(new ConditionalCommand(
                         robot.runIntake(),
                         robot.stopIntake(),
                         () -> {
@@ -55,12 +71,9 @@ public class OneController extends OpMode {
                 ));
 
         // Launchers - X
-        driver1.getGamepadButton(GamepadKeys.Button.X).whenPressed(robot.launchBack());
-        driver1.getGamepadButton(GamepadKeys.Button.A).whenPressed(robot.launchMid());
-        driver1.getGamepadButton(GamepadKeys.Button.B).whenPressed(robot.launchFront());
-        driver1.getGamepadButton(GamepadKeys.Button.Y)
-                .and(driver1.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER))
-                .whenActive(robot.launchAll());
+        driver1.getGamepadButton(GamepadKeys.Button.X).whenPressed(robot.launchColor(Launcher.Color.PURPLE));
+        driver1.getGamepadButton(GamepadKeys.Button.B).whenPressed(robot.launchColor(Launcher.Color.GREEN));
+        driver1.getGamepadButton(GamepadKeys.Button.A).whenPressed(robot.launchAll());
 
         // Ascent Lifts - Dpad Up and Dpad Down
         driver1.getGamepadButton(GamepadKeys.Button.DPAD_UP).whileHeld(robot.raiseLifts());
@@ -76,7 +89,12 @@ public class OneController extends OpMode {
         robot.drive(driveState, driver1, driveSpeedLimit);
 
         telemetry.addData("Drive Mode", driveState.name());
-        telemetry.addData("Voltage", pot.getVoltage());
+        telemetry.addData("Voltage 1", pot1.getVoltage());
+        telemetry.addData("Voltage 2", pot2.getVoltage());
+        telemetry.addData("Voltage 3", pot3.getVoltage());
+        telemetry.addData("Sensor 1", sensor1.RGBtoHSV(sensor3.red(), sensor3.green(), sensor3.blue(), new float[3])[0]);
+        telemetry.addData("Sensor 2", sensor2.RGBtoHSV(sensor2.red(), sensor2.green(), sensor2.blue(), new float[3])[0]);
+        telemetry.addData("Sensor 3", sensor3.RGBtoHSV(sensor3.red(), sensor3.green(), sensor3.blue(), new float[3])[0]);
         telemetry.update();
     }
 
