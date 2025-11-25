@@ -30,9 +30,9 @@ public class Robot {
     public Robot(HardwareMap hardwareMap, Telemetry telemetry) {
         drivetrain = new Drivetrain(hardwareMap, "frontLeft", "frontRight", "backLeft", "backRight");
         intake = new Intake(hardwareMap, "intakeLift");
-        frontLauncher = new Launcher(hardwareMap, "frontLauncher", "pot1", "sensor1");
-        midLauncher = new Launcher(hardwareMap, "midLauncher", "pot2", "sensor2");
-        backLauncher = new Launcher(hardwareMap, "backLauncher", "pot3", "sensor3");
+        frontLauncher = new Launcher(hardwareMap, "frontLauncher", "pot1", "sensor1", true);
+        midLauncher = new Launcher(hardwareMap, "midLauncher", "pot2", "sensor2", false);
+        backLauncher = new Launcher(hardwareMap, "backLauncher", "pot3", "sensor3", false);
         lifts = new Lifter(hardwareMap, "leftLift", "rightLift");
         lifts.setDefaultCommand(new PerpetualCommand(new RunCommand(lifts::stop, lifts)));
     }

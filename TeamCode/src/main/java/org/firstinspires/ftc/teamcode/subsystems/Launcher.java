@@ -64,12 +64,12 @@ public class Launcher extends SubsystemBase {
         }
     }
 
-    public Launcher(HardwareMap hardwareMap, String launch, String pot, String sensor) {
+    public Launcher(HardwareMap hardwareMap, String launch, String pot, String sensor, boolean inverted) {
         this.launcher = new CRServoEx(hardwareMap, launch);
         this.potentiometer = new RevPotentiometer(hardwareMap, pot);
         this.sensor = new REVColorSensor(hardwareMap, sensor);
 
-        launcher.setInverted(false);
+        launcher.setInverted(inverted);
         launcher.setRunMode(CRServoEx.RunMode.RawPower);
     }
 
