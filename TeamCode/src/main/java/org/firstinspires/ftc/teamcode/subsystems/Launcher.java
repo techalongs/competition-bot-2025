@@ -41,6 +41,10 @@ public class Launcher extends SubsystemBase {
         launcher.set(1);
     }
 
+    public void reload() {
+        launcher.set(-1);
+    }
+
     public void stopLauncher() {
         launcher.set(0);
     }

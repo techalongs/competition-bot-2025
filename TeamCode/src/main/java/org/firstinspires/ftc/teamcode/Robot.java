@@ -47,29 +47,28 @@ public class Robot {
         return new InstantCommand(intake::stop);
     }
 
-    public Command launchLeft() {
-        return new InstantCommand(leftLauncher::launch);
+    private Command launch(Launcher launcher) {
+        return new SequentialCommandGroup(
+                new InstantCommand(launcher::launch),
+                new SleepCommand(150),
+                new InstantCommand(launcher::reload),
+                new SleepCommand(70),
+                new InstantCommand(launcher::stopLauncher)
+        );
     }
 
-    public Command stopLeftLaunch() {
-        return new InstantCommand(leftLauncher::stopLauncher);
+    public Command launchLeft() {
+        return launch(leftLauncher);
     }
 
     public Command launchMid() {
-        return new InstantCommand(midLauncher::launch);
-    }
-
-    public Command stopMidLaunch() {
-        return new InstantCommand(midLauncher::stopLauncher);
+        return launch(midLauncher);
     }
 
     public Command launchRight() {
-        return new InstantCommand(rightLauncher::launch);
+        return launch(rightLauncher);
     }
 
-    public Command stopRightLaunch() {
-        return new InstantCommand(rightLauncher::stopLauncher);
-    }
 
 //    public Command launchColor(Launcher.Color color) {
 //        if (leftLauncher.getColor() == color) return new InstantCommand(leftLauncher::launch);
@@ -79,21 +78,17 @@ public class Robot {
 //    }
 
     public Command launchAll() {
-        return new SequentialCommandGroup(
+        return new ParallelCommandGroup(
                 launchLeft(),
-                new SleepCommand(500),
-                launchMid(),
-                stopLeftLaunch(),
-                new SleepCommand(500),
-                launchRight(),
-                stopMidLaunch(),
-                new SleepCommand(500),
-                stopRightLaunch()
+                new SequentialCommandGroup(
+                        new SleepCommand(100),
+                        launchMid()
+                ),
+                new SequentialCommandGroup(
+                        new SleepCommand(200),
+                        launchRight()
+                )
         );
-    }
-
-    public Command stopAllLaunch() {
-        return new ParallelCommandGroup(stopLeftLaunch(), stopMidLaunch(), stopRightLaunch());
     }
 
 //    public Command raiseLifts() {

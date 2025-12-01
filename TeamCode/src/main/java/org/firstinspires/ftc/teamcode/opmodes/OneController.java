@@ -26,10 +26,6 @@ public class OneController extends OpMode {
     private ToggleButtonReader toggleDriveSlow;
     private ToggleButtonReader toggleFieldCentric;
     private boolean intakeState = false;
-    private boolean leftLauncherState = false;
-    private boolean midLauncherState = false;
-    private boolean rightLauncherState = false;
-    private boolean allLauncherState = false;
     private REVColorSensor sensor1;
     private REVColorSensor sensor2;
     private REVColorSensor sensor3;
@@ -72,45 +68,10 @@ public class OneController extends OpMode {
 //        driver1.getGamepadButton(GamepadKeys.Button.B).whenPressed(robot.launchColor(Launcher.Color.GREEN));
 //        driver1.getGamepadButton(GamepadKeys.Button.A).whenPressed(robot.launchAll());
 
-        driver1.getGamepadButton(GamepadKeys.Button.X)
-                .whenPressed(new ConditionalCommand(
-                        robot.launchLeft(),
-                        robot.stopLeftLaunch(),
-                        () -> {
-                            leftLauncherState = !leftLauncherState;
-                            return leftLauncherState;
-                        }
-                ));
-
-        driver1.getGamepadButton(GamepadKeys.Button.A)
-                .whenPressed(new ConditionalCommand(
-                        robot.launchMid(),
-                        robot.stopMidLaunch(),
-                        () -> {
-                            midLauncherState = !midLauncherState;
-                            return midLauncherState;
-                        }
-                ));
-
-        driver1.getGamepadButton(GamepadKeys.Button.B)
-                .whenPressed(new ConditionalCommand(
-                        robot.launchRight(),
-                        robot.stopRightLaunch(),
-                        () -> {
-                            rightLauncherState = !rightLauncherState;
-                            return rightLauncherState;
-                        }
-                ));
-
-        driver1.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER)
-                .whenPressed(new ConditionalCommand(
-                        robot.launchAll(),
-                        robot.stopAllLaunch(),
-                        () -> {
-                            allLauncherState = !allLauncherState;
-                            return allLauncherState;
-                        }
-                ));
+        driver1.getGamepadButton(GamepadKeys.Button.X).whenPressed(robot.launchLeft());
+        driver1.getGamepadButton(GamepadKeys.Button.A).whenPressed(robot.launchMid());
+        driver1.getGamepadButton(GamepadKeys.Button.B).whenPressed(robot.launchRight());
+        driver1.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenPressed(robot.launchAll());
 
         // Ascent Lifts - Dpad Up and Dpad Down
 //        driver1.getGamepadButton(GamepadKeys.Button.DPAD_UP).whileHeld(robot.raiseLifts());
