@@ -31,7 +31,7 @@ public class TwoControllers extends OpMode {
         pot = new RevPotentiometer(hardwareMap, "pot3");
         driver1 = new GamepadEx(gamepad1);
         driver2 = new GamepadEx(gamepad2);
-        robot = new Robot(hardwareMap, telemetry);
+        robot = new Robot(hardwareMap);
         commandScheduler = CommandScheduler.getInstance();
 
         // With multi button toggles there is and enter before the .and
@@ -55,13 +55,13 @@ public class TwoControllers extends OpMode {
             ));
 
         // Launchers - X
-        driver1.getGamepadButton(GamepadKeys.Button.X).whenPressed(robot.launchColor(Launcher.Color.PURPLE));
-        driver1.getGamepadButton(GamepadKeys.Button.B).whenPressed(robot.launchColor(Launcher.Color.GREEN));
-        driver1.getGamepadButton(GamepadKeys.Button.A).whenPressed(robot.launchAll());
+//        driver1.getGamepadButton(GamepadKeys.Button.X).whenPressed(robot.launchColor(Launcher.Color.PURPLE));
+//        driver1.getGamepadButton(GamepadKeys.Button.B).whenPressed(robot.launchColor(Launcher.Color.GREEN));
+//        driver1.getGamepadButton(GamepadKeys.Button.A).whenPressed(robot.launchAll());
 
         // Ascent Lifts - Dpad Up and Dpad Down
-        driver1.getGamepadButton(GamepadKeys.Button.DPAD_UP).whileHeld(robot.raiseLifts());
-        driver1.getGamepadButton(GamepadKeys.Button.DPAD_DOWN).whileHeld(robot.lowerLifts());
+//        driver1.getGamepadButton(GamepadKeys.Button.DPAD_UP).whileHeld(robot.raiseLifts());
+//        driver1.getGamepadButton(GamepadKeys.Button.DPAD_DOWN).whileHeld(robot.lowerLifts());
     }
 
     @Override

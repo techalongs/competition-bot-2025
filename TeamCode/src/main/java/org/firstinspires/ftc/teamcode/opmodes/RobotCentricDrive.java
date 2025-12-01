@@ -17,7 +17,7 @@ public class RobotCentricDrive extends OpMode {
     public void init() {
         driver1 = new GamepadEx(gamepad1);
         driver2 = new GamepadEx(gamepad2);
-        robot = new Robot(hardwareMap, telemetry);
+        robot = new Robot(hardwareMap);
     }
 
     @Override
