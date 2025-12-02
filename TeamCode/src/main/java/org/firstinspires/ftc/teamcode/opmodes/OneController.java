@@ -44,9 +44,9 @@ public class OneController extends OpMode {
         commandScheduler = CommandScheduler.getInstance();
 
         // With multi button toggles there is and enter before the .and
-        //  Drive Slow Toggle = X + Right Bumper
-        toggleDriveSlow = new ToggleButtonReader(driver1.getGamepadButton(GamepadKeys.Button.X)
-                .and(driver1.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER))::get);
+        //  Drive Slow Toggle = Options + Left Bumper
+        toggleDriveSlow = new ToggleButtonReader(driver1.getGamepadButton(GamepadKeys.Button.OPTIONS)
+                .and(driver1.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER))::get);
 
         // Drive Field Centric Toggle = Options + X
         toggleFieldCentric = new ToggleButtonReader(driver1.getGamepadButton(GamepadKeys.Button.OPTIONS)
