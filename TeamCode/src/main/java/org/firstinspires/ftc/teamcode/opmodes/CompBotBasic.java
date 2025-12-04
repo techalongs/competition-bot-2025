@@ -51,6 +51,11 @@ public class CompBotBasic extends OpMode {
         toggleIntake = new ToggleButtonReader(driver1.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER)::get);
         runIntake = new RunIntake(robot.getIntake(), toggleIntake::getState);
         commandScheduler.schedule(runIntake);
+        // Telemetry - control display =
+        toggleHelpTelemetry = new ToggleButtonReader(
+                driver1.getGamepadButton(GamepadKeys.Button.X).and(driver1.getGamepadButton(GamepadKeys.Button.Y))
+                                .or(driver2.getGamepadButton(GamepadKeys.Button.X))
+                                .and(driver2.getGamepadButton(GamepadKeys.Button.Y)))
         // Lift the bot up =
 //        upBotLifter = new RunBotLifter(driver1.getGamepadButton(GamepadKeys.Button.DPAD_UP).whileHeld(runBotLifter)::get);
 //        driver1.getGamepadButton(GamepadKeys.Button.DPAD_DOWN).whileHeld(runBotLifter);

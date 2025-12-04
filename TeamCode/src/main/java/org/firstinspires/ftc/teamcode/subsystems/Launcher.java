@@ -9,9 +9,13 @@ import org.firstinspires.ftc.teamcode.util.RevPotentiometer;
 import org.firstinspires.ftc.teamcode.util.SleepCommand;
 
 public class Launcher extends SubsystemBase {
+
+    // IMPORTANT - Launcher rebuilt, mentally yell at builders!!!
+
     // 1 = closed to intake
     // 2 = middle launcher
     // 3 = farthest from launcher
+
 
     private CRServoEx launcher;
     private RevPotentiometer potentiometer;
