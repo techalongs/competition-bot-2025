@@ -49,10 +49,12 @@ public class Robot {
 
     private Command launch(Launcher launcher) {
         return new SequentialCommandGroup(
+                new InstantCommand(launcher::reloadSlow),
+                new SleepCommand(300),
                 new InstantCommand(launcher::launch),
                 new SleepCommand(150),
                 new InstantCommand(launcher::reload),
-                new SleepCommand(70),
+                new SleepCommand(25),
                 new InstantCommand(launcher::stopLauncher)
         );
     }

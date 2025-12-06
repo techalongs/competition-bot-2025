@@ -41,6 +41,10 @@ public class Launcher extends SubsystemBase {
         launcher.set(1);
     }
 
+    public void reloadSlow() {
+        launcher.set(-0.5);
+    }
+
     public void reload() {
         launcher.set(-1);
     }
