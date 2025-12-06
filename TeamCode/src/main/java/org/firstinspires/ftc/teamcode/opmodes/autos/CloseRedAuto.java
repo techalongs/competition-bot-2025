@@ -23,9 +23,11 @@ public class CloseRedAuto extends OpMode {
     private PathChain[] paths;
     private Pose[] poses;
 
+    private final int DELAY = 0; // Milliseconds
+
     private void initPoses() {
-        Pose startPose = new Pose(133, 112, Math.toRadians(37));
-        Pose scorePose = new Pose(93, 93, Math.toRadians(45));
+        Pose startPose = new Pose(134, 109, Math.toRadians(42));
+        Pose scorePose = new Pose(93, 83, Math.toRadians(45));
         Pose endPose = new Pose(105, 16, Math.toRadians(0));
         poses = new Pose[] {startPose, scorePose, endPose};
     }
@@ -58,7 +60,7 @@ public class CloseRedAuto extends OpMode {
         buildPaths();
         follower.setStartingPose(poses[0]);
 
-        AutoCommand auto = new AutoCommand(robot, follower, paths);
+        AutoCommand auto = new AutoCommand(robot, follower, paths, DELAY);
         auto.schedule();
     }
 

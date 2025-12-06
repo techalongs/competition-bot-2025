@@ -6,10 +6,12 @@ import com.seattlesolvers.solverslib.command.SequentialCommandGroup;
 import com.seattlesolvers.solverslib.pedroCommand.FollowPathCommand;
 
 import org.firstinspires.ftc.teamcode.Robot;
+import org.firstinspires.ftc.teamcode.util.SleepCommand;
 
 public class AutoCommand extends SequentialCommandGroup {
-    public AutoCommand(Robot robot, Follower follower, PathChain[] paths) {
+    public AutoCommand(Robot robot, Follower follower, PathChain[] paths, int delay) {
         addCommands(
+                new SleepCommand(delay),
                 new FollowPathCommand(follower, paths[0], true),
                 robot.launchAll(), // Score preload
                 new FollowPathCommand(follower, paths[1], true)

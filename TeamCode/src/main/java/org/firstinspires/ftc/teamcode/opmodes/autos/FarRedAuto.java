@@ -22,6 +22,7 @@ public class FarRedAuto extends OpMode {
 
     private PathChain[] paths;
     private Pose[] poses;
+    private final int DELAY = 0; // Milliseconds
 
     private void initPoses() {
         Pose startPose = new Pose(86.5, 9.5, Math.toRadians(0));
@@ -58,7 +59,7 @@ public class FarRedAuto extends OpMode {
         buildPaths();
         follower.setStartingPose(poses[0]);
 
-        AutoCommand auto = new AutoCommand(robot, follower, paths);
+        AutoCommand auto = new AutoCommand(robot, follower, paths, DELAY);
         auto.schedule();
     }
 

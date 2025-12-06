@@ -22,10 +22,11 @@ public class CloseBlueAuto extends OpMode {
 
     private PathChain[] paths;
     private Pose[] poses;
+    private final int DELAY = 0; // Milliseconds
 
     private void initPoses() {
-        Pose startPose = new Pose(20, 112, Math.toRadians(325));
-        Pose scorePose = new Pose(50, 93, Math.toRadians(135));
+        Pose startPose = new Pose(20, 109, Math.toRadians(320)); // TODO: check angle - increase
+        Pose scorePose = new Pose(50, 73, Math.toRadians(135));
         Pose endPose = new Pose(40, 15, Math.toRadians(180));
         poses = new Pose[] {startPose, scorePose, endPose};
     }
@@ -58,7 +59,7 @@ public class CloseBlueAuto extends OpMode {
         buildPaths();
         follower.setStartingPose(poses[0]);
 
-        AutoCommand auto = new AutoCommand(robot, follower, paths);
+        AutoCommand auto = new AutoCommand(robot, follower, paths, DELAY);
         auto.schedule();
     }
 
