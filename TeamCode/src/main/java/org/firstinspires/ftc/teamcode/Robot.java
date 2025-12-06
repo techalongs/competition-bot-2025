@@ -60,13 +60,25 @@ public class Robot {
         );
     }
 
-    public Command launchColor(Launcher.Color color) {
-        if (leftLauncher.getColor() == color) return launch(leftLauncher);
-        if (midLauncher.getColor() == color) return launch(midLauncher);
-        if (rightLauncher.getColor() == color) return launch(rightLauncher);
-        return new InstantCommand();
+    public Command launchLeft() {
+        return launch(leftLauncher);
     }
 
+    public Command launchMid() {
+        return launch(midLauncher);
+    }
+
+    public Command launchRight() {
+        return launch(rightLauncher);
+    }
+
+//    public Command launchColor(Launcher.Color color) {
+//        if (leftLauncher.getColor() == color) return launch(leftLauncher);
+//        if (midLauncher.getColor() == color) return launch(midLauncher);
+//        if (rightLauncher.getColor() == color) return launch(rightLauncher);
+//        return new InstantCommand();
+//    }
+    
     public Launcher.Color[] getLauncherColors() {
         return new Launcher.Color[] {leftLauncher.getColor(), midLauncher.getColor(), rightLauncher.getColor()};
     }

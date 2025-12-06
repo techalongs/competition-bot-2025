@@ -60,9 +60,14 @@ public class TwoControllers extends OpMode {
                 ));
 
         // Launchers - X
-        driver2.getGamepadButton(GamepadKeys.Button.X).whenPressed(robot.launchColor(Launcher.Color.PURPLE));
-        driver2.getGamepadButton(GamepadKeys.Button.B).whenPressed(robot.launchColor(Launcher.Color.GREEN));
-        driver2.getGamepadButton(GamepadKeys.Button.A).whenPressed(robot.launchAll());
+//        driver2.getGamepadButton(GamepadKeys.Button.X).whenPressed(robot.launchColor(Launcher.Color.PURPLE));
+//        driver2.getGamepadButton(GamepadKeys.Button.B).whenPressed(robot.launchColor(Launcher.Color.GREEN));
+//        driver2.getGamepadButton(GamepadKeys.Button.A).whenPressed(robot.launchAll());
+
+        driver2.getGamepadButton(GamepadKeys.Button.SQUARE).whenPressed(robot.launchLeft());
+        driver2.getGamepadButton(GamepadKeys.Button.CROSS).whenPressed(robot.launchMid());
+        driver2.getGamepadButton(GamepadKeys.Button.CIRCLE).whenPressed(robot.launchRight());
+        driver2.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenPressed(robot.launchAll());
 
         // Ascent Lifts - Dpad Up and Dpad Down
 //        driver1.getGamepadButton(GamepadKeys.Button.DPAD_UP).whileHeld(robot.raiseLifts());

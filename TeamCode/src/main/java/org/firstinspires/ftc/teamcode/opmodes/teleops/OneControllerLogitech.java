@@ -62,9 +62,14 @@ public class OneControllerLogitech extends OpMode {
                 ));
 
         // Launchers - X
-        driver1.getGamepadButton(GamepadKeys.Button.X).whenPressed(robot.launchColor(Launcher.Color.PURPLE));
-        driver1.getGamepadButton(GamepadKeys.Button.B).whenPressed(robot.launchColor(Launcher.Color.GREEN));
-        driver1.getGamepadButton(GamepadKeys.Button.A).whenPressed(robot.launchAll());
+//        driver1.getGamepadButton(GamepadKeys.Button.X).whenPressed(robot.launchColor(Launcher.Color.PURPLE));
+//        driver1.getGamepadButton(GamepadKeys.Button.B).whenPressed(robot.launchColor(Launcher.Color.GREEN));
+//        driver1.getGamepadButton(GamepadKeys.Button.A).whenPressed(robot.launchAll());
+
+        driver1.getGamepadButton(GamepadKeys.Button.X).whenPressed(robot.launchLeft());
+        driver1.getGamepadButton(GamepadKeys.Button.A).whenPressed(robot.launchMid());
+        driver1.getGamepadButton(GamepadKeys.Button.B).whenPressed(robot.launchRight());
+        driver1.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenPressed(robot.launchAll());
 
         // Ascent Lifts - Dpad Up and Dpad Down
 //        driver1.getGamepadButton(GamepadKeys.Button.DPAD_UP).whileHeld(robot.raiseLifts());
