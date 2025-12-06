@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.opmodes;
+package org.firstinspires.ftc.teamcode.opmodes.teleops;
 
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
@@ -13,8 +13,8 @@ import org.firstinspires.ftc.teamcode.Robot;
 import org.firstinspires.ftc.teamcode.util.REVColorSensor;
 
 @Disabled
-@TeleOp(name = "Two Controllers TeleOp - Logitech", group = "Logitech Controls")
-public class TwoControllersLogitech extends OpMode {
+@TeleOp(name = "One Controller TeleOp - Logitech", group = "Logitech Controls")
+public class OneControllerLogitech extends OpMode {
 
     private GamepadEx driver1;
     private GamepadEx driver2;
@@ -65,10 +65,10 @@ public class TwoControllersLogitech extends OpMode {
 //        driver1.getGamepadButton(GamepadKeys.Button.B).whenPressed(robot.launchColor(Launcher.Color.GREEN));
 //        driver1.getGamepadButton(GamepadKeys.Button.A).whenPressed(robot.launchAll());
 
-        driver2.getGamepadButton(GamepadKeys.Button.X).whenPressed(robot.launchLeft());
-        driver2.getGamepadButton(GamepadKeys.Button.A).whenPressed(robot.launchMid());
-        driver2.getGamepadButton(GamepadKeys.Button.B).whenPressed(robot.launchRight());
-        driver2.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenPressed(robot.launchAll());
+        driver1.getGamepadButton(GamepadKeys.Button.X).whenPressed(robot.launchLeft());
+        driver1.getGamepadButton(GamepadKeys.Button.A).whenPressed(robot.launchMid());
+        driver1.getGamepadButton(GamepadKeys.Button.B).whenPressed(robot.launchRight());
+        driver1.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenPressed(robot.launchAll());
 
         // Ascent Lifts - Dpad Up and Dpad Down
 //        driver1.getGamepadButton(GamepadKeys.Button.DPAD_UP).whileHeld(robot.raiseLifts());

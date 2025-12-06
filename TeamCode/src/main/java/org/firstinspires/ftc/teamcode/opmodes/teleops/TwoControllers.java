@@ -1,6 +1,5 @@
-package org.firstinspires.ftc.teamcode.opmodes;
+package org.firstinspires.ftc.teamcode.opmodes.teleops;
 
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.seattlesolvers.solverslib.command.CommandScheduler;
@@ -12,9 +11,8 @@ import com.seattlesolvers.solverslib.gamepad.ToggleButtonReader;
 import org.firstinspires.ftc.teamcode.Robot;
 import org.firstinspires.ftc.teamcode.util.REVColorSensor;
 
-@Disabled
-@TeleOp(name = "One Controller TeleOp - Logitech", group = "Logitech Controls")
-public class OneControllerLogitech extends OpMode {
+@TeleOp(name = "Two Controller TeleOp - PS4", group = "Normal Controls")
+public class TwoControllers extends OpMode {
 
     private GamepadEx driver1;
     private GamepadEx driver2;
@@ -47,10 +45,10 @@ public class OneControllerLogitech extends OpMode {
 
         // Drive Field Centric Toggle = Options + X
         toggleFieldCentric = new ToggleButtonReader(driver1.getGamepadButton(GamepadKeys.Button.OPTIONS)
-                .and(driver1.getGamepadButton(GamepadKeys.Button.X))::get);
+                .and(driver1.getGamepadButton(GamepadKeys.Button.SQUARE))::get);
 
         // Intake - Y
-        driver1.getGamepadButton(GamepadKeys.Button.Y)
+        driver1.getGamepadButton(GamepadKeys.Button.TRIANGLE)
                 .whenPressed(new ConditionalCommand(
                         robot.runIntake(),
                         robot.stopIntake(),
@@ -65,10 +63,10 @@ public class OneControllerLogitech extends OpMode {
 //        driver1.getGamepadButton(GamepadKeys.Button.B).whenPressed(robot.launchColor(Launcher.Color.GREEN));
 //        driver1.getGamepadButton(GamepadKeys.Button.A).whenPressed(robot.launchAll());
 
-        driver1.getGamepadButton(GamepadKeys.Button.X).whenPressed(robot.launchLeft());
-        driver1.getGamepadButton(GamepadKeys.Button.A).whenPressed(robot.launchMid());
-        driver1.getGamepadButton(GamepadKeys.Button.B).whenPressed(robot.launchRight());
-        driver1.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenPressed(robot.launchAll());
+        driver2.getGamepadButton(GamepadKeys.Button.SQUARE).whenPressed(robot.launchLeft());
+        driver2.getGamepadButton(GamepadKeys.Button.CROSS).whenPressed(robot.launchMid());
+        driver2.getGamepadButton(GamepadKeys.Button.CIRCLE).whenPressed(robot.launchRight());
+        driver2.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenPressed(robot.launchAll());
 
         // Ascent Lifts - Dpad Up and Dpad Down
 //        driver1.getGamepadButton(GamepadKeys.Button.DPAD_UP).whileHeld(robot.raiseLifts());
