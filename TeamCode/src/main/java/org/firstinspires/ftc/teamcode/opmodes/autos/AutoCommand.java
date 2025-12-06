@@ -7,8 +7,8 @@ import com.seattlesolvers.solverslib.pedroCommand.FollowPathCommand;
 
 import org.firstinspires.ftc.teamcode.Robot;
 
-public class FarAutoCommand extends SequentialCommandGroup {
-    public FarAutoCommand(Robot robot, Follower follower, PathChain[] paths) {
+public class AutoCommand extends SequentialCommandGroup {
+    public AutoCommand(Robot robot, Follower follower, PathChain[] paths) {
         addCommands(
                 new FollowPathCommand(follower, paths[0], true),
                 robot.launchAll(), // Score preload

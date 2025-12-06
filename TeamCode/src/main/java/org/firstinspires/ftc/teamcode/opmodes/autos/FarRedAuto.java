@@ -26,7 +26,7 @@ public class FarRedAuto extends OpMode {
     private void initPoses() {
         Pose startPose = new Pose(86.5, 9.5, Math.toRadians(0));
         Pose scorePose = new Pose(93, 93, Math.toRadians(45));
-        Pose endPose = new Pose(105, 15, Math.toRadians(0));
+        Pose endPose = new Pose(105, 16, Math.toRadians(0));
         poses = new Pose[] {startPose, scorePose, endPose};
     }
 
@@ -58,7 +58,7 @@ public class FarRedAuto extends OpMode {
         buildPaths();
         follower.setStartingPose(poses[0]);
 
-        FarAutoCommand auto = new FarAutoCommand(robot, follower, paths);
+        AutoCommand auto = new AutoCommand(robot, follower, paths);
         auto.schedule();
     }
 
