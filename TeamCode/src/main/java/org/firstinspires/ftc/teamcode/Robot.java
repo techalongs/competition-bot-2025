@@ -5,6 +5,7 @@ import com.seattlesolvers.solverslib.command.Command;
 import com.seattlesolvers.solverslib.command.InstantCommand;
 import com.seattlesolvers.solverslib.command.ParallelCommandGroup;
 import com.seattlesolvers.solverslib.command.SequentialCommandGroup;
+import com.seattlesolvers.solverslib.command.Subsystem;
 import com.seattlesolvers.solverslib.gamepad.GamepadEx;
 
 import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
@@ -59,36 +60,27 @@ public class Robot {
         );
     }
 
-    public Command launchLeft() {
-        return launch(leftLauncher);
+    public Command launchColor(Launcher.Color color) {
+        if (leftLauncher.getColor() == color) return launch(leftLauncher);
+        if (midLauncher.getColor() == color) return launch(midLauncher);
+        if (rightLauncher.getColor() == color) return launch(rightLauncher);
+        return new InstantCommand();
     }
 
-    public Command launchMid() {
-        return launch(midLauncher);
+    public Launcher.Color[] getLauncherColors() {
+        return new Launcher.Color[] {leftLauncher.getColor(), midLauncher.getColor(), rightLauncher.getColor()};
     }
-
-    public Command launchRight() {
-        return launch(rightLauncher);
-    }
-
-
-//    public Command launchColor(Launcher.Color color) {
-//        if (leftLauncher.getColor() == color) return new InstantCommand(leftLauncher::launch);
-//        if (midLauncher.getColor() == color) return new InstantCommand(midLauncher::launch);
-//        if (rightLauncher.getColor() == color) return new InstantCommand(rightLauncher::launch);
-//        return new InstantCommand();
-//    }
 
     public Command launchAll() {
         return new ParallelCommandGroup(
-                launchLeft(),
+                launch(leftLauncher),
                 new SequentialCommandGroup(
                         new SleepCommand(100),
-                        launchMid()
+                        launch(midLauncher)
                 ),
                 new SequentialCommandGroup(
                         new SleepCommand(200),
-                        launchRight()
+                        launch(rightLauncher)
                 )
         );
     }

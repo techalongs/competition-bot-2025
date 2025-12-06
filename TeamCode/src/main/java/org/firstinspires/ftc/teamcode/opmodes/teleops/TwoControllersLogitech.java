@@ -10,6 +10,7 @@ import com.seattlesolvers.solverslib.gamepad.GamepadKeys;
 import com.seattlesolvers.solverslib.gamepad.ToggleButtonReader;
 
 import org.firstinspires.ftc.teamcode.Robot;
+import org.firstinspires.ftc.teamcode.subsystems.Launcher;
 import org.firstinspires.ftc.teamcode.util.REVColorSensor;
 
 @Disabled
@@ -61,14 +62,9 @@ public class TwoControllersLogitech extends OpMode {
                 ));
 
         // Launchers - X
-//        driver1.getGamepadButton(GamepadKeys.Button.X).whenPressed(robot.launchColor(Launcher.Color.PURPLE));
-//        driver1.getGamepadButton(GamepadKeys.Button.B).whenPressed(robot.launchColor(Launcher.Color.GREEN));
-//        driver1.getGamepadButton(GamepadKeys.Button.A).whenPressed(robot.launchAll());
-
-        driver2.getGamepadButton(GamepadKeys.Button.X).whenPressed(robot.launchLeft());
-        driver2.getGamepadButton(GamepadKeys.Button.A).whenPressed(robot.launchMid());
-        driver2.getGamepadButton(GamepadKeys.Button.B).whenPressed(robot.launchRight());
-        driver2.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenPressed(robot.launchAll());
+        driver2.getGamepadButton(GamepadKeys.Button.X).whenPressed(robot.launchColor(Launcher.Color.PURPLE));
+        driver2.getGamepadButton(GamepadKeys.Button.B).whenPressed(robot.launchColor(Launcher.Color.GREEN));
+        driver2.getGamepadButton(GamepadKeys.Button.A).whenPressed(robot.launchAll());
 
         // Ascent Lifts - Dpad Up and Dpad Down
 //        driver1.getGamepadButton(GamepadKeys.Button.DPAD_UP).whileHeld(robot.raiseLifts());

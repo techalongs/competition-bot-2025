@@ -34,7 +34,8 @@ public class Launcher extends SubsystemBase {
     public Color getColor() {
         float hue = sensor.RGBtoHSV(sensor.red(), sensor.green(), sensor.blue(), new float[3])[0];
         if (Color.GREEN.range[0] < hue && hue < Color.GREEN.range[1]) return Color.GREEN;
-        else return Color.PURPLE;
+        else if (Color.PURPLE.range[0] < hue && hue < Color.PURPLE.range[1]) return Color.PURPLE;
+        return null;
     }
 
     public void launch() {

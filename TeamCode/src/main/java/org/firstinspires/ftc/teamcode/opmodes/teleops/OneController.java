@@ -9,7 +9,10 @@ import com.seattlesolvers.solverslib.gamepad.GamepadKeys;
 import com.seattlesolvers.solverslib.gamepad.ToggleButtonReader;
 
 import org.firstinspires.ftc.teamcode.Robot;
+import org.firstinspires.ftc.teamcode.subsystems.Launcher;
 import org.firstinspires.ftc.teamcode.util.REVColorSensor;
+
+import java.util.Arrays;
 
 @TeleOp(name = "One Controller TeleOp - PS4", group = "Normal Controls")
 public class OneController extends OpMode {
@@ -59,14 +62,9 @@ public class OneController extends OpMode {
                 ));
 
         // Launchers - X
-//        driver1.getGamepadButton(GamepadKeys.Button.X).whenPressed(robot.launchColor(Launcher.Color.PURPLE));
-//        driver1.getGamepadButton(GamepadKeys.Button.B).whenPressed(robot.launchColor(Launcher.Color.GREEN));
-//        driver1.getGamepadButton(GamepadKeys.Button.A).whenPressed(robot.launchAll());
-
-        driver1.getGamepadButton(GamepadKeys.Button.SQUARE).whenPressed(robot.launchLeft());
-        driver1.getGamepadButton(GamepadKeys.Button.CROSS).whenPressed(robot.launchMid());
-        driver1.getGamepadButton(GamepadKeys.Button.CIRCLE).whenPressed(robot.launchRight());
-        driver1.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenPressed(robot.launchAll());
+        driver1.getGamepadButton(GamepadKeys.Button.SQUARE).whenPressed(robot.launchColor(Launcher.Color.PURPLE));
+        driver1.getGamepadButton(GamepadKeys.Button.CIRCLE).whenPressed(robot.launchColor(Launcher.Color.GREEN));
+        driver1.getGamepadButton(GamepadKeys.Button.CROSS).whenPressed(robot.launchAll());
 
         // Ascent Lifts - Dpad Up and Dpad Down
 //        driver1.getGamepadButton(GamepadKeys.Button.DPAD_UP).whileHeld(robot.raiseLifts());
@@ -81,9 +79,10 @@ public class OneController extends OpMode {
         Robot.DriveState driveState = getDriveState();
         robot.drive(driveState, driver1, driveSpeedLimit);
 
-        telemetry.addData("Sensor 1", sensor1.RGBtoHSV(sensor3.red(), sensor3.green(), sensor3.blue(), new float[3])[0]);
+        telemetry.addData("Sensor 1", sensor1.RGBtoHSV(sensor1.red(), sensor1.green(), sensor1.blue(), new float[3])[0]);
         telemetry.addData("Sensor 2", sensor2.RGBtoHSV(sensor2.red(), sensor2.green(), sensor2.blue(), new float[3])[0]);
         telemetry.addData("Sensor 3", sensor3.RGBtoHSV(sensor3.red(), sensor3.green(), sensor3.blue(), new float[3])[0]);
+        telemetry.addData("Launcher Colors", Arrays.toString(robot.getLauncherColors()));
         telemetry.update();
     }
 

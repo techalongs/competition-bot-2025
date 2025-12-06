@@ -8,6 +8,8 @@ import com.pedropathing.paths.PathChain;
 import com.pedropathing.util.Timer;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.seattlesolvers.solverslib.command.Command;
+import com.seattlesolvers.solverslib.command.CommandScheduler;
 
 import org.firstinspires.ftc.teamcode.Robot;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
@@ -17,17 +19,17 @@ public class FarRedAuto extends OpMode {
     private Robot robot;
 
     private Follower follower;
-    private Timer pathTimer, actionTimer, opmodeTimer;
+    private Timer pathTimer, opmodeTimer;
     private int pathState;
 
     private PathChain[] paths;
     private Pose[] poses;
 
     private void initPoses() {
-        Pose startPose = new Pose(86.5, 9.5, Math.toRadians(270));
-        Pose scorePose = new Pose(100, 99, Math.toRadians(45));
-        Pose pickupPose = new Pose(129, 35, Math.toRadians(0));
-        Pose endPose = new Pose(105, 15, Math.toRadians(180));
+        Pose startPose = new Pose(86.5, 9.5, Math.toRadians(0));
+        Pose scorePose = new Pose(90, 90, Math.toRadians(45));
+        Pose pickupPose = new Pose(129, 45, Math.toRadians(0));
+        Pose endPose = new Pose(105, 15, Math.toRadians(0));
         poses = new Pose[] {startPose, scorePose, pickupPose, endPose};
     }
 
@@ -73,44 +75,6 @@ public class FarRedAuto extends OpMode {
                 .build();
     }
 
-    public void autonomousPathUpdate() {
-        switch (pathState) {
-            case 0:
-                follower.followPath(paths[pathState], true);
-                setPathState(1);
-                break;
-            case 1:
-                if (!follower.isBusy()) {
-                    // TODO: Score Preload
-                    follower.followPath(paths[pathState], true);
-                    setPathState(2);
-                }
-                break;
-            case 2:
-                if(!follower.isBusy()) {
-                    // TODO: Grab Artifacts
-                    follower.followPath(paths[pathState],true);
-                    setPathState(3);
-                }
-                break;
-            case 3:
-                if(!follower.isBusy()) {
-                    // TODO: Score Artifacts
-                    follower.followPath(paths[pathState],true);
-                    setPathState(4);
-                }
-                break;
-            case 4:
-                if(!follower.isBusy()) setPathState(-1);
-                break;
-        }
-    }
-
-    public void setPathState(int pState) {
-        pathState = pState;
-        pathTimer.resetTimer();
-    }
-
     @Override
     public void init() {
         robot = new Robot(hardwareMap);
@@ -118,20 +82,25 @@ public class FarRedAuto extends OpMode {
         opmodeTimer = new Timer();
         opmodeTimer.resetTimer();
         follower = Constants.createFollower(hardwareMap);
+
+        initPoses();
         buildPaths();
         follower.setStartingPose(poses[0]);
+
+        FarRedCommand auto = new FarRedCommand(robot, follower, paths);
+        auto.schedule();
     }
 
     @Override
     public void start() {
         opmodeTimer.resetTimer();
-        setPathState(0);
     }
 
     @Override
     public void loop() {
         follower.update();
-        autonomousPathUpdate();
+        // autonomousPathUpdate();
+        CommandScheduler.getInstance().run();
 
         // Feedback to Driver Hub for debugging
         telemetry.addData("path state", pathState);
