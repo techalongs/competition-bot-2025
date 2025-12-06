@@ -12,8 +12,8 @@ import com.seattlesolvers.solverslib.command.CommandScheduler;
 import org.firstinspires.ftc.teamcode.Robot;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
-@Autonomous(name = "Far Red Auto", group = "Autos")
-public class FarRedAuto extends OpMode {
+@Autonomous(name = "Far Blue Auto", group = "Autos")
+public class FarBlueAuto extends OpMode {
     private Robot robot;
 
     private Follower follower;
@@ -24,9 +24,9 @@ public class FarRedAuto extends OpMode {
     private Pose[] poses;
 
     private void initPoses() {
-        Pose startPose = new Pose(86.5, 9.5, Math.toRadians(0));
-        Pose scorePose = new Pose(93, 93, Math.toRadians(45));
-        Pose endPose = new Pose(105, 15, Math.toRadians(0));
+        Pose startPose = new Pose(57, 9.5, Math.toRadians(0));
+        Pose scorePose = new Pose(50, 93, Math.toRadians(135));
+        Pose endPose = new Pose(40, 15, Math.toRadians(180));
         poses = new Pose[] {startPose, scorePose, endPose};
     }
 
