@@ -50,9 +50,9 @@ public class Drivetrain extends SubsystemBase {
         imu = new NewIMU(hardwareMap, "imu");
     }
 
-    public void drive(Robot.DriveState state, GamepadEx gamepad, double limiter) {
-        if (state == Robot.DriveState.ROBOT_CENTRIC) driveRobotCentric(gamepad, limiter);
-        else if (state == Robot.DriveState.FIELD_CENTRIC) driveFieldCentric(gamepad, limiter);
+    public void drive(Drivetrain.DriveState state, GamepadEx gamepad, double limiter) {
+        if (state == Drivetrain.DriveState.ROBOT_CENTRIC) driveRobotCentric(gamepad, limiter);
+        else if (state == Drivetrain.DriveState.FIELD_CENTRIC) driveFieldCentric(gamepad, limiter);
         else throw new IllegalArgumentException("Not a valid Drive State");
     }
 

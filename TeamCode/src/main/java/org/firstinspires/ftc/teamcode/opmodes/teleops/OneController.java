@@ -9,6 +9,7 @@ import com.seattlesolvers.solverslib.gamepad.GamepadKeys;
 import com.seattlesolvers.solverslib.gamepad.ToggleButtonReader;
 
 import org.firstinspires.ftc.teamcode.Robot;
+import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
 import org.firstinspires.ftc.teamcode.subsystems.Launcher;
 import org.firstinspires.ftc.teamcode.util.REVColorSensor;
 
@@ -76,7 +77,7 @@ public class OneController extends OpMode {
         loopReadStuff();
 
         double driveSpeedLimit = getDriveSpeedLimit();
-        Robot.DriveState driveState = getDriveState();
+        Drivetrain.DriveState driveState = getDriveState();
         robot.drive(driveState, driver1, driveSpeedLimit);
 
         telemetry.addData("Sensor 1", sensor1.RGBtoHSV(sensor1.red(), sensor1.green(), sensor1.blue(), new float[3])[0]);
@@ -94,11 +95,11 @@ public class OneController extends OpMode {
         }
     }
 
-    public Robot.DriveState getDriveState() {
+    public Drivetrain.DriveState getDriveState() {
         if (toggleFieldCentric.getState()) {
-            return Robot.DriveState.FIELD_CENTRIC;
+            return Drivetrain.DriveState.FIELD_CENTRIC;
         } else {
-            return Robot.DriveState.ROBOT_CENTRIC;
+            return Drivetrain.DriveState.ROBOT_CENTRIC;
         }
     }
 

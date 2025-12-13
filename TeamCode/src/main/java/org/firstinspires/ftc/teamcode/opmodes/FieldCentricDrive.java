@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.seattlesolvers.solverslib.gamepad.GamepadEx;
 
 import org.firstinspires.ftc.teamcode.Robot;
+import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
 
 @TeleOp(name = "Drive Field-Centric", group = "Test")
 public class FieldCentricDrive extends OpMode {
@@ -22,7 +23,7 @@ public class FieldCentricDrive extends OpMode {
 
     @Override
     public void loop() {
-        robot.drive(Robot.DriveState.FIELD_CENTRIC, driver1, 0.5);
+        robot.drive(Drivetrain.DriveState.FIELD_CENTRIC, driver1, 0.5);
     }
 
 }

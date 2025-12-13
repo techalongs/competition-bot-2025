@@ -24,11 +24,6 @@ public class Robot {
     private final Launcher rightLauncher;
 //    private final Lifter lifts;
 
-    public enum DriveState {
-        ROBOT_CENTRIC,
-        FIELD_CENTRIC
-    }
-
     public Robot(HardwareMap hardwareMap) {
         drivetrain = new Drivetrain(hardwareMap, "frontLeft", "frontRight", "backLeft", "backRight");
         intake = new Intake(hardwareMap, "intakeLift");
@@ -39,7 +34,7 @@ public class Robot {
 //        lifts.setDefaultCommand(new PerpetualCommand(new RunCommand(lifts::stop, lifts)));
     }
 
-    public void drive(Robot.DriveState state, GamepadEx gamepad, double limiter) {
+    public void drive(Drivetrain.DriveState state, GamepadEx gamepad, double limiter) {
         drivetrain.drive(state, gamepad, limiter);
     }
 
