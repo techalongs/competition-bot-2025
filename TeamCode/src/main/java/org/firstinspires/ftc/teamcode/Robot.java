@@ -15,8 +15,6 @@ import org.firstinspires.ftc.teamcode.subsystems.Launcher;
 import org.firstinspires.ftc.teamcode.util.SleepCommand;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
 
 public class Robot {
     private final Drivetrain drivetrain;
@@ -63,18 +61,6 @@ public class Robot {
                 new SleepCommand(25),
                 new InstantCommand(launcher::stopLauncher)
         );
-    }
-
-    public Command launchLeft() {
-        return launch(leftLauncher);
-    }
-
-    public Command launchMid() {
-        return launch(midLauncher);
-    }
-
-    public Command launchRight() {
-        return launch(rightLauncher);
     }
 
     public Command launchColor(Launcher.Color color) {
