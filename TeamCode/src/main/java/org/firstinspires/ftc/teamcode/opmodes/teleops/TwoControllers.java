@@ -12,6 +12,8 @@ import org.firstinspires.ftc.teamcode.Robot;
 import org.firstinspires.ftc.teamcode.subsystems.Launcher;
 import org.firstinspires.ftc.teamcode.util.REVColorSensor;
 
+import java.util.Arrays;
+
 @TeleOp(name = "Two Controller TeleOp - PS4", group = "Normal Controls")
 public class TwoControllers extends OpMode {
 
@@ -60,14 +62,9 @@ public class TwoControllers extends OpMode {
                 ));
 
         // Launchers - X
-//        driver2.getGamepadButton(GamepadKeys.Button.X).whenPressed(robot.launchColor(Launcher.Color.PURPLE));
-//        driver2.getGamepadButton(GamepadKeys.Button.B).whenPressed(robot.launchColor(Launcher.Color.GREEN));
-//        driver2.getGamepadButton(GamepadKeys.Button.A).whenPressed(robot.launchAll());
-
-        driver2.getGamepadButton(GamepadKeys.Button.SQUARE).whenPressed(robot.launchLeft());
-        driver2.getGamepadButton(GamepadKeys.Button.CROSS).whenPressed(robot.launchMid());
-        driver2.getGamepadButton(GamepadKeys.Button.CIRCLE).whenPressed(robot.launchRight());
-        driver2.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenPressed(robot.launchAll());
+        driver2.getGamepadButton(GamepadKeys.Button.SQUARE).whenPressed(robot.launchColor(Launcher.Color.PURPLE));
+        driver2.getGamepadButton(GamepadKeys.Button.CIRCLE).whenPressed(robot.launchColor(Launcher.Color.GREEN));
+        driver2.getGamepadButton(GamepadKeys.Button.CROSS).whenPressed(robot.launchAll());
 
         // Ascent Lifts - Dpad Up and Dpad Down
 //        driver1.getGamepadButton(GamepadKeys.Button.DPAD_UP).whileHeld(robot.raiseLifts());
@@ -85,6 +82,7 @@ public class TwoControllers extends OpMode {
         telemetry.addData("Sensor 1", sensor1.RGBtoHSV(sensor3.red(), sensor3.green(), sensor3.blue(), new float[3])[0]);
         telemetry.addData("Sensor 2", sensor2.RGBtoHSV(sensor2.red(), sensor2.green(), sensor2.blue(), new float[3])[0]);
         telemetry.addData("Sensor 3", sensor3.RGBtoHSV(sensor3.red(), sensor3.green(), sensor3.blue(), new float[3])[0]);
+        telemetry.addData("Launcher Colors", Arrays.toString(robot.getLauncherColors()));
         telemetry.update();
     }
 

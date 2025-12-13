@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.seattlesolvers.solverslib.command.Command;
+import com.seattlesolvers.solverslib.command.DeferredCommand;
 import com.seattlesolvers.solverslib.command.InstantCommand;
 import com.seattlesolvers.solverslib.command.ParallelCommandGroup;
 import com.seattlesolvers.solverslib.command.SequentialCommandGroup;
@@ -12,6 +13,10 @@ import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.Launcher;
 import org.firstinspires.ftc.teamcode.util.SleepCommand;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 public class Robot {
     private final Drivetrain drivetrain;
@@ -72,12 +77,19 @@ public class Robot {
         return launch(rightLauncher);
     }
 
-//    public Command launchColor(Launcher.Color color) {
-//        if (leftLauncher.getColor() == color) return launch(leftLauncher);
-//        if (midLauncher.getColor() == color) return launch(midLauncher);
-//        if (rightLauncher.getColor() == color) return launch(rightLauncher);
-//        return new InstantCommand();
-//    }
+    public Command launchColor(Launcher.Color color) {
+        ArrayList<Subsystem> launchers = new ArrayList<>();
+        launchers.add(leftLauncher);
+        launchers.add(midLauncher);
+        launchers.add(rightLauncher);
+
+        return new DeferredCommand(() -> {
+            if (leftLauncher.getColor() == color) return launch(leftLauncher);
+            if (midLauncher.getColor() == color) return launch(midLauncher);
+            if (rightLauncher.getColor() == color) return launch(rightLauncher);
+            return new InstantCommand();
+        }, launchers);
+    }
     
     public Launcher.Color[] getLauncherColors() {
         return new Launcher.Color[] {leftLauncher.getColor(), midLauncher.getColor(), rightLauncher.getColor()};
