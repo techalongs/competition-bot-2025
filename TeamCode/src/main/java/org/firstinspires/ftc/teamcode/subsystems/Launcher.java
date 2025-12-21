@@ -21,6 +21,17 @@ public class Launcher extends SubsystemBase {
         }
     }
 
+    public enum Power {
+        LONG(1),
+        MID(0.8),
+        SHORT(0.7);
+
+        final double power;
+        Power(double power) {
+            this.power = power;
+        }
+    }
+
     public Launcher(HardwareMap hardwareMap, String launch, String sensor, boolean inverted) {
         this.launcher = new MotorEx(hardwareMap, launch);
         this.sensor = new REVColorSensor(hardwareMap, sensor);
@@ -38,8 +49,8 @@ public class Launcher extends SubsystemBase {
         return null;
     }
 
-    public void launch() {
-        launcher.set(1);
+    public void launch(Power power) {
+        launcher.set(power.power);
     }
 
     public void reloadSlow() {

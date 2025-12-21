@@ -29,7 +29,7 @@ public class Robot {
         intake = new Intake(hardwareMap, "intakeLift");
         leftLauncher = new Launcher(hardwareMap, "leftLauncher", "sensor1", true);
         midLauncher = new Launcher(hardwareMap, "midLauncher", "sensor2", true);
-        rightLauncher = new Launcher(hardwareMap, "rightLauncher", "sensor3", true);
+        rightLauncher = new Launcher(hardwareMap, "rightLauncher", "sensor3", false);
 //        lifts = new Lifter(hardwareMap, "leftLift", "rightLift");
 //        lifts.setDefaultCommand(new PerpetualCommand(new RunCommand(lifts::stop, lifts)));
     }
@@ -46,11 +46,11 @@ public class Robot {
         return new InstantCommand(intake::stop);
     }
 
-    private Command launch(Launcher launcher) {
+    private Command launch(Launcher launcher, Launcher.Power power) {
         return new SequentialCommandGroup(
                 new InstantCommand(launcher::reloadSlow),
                 new SleepCommand(300),
-                new InstantCommand(launcher::launch),
+                new InstantCommand(() -> launcher.launch(power)),
                 new SleepCommand(150),
                 new InstantCommand(launcher::reload),
                 new SleepCommand(25),
@@ -58,16 +58,16 @@ public class Robot {
         );
     }
 
-    public Command launchColor(Launcher.Color color) {
+    public Command launchColor(Launcher.Color color, Launcher.Power power) {
         ArrayList<Subsystem> launchers = new ArrayList<>();
         launchers.add(leftLauncher);
         launchers.add(midLauncher);
         launchers.add(rightLauncher);
 
         return new DeferredCommand(() -> {
-            if (leftLauncher.getColor() == color) return launch(leftLauncher);
-            if (midLauncher.getColor() == color) return launch(midLauncher);
-            if (rightLauncher.getColor() == color) return launch(rightLauncher);
+            if (leftLauncher.getColor() == color) return launch(leftLauncher, power);
+            if (midLauncher.getColor() == color) return launch(midLauncher, power);
+            if (rightLauncher.getColor() == color) return launch(rightLauncher, power);
             return new InstantCommand();
         }, launchers);
     }
@@ -76,16 +76,16 @@ public class Robot {
         return new Launcher.Color[] {leftLauncher.getColor(), midLauncher.getColor(), rightLauncher.getColor()};
     }
 
-    public Command launchAll() {
+    public Command launchAll(Launcher.Power power) {
         return new ParallelCommandGroup(
-                launch(leftLauncher),
+                launch(leftLauncher, power),
                 new SequentialCommandGroup(
                         new SleepCommand(100),
-                        launch(midLauncher)
+                        launch(midLauncher, power)
                 ),
                 new SequentialCommandGroup(
                         new SleepCommand(200),
-                        launch(rightLauncher)
+                        launch(rightLauncher, power)
                 )
         );
     }

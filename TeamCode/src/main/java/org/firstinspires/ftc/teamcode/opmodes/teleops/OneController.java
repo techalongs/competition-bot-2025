@@ -4,6 +4,8 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.seattlesolvers.solverslib.command.CommandScheduler;
 import com.seattlesolvers.solverslib.command.ConditionalCommand;
+import com.seattlesolvers.solverslib.command.DeferredCommand;
+import com.seattlesolvers.solverslib.command.InstantCommand;
 import com.seattlesolvers.solverslib.gamepad.GamepadEx;
 import com.seattlesolvers.solverslib.gamepad.GamepadKeys;
 import com.seattlesolvers.solverslib.gamepad.ToggleButtonReader;
@@ -30,6 +32,10 @@ public class OneController extends OpMode {
     private REVColorSensor sensor3;
     private double driveFastSpeedLimit = 1.0;
     private double driveSlowSpeedLimit = 0.5;
+    private Launcher.Power launcherPower = Launcher.Power.LONG;
+    private Launcher.Power[] launcherPowers =
+            new Launcher.Power[] {Launcher.Power.LONG, Launcher.Power.MID, Launcher.Power.SHORT};
+    private int launcherState = 0;
 
     @Override
     public void init() {
@@ -51,6 +57,12 @@ public class OneController extends OpMode {
         toggleFieldCentric = new ToggleButtonReader(driver1.getGamepadButton(GamepadKeys.Button.OPTIONS)
                 .and(driver1.getGamepadButton(GamepadKeys.Button.SQUARE))::get);
 
+        // Launcher Power Toggle - Right Bumper
+        driver1.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER)
+                .whenPressed(
+                        new InstantCommand(() -> launcherPower = launcherPowers[++launcherState % launcherPowers.length])
+                );
+
         // Intake - Y
         driver1.getGamepadButton(GamepadKeys.Button.TRIANGLE)
                 .whenPressed(new ConditionalCommand(
@@ -63,9 +75,12 @@ public class OneController extends OpMode {
                 ));
 
         // Launchers - X
-        driver1.getGamepadButton(GamepadKeys.Button.SQUARE).whenPressed(robot.launchColor(Launcher.Color.PURPLE));
-        driver1.getGamepadButton(GamepadKeys.Button.CIRCLE).whenPressed(robot.launchColor(Launcher.Color.GREEN));
-        driver1.getGamepadButton(GamepadKeys.Button.CROSS).whenPressed(robot.launchAll());
+        driver1.getGamepadButton(GamepadKeys.Button.SQUARE)
+                .whenPressed(new DeferredCommand(() -> robot.launchColor(Launcher.Color.PURPLE, launcherPower), null));
+        driver1.getGamepadButton(GamepadKeys.Button.CIRCLE)
+                .whenPressed(new DeferredCommand(() -> robot.launchColor(Launcher.Color.GREEN, launcherPower), null));
+        driver1.getGamepadButton(GamepadKeys.Button.CROSS)
+                .whenPressed(new DeferredCommand(() -> robot.launchAll(launcherPower), null));
 
         // Ascent Lifts - Dpad Up and Dpad Down
 //        driver1.getGamepadButton(GamepadKeys.Button.DPAD_UP).whileHeld(robot.raiseLifts());
@@ -84,6 +99,7 @@ public class OneController extends OpMode {
         telemetry.addData("Sensor 2", sensor2.RGBtoHSV(sensor2.red(), sensor2.green(), sensor2.blue(), new float[3])[0]);
         telemetry.addData("Sensor 3", sensor3.RGBtoHSV(sensor3.red(), sensor3.green(), sensor3.blue(), new float[3])[0]);
         telemetry.addData("Launcher Colors", Arrays.toString(robot.getLauncherColors()));
+        telemetry.addData("Launcher Power State", launcherPower.name());
         telemetry.update();
     }
 
