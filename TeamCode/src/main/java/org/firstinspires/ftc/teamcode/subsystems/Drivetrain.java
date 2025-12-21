@@ -26,10 +26,10 @@ public class Drivetrain extends SubsystemBase {
         MotorEx backLeft = new MotorEx(hardwareMap, blM, Motor.GoBILDA.RPM_312);
         MotorEx backRight = new MotorEx(hardwareMap, brM, Motor.GoBILDA.RPM_312);
 
-        frontLeft.setInverted(true);
-        frontRight.setInverted(false);
-        backLeft.setInverted(true);
-        backRight.setInverted(false);
+        frontLeft.setInverted(false);
+        frontRight.setInverted(true);
+        backLeft.setInverted(false);
+        backRight.setInverted(true);
 
         frontLeft.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
         frontRight.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
