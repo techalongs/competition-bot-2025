@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode.opmodes.teleops;
 
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.seattlesolvers.solverslib.command.CommandScheduler;
@@ -16,7 +15,6 @@ import org.firstinspires.ftc.teamcode.util.REVColorSensor;
 
 import java.util.Arrays;
 
-@Disabled
 @TeleOp(name = "One Controller TeleOp - Logitech", group = "Logitech Controls")
 public class OneControllerLogitech extends OpMode {
 
