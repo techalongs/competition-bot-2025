@@ -37,6 +37,9 @@ public class OneController extends OpMode {
             new Launcher.Power[] {Launcher.Power.LONG, Launcher.Power.MID, Launcher.Power.SHORT};
     private int launcherState = 0;
 
+    // Long - red, Mid - blue, Close - green
+    private int[][] gamepadColors = new int[][] {{255, 0, 0}, {0, 0, 255}, {0, 255, 0}};
+
     @Override
     public void init() {
         sensor1 = new REVColorSensor(hardwareMap, "sensor1");
@@ -60,7 +63,15 @@ public class OneController extends OpMode {
         // Launcher Power Toggle - Right Bumper
         driver1.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER)
                 .whenPressed(
-                        new InstantCommand(() -> launcherPower = launcherPowers[++launcherState % launcherPowers.length])
+                        new InstantCommand(() -> {
+                            int index = ++launcherState % launcherPowers.length;
+                            launcherPower = launcherPowers[index];
+                            gamepad1.setLedColor(
+                                    gamepadColors[index][0],
+                                    gamepadColors[index][1],
+                                    gamepadColors[index][2],
+                                    5000);
+                        })
                 );
 
         // Intake - Y
