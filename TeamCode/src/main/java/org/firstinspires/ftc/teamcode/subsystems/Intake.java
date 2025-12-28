@@ -13,7 +13,7 @@ public class Intake extends SubsystemBase {
     public Intake(HardwareMap hardwareMap, String intakeName) {
         intake = new MotorEx(hardwareMap, intakeName);
 
-        intake.setInverted(true);
+        intake.setInverted(false);
         intake.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
         intake.stopAndResetEncoder();
         intake.setRunMode(Motor.RunMode.RawPower);
