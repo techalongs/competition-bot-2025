@@ -32,10 +32,10 @@ public class TwoControllersLogitech extends OpMode {
     private REVColorSensor sensor3;
     private double driveFastSpeedLimit = 1.0;
     private double driveSlowSpeedLimit = 0.5;
-    private Launcher.Power launcherPower = Launcher.Power.LONG;
+    private Launcher.Power launcherPower = Launcher.Power.MID;
     private Launcher.Power[] launcherPowers =
             new Launcher.Power[] {Launcher.Power.LONG, Launcher.Power.MID, Launcher.Power.SHORT};
-    private int launcherState = 0;
+    private int launcherState = 1;
 
     @Override
     public void init() {
