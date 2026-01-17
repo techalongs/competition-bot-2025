@@ -23,7 +23,7 @@ public class LogitechCamera implements HardwareDevice {
                 .setTagLibrary(AprilTagGameDatabase.getCurrentGameTagLibrary())
                 .setDrawTagID(true)
                 .setDrawTagOutline(true)
-                .setLensIntrinsics(1434.39, 1434.39, 950.641, 539.478)
+                .setLensIntrinsics(1440.381342, 1435.602662, 959.8105025, 525.3844601)
                 .build();
 
         visionPortal = new VisionPortal.Builder()
