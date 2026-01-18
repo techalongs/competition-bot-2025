@@ -14,8 +14,8 @@ import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 import java.util.List;
 
 public class LogitechCamera implements HardwareDevice {
-    private AprilTagProcessor processor;
-    private VisionPortal visionPortal;
+    private final AprilTagProcessor processor;
+    private final VisionPortal visionPortal;
 
     public LogitechCamera(HardwareMap hardwareMap, String id) {
 
