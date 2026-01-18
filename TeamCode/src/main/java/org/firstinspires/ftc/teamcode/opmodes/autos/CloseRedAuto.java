@@ -2,7 +2,6 @@ package org.firstinspires.ftc.teamcode.opmodes.autos;
 
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.BezierLine;
-import com.pedropathing.geometry.Pose;
 import com.pedropathing.paths.PathChain;
 import com.pedropathing.util.Timer;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -11,56 +10,28 @@ import com.seattlesolvers.solverslib.command.CommandScheduler;
 
 import org.firstinspires.ftc.teamcode.Robot;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
+import org.firstinspires.ftc.teamcode.subsystems.Launcher;
 
 @Autonomous(name = "Close Red Auto", group = "Autos")
 public class CloseRedAuto extends OpMode {
     private Robot robot;
 
     private Follower follower;
-    private Timer pathTimer, opmodeTimer;
-    private int pathState;
+    private Timer opmodeTimer;
 
     private PathChain[] paths;
-    private Pose[] poses;
-
-    private final int DELAY = 0; // Milliseconds
-
-    private void initPoses() {
-        Pose startPose = new Pose(134, 109, Math.toRadians(42));
-        Pose scorePose = new Pose(93, 83, Math.toRadians(45));
-        Pose endPose = new Pose(105, 16, Math.toRadians(0));
-        poses = new Pose[] {startPose, scorePose, endPose};
-    }
-
-    private void buildPaths() {
-        paths = new PathChain[2];
-
-        // Score Preload
-        paths[0] = follower.pathBuilder()
-                .addPath(new BezierLine(poses[0], poses[1]))
-                .setLinearHeadingInterpolation(poses[0].getHeading(), poses[1].getHeading())
-                .build();
-
-        // Park
-        paths[1] = follower.pathBuilder()
-                .addPath(new BezierLine(poses[1], poses[2]))
-                .setLinearHeadingInterpolation(poses[1].getHeading(), poses[2].getHeading())
-                .build();
-    }
 
     @Override
     public void init() {
         robot = new Robot(hardwareMap);
-        pathTimer = new Timer();
         opmodeTimer = new Timer();
         opmodeTimer.resetTimer();
         follower = Constants.createFollower(hardwareMap);
 
-        initPoses();
         buildPaths();
-        follower.setStartingPose(poses[0]);
+        follower.setStartingPose(RedPosition.SHORT_START.pos);
 
-        AutoCommand auto = new AutoCommand(robot, follower, paths, DELAY);
+        AutoCommand auto = new AutoCommand(robot, follower, paths, Launcher.Power.SHORT);
         auto.schedule();
     }
 
@@ -75,10 +46,25 @@ public class CloseRedAuto extends OpMode {
         CommandScheduler.getInstance().run();
 
         // Feedback to Driver Hub for debugging
-        telemetry.addData("path state", pathState);
         telemetry.addData("x", follower.getPose().getX());
         telemetry.addData("y", follower.getPose().getY());
         telemetry.addData("heading", follower.getPose().getHeading());
         telemetry.update();
+    }
+
+    private void buildPaths() {
+        paths = new PathChain[3];
+
+        paths[0] = getPath(RedPosition.SHORT_START, RedPosition.SHOOT); // Score Preload
+        paths[1] = getPath(RedPosition.SHOOT, RedPosition.SHORT_COLLECT_PREP); // Prep to collect
+        paths[2] = getPath(RedPosition.SHORT_COLLECT_PREP, RedPosition.SHORT_COLLECT); // Collect
+        paths[3] = getPath(RedPosition.SHORT_COLLECT, RedPosition.SHOOT); // Score
+    }
+
+    private PathChain getPath(RedPosition point1, RedPosition point2) {
+        return follower.pathBuilder()
+                .addPath(new BezierLine(point1.pos, point2.pos))
+                .setLinearHeadingInterpolation(point1.pos.getHeading(), point2.pos.getHeading())
+                .build();
     }
 }
