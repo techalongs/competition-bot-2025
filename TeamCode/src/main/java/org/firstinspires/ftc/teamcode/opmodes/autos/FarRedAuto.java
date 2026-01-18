@@ -11,6 +11,7 @@ import com.seattlesolvers.solverslib.command.CommandScheduler;
 
 import org.firstinspires.ftc.teamcode.Robot;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
+import org.firstinspires.ftc.teamcode.subsystems.Launcher;
 
 @Autonomous(name = "Far Red Auto", group = "Autos")
 public class FarRedAuto extends OpMode {
@@ -59,7 +60,7 @@ public class FarRedAuto extends OpMode {
         buildPaths();
         follower.setStartingPose(poses[0]);
 
-        AutoCommand auto = new AutoCommand(robot, follower, paths, DELAY);
+        AutoCommand auto = new AutoCommand(robot, follower, paths, Launcher.Power.LONG);
         auto.schedule();
     }
 
