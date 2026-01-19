@@ -33,12 +33,12 @@ public class OneController extends OpMode {
     private double driveFastSpeedLimit = 1.0;
     private double driveSlowSpeedLimit = 0.5;
     private Launcher.Power launcherPower = Launcher.Power.SHORT;
-    private Launcher.Power[] launcherPowers =
+    private final Launcher.Power[] launcherPowers =
             new Launcher.Power[] {Launcher.Power.LONG, Launcher.Power.MID, Launcher.Power.SHORT};
     private int launcherState = 2;
 
     // Long - red, Mid - blue, Close - green
-    private int[][] gamepadColors = new int[][] {{255, 0, 0}, {0, 0, 255}, {0, 255, 0}};
+    private final int[][] gamepadColors = new int[][] {{255, 0, 0}, {0, 0, 255}, {0, 255, 0}};
 
     @Override
     public void init() {
