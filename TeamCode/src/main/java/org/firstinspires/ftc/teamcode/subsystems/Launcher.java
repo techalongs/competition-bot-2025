@@ -9,7 +9,8 @@ import org.firstinspires.ftc.teamcode.util.REVColorSensor;
 
 public class Launcher extends SubsystemBase {
     private final MotorEx launcher;
-    private final REVColorSensor sensor;
+    private final REVColorSensor sensor1;
+    private final REVColorSensor sensor2;
 
     public enum Color {
         GREEN(new float[] {60, 190}),
@@ -34,7 +35,8 @@ public class Launcher extends SubsystemBase {
 
     public Launcher(HardwareMap hardwareMap, String launch, String sensor, boolean inverted) {
         this.launcher = new MotorEx(hardwareMap, launch);
-        this.sensor = new REVColorSensor(hardwareMap, sensor);
+        this.sensor1 = new REVColorSensor(hardwareMap, sensor + "1");
+        this.sensor2 = new REVColorSensor(hardwareMap, sensor + "2");
 
         launcher.setInverted(inverted);
         launcher.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
@@ -42,10 +44,15 @@ public class Launcher extends SubsystemBase {
         launcher.setRunMode(MotorEx.RunMode.RawPower);
     }
 
+    private boolean inRange(Color color, float hue) {
+        return color.range[0] < hue && hue < color.range[1];
+    }
+
     public Color getColor() {
-        float hue = sensor.RGBtoHSV(sensor.red(), sensor.green(), sensor.blue(), new float[3])[0];
-        if (Color.GREEN.range[0] < hue && hue < Color.GREEN.range[1]) return Color.GREEN;
-        else if (Color.PURPLE.range[0] < hue && hue < Color.PURPLE.range[1]) return Color.PURPLE;
+        float hue1 = sensor1.RGBtoHSV(sensor1.red(), sensor1.green(), sensor1.blue(), new float[3])[0];
+        float hue2 = sensor2.RGBtoHSV(sensor2.red(), sensor2.green(), sensor2.blue(), new float[3])[0];
+        if (inRange(Color.PURPLE, hue1) || inRange(Color.PURPLE, hue2)) return Color.PURPLE;
+        else if (inRange(Color.GREEN, hue1) || inRange(Color.GREEN, hue2)) return Color.GREEN;
         return null;
     }
 

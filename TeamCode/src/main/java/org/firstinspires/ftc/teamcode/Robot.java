@@ -29,9 +29,9 @@ public class Robot {
     public Robot(HardwareMap hardwareMap) {
         drivetrain = new Drivetrain(hardwareMap, "frontLeft", "frontRight", "backLeft", "backRight");
         intake = new Intake(hardwareMap, "intakeLift");
-        leftLauncher = new Launcher(hardwareMap, "leftLauncher", "sensor1", true);
-        midLauncher = new Launcher(hardwareMap, "midLauncher", "sensor2", true);
-        rightLauncher = new Launcher(hardwareMap, "rightLauncher", "sensor3", false);
+        leftLauncher = new Launcher(hardwareMap, "leftLauncher", "leftSensor", true);
+        midLauncher = new Launcher(hardwareMap, "midLauncher", "midSensor", true);
+        rightLauncher = new Launcher(hardwareMap, "rightLauncher", "rightSensor", false);
         camera = new LogitechCamera(hardwareMap, "Webcam 1");
 //        lifts = new Lifter(hardwareMap, "leftLift", "rightLift");
 //        lifts.setDefaultCommand(new PerpetualCommand(new RunCommand(lifts::stop, lifts)));
