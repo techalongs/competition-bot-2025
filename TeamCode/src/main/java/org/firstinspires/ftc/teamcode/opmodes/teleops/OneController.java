@@ -29,7 +29,6 @@ public class OneController extends OpMode {
     private boolean intakeState = false;
     private REVColorSensor sensor1;
     private REVColorSensor sensor2;
-    private REVColorSensor sensor3;
     private double driveFastSpeedLimit = 1.0;
     private double driveSlowSpeedLimit = 0.5;
     private Launcher.Power launcherPower = Launcher.Power.SHORT;
