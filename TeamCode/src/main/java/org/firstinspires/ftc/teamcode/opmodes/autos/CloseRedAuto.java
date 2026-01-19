@@ -33,6 +33,9 @@ public class CloseRedAuto extends OpMode {
 
         AutoCommand auto = new AutoCommand(robot, follower, paths, Launcher.Power.SHORT);
         auto.schedule();
+
+        telemetry.addData("Status", "Initialized");
+        telemetry.update();
     }
 
     @Override
@@ -53,7 +56,7 @@ public class CloseRedAuto extends OpMode {
     }
 
     private void buildPaths() {
-        paths = new PathChain[3];
+        paths = new PathChain[4];
 
         paths[0] = getPath(RedPosition.SHORT_START, RedPosition.SHOOT); // Score Preload
         paths[1] = getPath(RedPosition.SHOOT, RedPosition.SHORT_COLLECT_PREP); // Prep to collect
