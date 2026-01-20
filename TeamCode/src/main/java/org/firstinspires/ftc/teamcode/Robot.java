@@ -93,6 +93,18 @@ public class Robot {
         );
     }
 
+    public Command launchLeft(Launcher.Power power) {
+        return this.launch(leftLauncher, power);
+    }
+
+    public Command launchMid(Launcher.Power power) {
+        return this.launch(midLauncher, power);
+    }
+
+    public Command launchRight(Launcher.Power power) {
+        return this.launch(rightLauncher, power);
+    }
+
 //    public Command raiseLifts() {
 //        return new InstantCommand(lifts::raise, lifts);
 //    }

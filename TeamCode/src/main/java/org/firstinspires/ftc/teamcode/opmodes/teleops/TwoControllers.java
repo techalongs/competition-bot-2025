@@ -91,6 +91,13 @@ public class TwoControllers extends OpMode {
         driver2.getGamepadButton(GamepadKeys.Button.CROSS)
                 .whenPressed(new DeferredCommand(() -> robot.launchAll(launcherPower), null));
 
+        driver2.getGamepadButton(GamepadKeys.Button.DPAD_LEFT)
+                .whenPressed(new DeferredCommand(() -> robot.launchLeft(launcherPower), null));
+        driver2.getGamepadButton(GamepadKeys.Button.DPAD_UP)
+                .whenPressed(new DeferredCommand(() -> robot.launchMid(launcherPower), null));
+        driver2.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT)
+                .whenPressed(new DeferredCommand(() -> robot.launchRight(launcherPower), null));
+
         // Ascent Lifts - Dpad Up and Dpad Down
 //        driver1.getGamepadButton(GamepadKeys.Button.DPAD_UP).whileHeld(robot.raiseLifts());
 //        driver1.getGamepadButton(GamepadKeys.Button.DPAD_DOWN).whileHeld(robot.lowerLifts());
