@@ -8,7 +8,7 @@ public enum RedPosition {
     SHOOT(new Pose(100, 100, Math.toRadians(45))),
     SHORT_COLLECT_PREP(new Pose(100, 83.5, Math.toRadians(0))),
     SHORT_COLLECT(new Pose(125, 83.5, Math.toRadians(0))),
-    MID_COllECT_PREP(new Pose(100, 59.5, Math.toRadians(0))),
+    MID_COLLECT_PREP(new Pose(100, 59.5, Math.toRadians(0))),
     MID_COLLECT(new Pose(125, 59.5, Math.toRadians(0))),
     LONG_COLLECT_PREP(new Pose(100, 35, Math.toRadians(0))),
     LONG_COLLECT(new Pose(125, 35, Math.toRadians(0))),
