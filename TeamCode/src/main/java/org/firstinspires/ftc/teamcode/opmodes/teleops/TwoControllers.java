@@ -57,7 +57,7 @@ public class TwoControllers extends OpMode {
         toggleDriveSlow = gamepadControls.getDriveSlowToggleReader();
         toggleFieldCentric = gamepadControls.getFieldCentricToggleReader();
 
-        driver2.getGamepadButton(GamepadKeys.Button.OPTIONS).and(driver2.getGamepadButton(GamepadKeys.Button.CROSS)).toggleWhenActive(() -> {
+        driver2.getGamepadButton(GamepadKeys.Button.OPTIONS).and(driver2.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER)).toggleWhenActive(() -> {
                     commandScheduler.clearButtons();
                     gamepadControls = new AnnaControls(driver1, driver2, robot);
                     toggleDriveSlow = gamepadControls.getDriveSlowToggleReader();
