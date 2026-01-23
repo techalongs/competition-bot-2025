@@ -14,6 +14,15 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 public class Constants {
 
+    public final static String TAG = "techalongs";
+
+    static {
+        ForwardVelocityTuner.DISTANCE = 96;
+        ForwardZeroPowerAccelerationTuner.VELOCITY = 55;
+        LateralVelocityTuner.DISTANCE = 96;
+        LateralZeroPowerAccelerationTuner.VELOCITY = 40;
+    }
+
     public static FollowerConstants followerConstants = new FollowerConstants()
             .mass(16.06)
             .forwardZeroPowerAcceleration(-36.52761554060430000)

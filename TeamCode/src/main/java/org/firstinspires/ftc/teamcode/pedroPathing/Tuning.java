@@ -7,6 +7,8 @@ import static org.firstinspires.ftc.teamcode.pedroPathing.Tuning.follower;
 import static org.firstinspires.ftc.teamcode.pedroPathing.Tuning.stopRobot;
 import static org.firstinspires.ftc.teamcode.pedroPathing.Tuning.telemetryM;
 
+import android.util.Log;
+
 import com.bylazar.configurables.PanelsConfigurables;
 import com.bylazar.configurables.annotations.Configurable;
 import com.bylazar.configurables.annotations.IgnoreConfigurable;
@@ -548,6 +550,7 @@ class LateralVelocityTuner extends OpMode {
 class ForwardZeroPowerAccelerationTuner extends OpMode {
     private final ArrayList<Double> accelerations = new ArrayList<>();
     public static double VELOCITY = 30;
+    public static double MAX_VELOCITY_RECORDED = 0.0;
 
     private double previousVelocity;
     private long previousTimeNano;
@@ -601,6 +604,8 @@ class ForwardZeroPowerAccelerationTuner extends OpMode {
         drawCurrentAndHistory();
 
         Vector heading = new Vector(1.0, follower.getPose().getHeading());
+        MAX_VELOCITY_RECORDED = Math.max(MAX_VELOCITY_RECORDED, follower.getVelocity().dot(heading));
+        Log.w(Constants.TAG, "Max Velocity = " + MAX_VELOCITY_RECORDED);
         if (!end) {
             if (!stopping) {
                 if (follower.getVelocity().dot(heading) > VELOCITY) {
@@ -657,6 +662,7 @@ class ForwardZeroPowerAccelerationTuner extends OpMode {
 class LateralZeroPowerAccelerationTuner extends OpMode {
     private final ArrayList<Double> accelerations = new ArrayList<>();
     public static double VELOCITY = 30;
+    public static double MAX_VELOCITY_RECORDED = 0.0;
     private double previousVelocity;
     private long previousTimeNano;
     private boolean stopping;
@@ -708,6 +714,8 @@ class LateralZeroPowerAccelerationTuner extends OpMode {
         drawCurrentAndHistory();
 
         Vector heading = new Vector(1.0, follower.getPose().getHeading() - Math.PI / 2);
+        MAX_VELOCITY_RECORDED = Math.max(MAX_VELOCITY_RECORDED, follower.getVelocity().dot(heading));
+        Log.w(Constants.TAG, "Max Velocity = " + MAX_VELOCITY_RECORDED);
         if (!end) {
             if (!stopping) {
                 if (Math.abs(follower.getVelocity().dot(heading)) > VELOCITY) {
