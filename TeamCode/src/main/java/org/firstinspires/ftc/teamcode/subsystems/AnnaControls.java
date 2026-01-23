@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
+import androidx.annotation.NonNull;
+
 import com.seattlesolvers.solverslib.command.CommandScheduler;
 import com.seattlesolvers.solverslib.command.ConditionalCommand;
 import com.seattlesolvers.solverslib.command.DeferredCommand;
@@ -123,11 +125,18 @@ public class AnnaControls extends SubsystemBase implements GamepadControls{
         return toggleFieldCentric;
     }
 
+    @Override
+    public Launcher.Power getLauncherPower() {
+        return launcherPower;
+    }
+
     public boolean isDefault() {
         return false;
     }
 
+    @NonNull
     public String toString() {
         return "Anna's Controls are on!";
     }
+
 }

@@ -99,4 +99,10 @@ public class DefaultControls extends SubsystemBase implements GamepadControls {
     public ToggleButtonReader getFieldCentricToggleReader() {
         return toggleFieldCentric;
     }
+
+    @Override
+    public Launcher.Power getLauncherPower() {
+        return launcherPower;
+    }
+
 }

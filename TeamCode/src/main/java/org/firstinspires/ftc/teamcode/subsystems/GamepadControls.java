@@ -4,9 +4,14 @@ import com.seattlesolvers.solverslib.gamepad.ToggleButtonReader;
 
 public interface GamepadControls {
 
-    public ToggleButtonReader getDriveSlowToggleReader();
-    public ToggleButtonReader getFieldCentricToggleReader();
+    ToggleButtonReader getDriveSlowToggleReader();
+
+    ToggleButtonReader getFieldCentricToggleReader();
+
+    Launcher.Power getLauncherPower();
+
     default boolean isDefault() {
         return true;
     }
+
 }

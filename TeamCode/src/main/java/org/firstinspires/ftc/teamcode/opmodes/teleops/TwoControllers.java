@@ -35,10 +35,6 @@ public class TwoControllers extends OpMode {
     private double driveFastSpeedLimit = 1.0;
     private double driveSlowSpeedLimit = 0.5;
     private GamepadControls gamepadControls;
-    private Launcher.Power launcherPower = Launcher.Power.SHORT;
-    private final Launcher.Power[] launcherPowers =
-            new Launcher.Power[]{Launcher.Power.LONG, Launcher.Power.MID, Launcher.Power.SHORT};
-    private int launcherState = 2;
 
     // Long - red, Mid - blue, Close - green
     private final int[][] gamepadColors = new int[][]{{255, 0, 0}, {0, 0, 255}, {0, 255, 0}};
@@ -84,7 +80,7 @@ public class TwoControllers extends OpMode {
         telemetry.addData("Sensor 1", sensor1.RGBtoHSV(sensor1.red(), sensor1.green(), sensor1.blue(), new float[3])[0]);
         telemetry.addData("Sensor 2", sensor2.RGBtoHSV(sensor2.red(), sensor2.green(), sensor2.blue(), new float[3])[0]);
         telemetry.addData("Launcher Colors", Arrays.toString(robot.getLauncherColors()));
-        telemetry.addData("Launcher Power State", launcherPower.name());
+        telemetry.addData("Launcher Power State", gamepadControls.getLauncherPower().name());
         telemetry.addData("Drive state", getDriveState());
         if (!gamepadControls.isDefault()) {
             telemetry.addData("Countrols", gamepadControls);
