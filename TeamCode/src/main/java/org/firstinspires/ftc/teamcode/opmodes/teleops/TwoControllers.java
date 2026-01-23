@@ -11,7 +11,10 @@ import com.seattlesolvers.solverslib.gamepad.GamepadKeys;
 import com.seattlesolvers.solverslib.gamepad.ToggleButtonReader;
 
 import org.firstinspires.ftc.teamcode.Robot;
+import org.firstinspires.ftc.teamcode.subsystems.AnnaControls;
+import org.firstinspires.ftc.teamcode.subsystems.DefaultControls;
 import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
+import org.firstinspires.ftc.teamcode.subsystems.GamepadControls;
 import org.firstinspires.ftc.teamcode.subsystems.Launcher;
 import org.firstinspires.ftc.teamcode.util.REVColorSensor;
 
@@ -31,13 +34,14 @@ public class TwoControllers extends OpMode {
     private REVColorSensor sensor2;
     private double driveFastSpeedLimit = 1.0;
     private double driveSlowSpeedLimit = 0.5;
+    private GamepadControls gamepadControls;
     private Launcher.Power launcherPower = Launcher.Power.SHORT;
     private final Launcher.Power[] launcherPowers =
-            new Launcher.Power[] {Launcher.Power.LONG, Launcher.Power.MID, Launcher.Power.SHORT};
+            new Launcher.Power[]{Launcher.Power.LONG, Launcher.Power.MID, Launcher.Power.SHORT};
     private int launcherState = 2;
 
     // Long - red, Mid - blue, Close - green
-    private final int[][] gamepadColors = new int[][] {{255, 0, 0}, {0, 0, 255}, {0, 255, 0}};
+    private final int[][] gamepadColors = new int[][]{{255, 0, 0}, {0, 0, 255}, {0, 255, 0}};
 
     @Override
     public void init() {
@@ -49,58 +53,24 @@ public class TwoControllers extends OpMode {
         robot = new Robot(hardwareMap);
         commandScheduler = CommandScheduler.getInstance();
 
-        // With multi button toggles there is and enter before the .and
-        //  Drive Slow Toggle = Options + Left Bumper
-        toggleDriveSlow = new ToggleButtonReader(driver1.getGamepadButton(GamepadKeys.Button.OPTIONS)
-                .and(driver1.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER))::get);
+        gamepadControls = new DefaultControls(driver1, driver2, robot);
+        toggleDriveSlow = gamepadControls.getDriveSlowToggleReader();
+        toggleFieldCentric = gamepadControls.getFieldCentricToggleReader();
 
-        // Drive Field Centric Toggle = Options + X
-        toggleFieldCentric = new ToggleButtonReader(driver1.getGamepadButton(GamepadKeys.Button.OPTIONS)
-                .and(driver1.getGamepadButton(GamepadKeys.Button.SQUARE))::get);
+        driver2.getGamepadButton(GamepadKeys.Button.OPTIONS).and(driver2.getGamepadButton(GamepadKeys.Button.CROSS)).toggleWhenActive(() -> {
+                    commandScheduler.clearButtons();
+                    gamepadControls = new AnnaControls(driver1, driver2, robot);
+                    toggleDriveSlow = gamepadControls.getDriveSlowToggleReader();
+                    toggleFieldCentric = gamepadControls.getFieldCentricToggleReader();
 
-        // Launcher Power Toggle - Right Bumper
-        driver2.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER)
-                .whenPressed(
-                        new InstantCommand(() -> {
-                            int index = ++launcherState % launcherPowers.length;
-                            launcherPower = launcherPowers[index];
-                            gamepad2.setLedColor(
-                                    gamepadColors[index][0],
-                                    gamepadColors[index][1],
-                                    gamepadColors[index][2],
-                                    5000);
-                        })
-                );
+                },
+                () -> {
+                    commandScheduler.clearButtons();
+                    gamepadControls = new DefaultControls(driver1, driver2, robot);
+                    toggleDriveSlow = gamepadControls.getDriveSlowToggleReader();
+                    toggleFieldCentric = gamepadControls.getFieldCentricToggleReader();
 
-        // Intake - Y
-        driver1.getGamepadButton(GamepadKeys.Button.TRIANGLE)
-                .whenPressed(new ConditionalCommand(
-                        robot.runIntake(),
-                        robot.stopIntake(),
-                        () -> {
-                            intakeState = !intakeState;
-                            return intakeState;
-                        }
-                ));
-
-        // Launchers - X
-        driver2.getGamepadButton(GamepadKeys.Button.SQUARE)
-                .whenPressed(new DeferredCommand(() -> robot.launchColor(Launcher.Color.PURPLE, launcherPower), null));
-        driver2.getGamepadButton(GamepadKeys.Button.CIRCLE)
-                .whenPressed(new DeferredCommand(() -> robot.launchColor(Launcher.Color.GREEN, launcherPower), null));
-        driver2.getGamepadButton(GamepadKeys.Button.CROSS)
-                .whenPressed(new DeferredCommand(() -> robot.launchAll(launcherPower), null));
-
-        driver2.getGamepadButton(GamepadKeys.Button.DPAD_LEFT)
-                .whenPressed(new DeferredCommand(() -> robot.launchLeft(launcherPower), null));
-        driver2.getGamepadButton(GamepadKeys.Button.DPAD_UP)
-                .whenPressed(new DeferredCommand(() -> robot.launchMid(launcherPower), null));
-        driver2.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT)
-                .whenPressed(new DeferredCommand(() -> robot.launchRight(launcherPower), null));
-
-        // Ascent Lifts - Dpad Up and Dpad Down
-//        driver1.getGamepadButton(GamepadKeys.Button.DPAD_UP).whileHeld(robot.raiseLifts());
-//        driver1.getGamepadButton(GamepadKeys.Button.DPAD_DOWN).whileHeld(robot.lowerLifts());
+                });
     }
 
     @Override
@@ -115,6 +85,11 @@ public class TwoControllers extends OpMode {
         telemetry.addData("Sensor 2", sensor2.RGBtoHSV(sensor2.red(), sensor2.green(), sensor2.blue(), new float[3])[0]);
         telemetry.addData("Launcher Colors", Arrays.toString(robot.getLauncherColors()));
         telemetry.addData("Launcher Power State", launcherPower.name());
+        telemetry.addData("Drive state", getDriveState());
+        if (!gamepadControls.isDefault()) {
+            telemetry.addData("Countrols", gamepadControls);
+            telemetry.addLine(" Option + A or Cross to switch back");
+        }
         telemetry.update();
     }
 

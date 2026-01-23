@@ -12,7 +12,7 @@ import com.seattlesolvers.solverslib.gamepad.ToggleButtonReader;
 import org.firstinspires.ftc.teamcode.Robot;
 import org.firstinspires.ftc.teamcode.util.REVColorSensor;
 
-public class DefaultControls extends SubsystemBase {
+public class DefaultControls extends SubsystemBase implements GamepadControls {
 
     private GamepadEx driver1;
     private GamepadEx driver2;
@@ -20,10 +20,6 @@ public class DefaultControls extends SubsystemBase {
     private ToggleButtonReader toggleDriveSlow;
     private ToggleButtonReader toggleFieldCentric;
     private boolean intakeState = false;
-    private REVColorSensor sensor1;
-    private REVColorSensor sensor2;
-    private double driveFastSpeedLimit = 1.0;
-    private double driveSlowSpeedLimit = 0.5;
     private Launcher.Power launcherPower = Launcher.Power.SHORT;
     private final Launcher.Power[] launcherPowers =
             new Launcher.Power[] {Launcher.Power.LONG, Launcher.Power.MID, Launcher.Power.SHORT};
@@ -31,13 +27,11 @@ public class DefaultControls extends SubsystemBase {
     private final int[][] gamepadColors = new int[][] {{255, 0, 0}, {0, 0, 255}, {0, 255, 0}};
 
 
-    public DefaultControls(GamepadEx driver1, GamepadEx driver2, Robot robot, Robot robot1, CommandScheduler commandScheduler, REVColorSensor sensor1, REVColorSensor sensor2) {
+    public DefaultControls(GamepadEx driver1, GamepadEx driver2, Robot robot) {
 
         this.driver1 = driver1;
         this.driver2 = driver2;
-        this.robot = robot1;
-        this.sensor1 = sensor1;
-        this.sensor2 = sensor2;
+        this.robot = robot;
 
 
         // With multi button toggles there is and enter before the .and
@@ -94,5 +88,15 @@ public class DefaultControls extends SubsystemBase {
         // Ascent Lifts - Dpad Up and Dpad Down
 //        driver1.getGamepadButton(GamepadKeys.Button.DPAD_UP).whileHeld(robot.raiseLifts());
 //        driver1.getGamepadButton(GamepadKeys.Button.DPAD_DOWN).whileHeld(robot.lowerLifts());
+    }
+
+    @Override
+    public ToggleButtonReader getDriveSlowToggleReader() {
+        return toggleDriveSlow;
+    }
+
+    @Override
+    public ToggleButtonReader getFieldCentricToggleReader() {
+        return toggleFieldCentric;
     }
 }
