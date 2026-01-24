@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.opmodes.autos;
 
 import com.pedropathing.follower.Follower;
 import com.pedropathing.paths.PathChain;
+import com.seattlesolvers.solverslib.command.InstantCommand;
 import com.seattlesolvers.solverslib.command.SequentialCommandGroup;
 import com.seattlesolvers.solverslib.pedroCommand.FollowPathCommand;
 
@@ -17,11 +18,12 @@ public class AutoCommand extends SequentialCommandGroup {
                         new SleepCommand(DELAY),
                         new FollowPathCommand(follower, paths[0], true),
                         robot.launchAll(power), // Score preload
-                        new SleepCommand(500),
                         new FollowPathCommand(follower, paths[1], false),
                         robot.runIntake(), // Collect a row
+                        new InstantCommand(() -> follower.setMaxPower(0.3)),
                         new FollowPathCommand(follower, paths[2], true),
                         robot.stopIntake(),
+                        new InstantCommand(() -> follower.setMaxPower(1)),
                         new FollowPathCommand(follower, paths[3], true),
                         robot.launchAll(power) // Score
                 )
