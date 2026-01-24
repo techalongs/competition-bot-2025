@@ -13,15 +13,18 @@ public class AutoCommand extends SequentialCommandGroup {
     private final int DELAY = 0;
     public AutoCommand(Robot robot, Follower follower, PathChain[] paths, Launcher.Power power) {
         addCommands(
-                new SleepCommand(DELAY),
-                new FollowPathCommand(follower, paths[0], true),
-                robot.launchAll(power), // Score preload
-                new FollowPathCommand(follower, paths[1], false),
-                robot.runIntake(), // Collect a row
-                new FollowPathCommand(follower, paths[2], true),
-                robot.stopIntake(),
-                new FollowPathCommand(follower, paths[3], true),
-                robot.launchAll(power) // Score
+                new SequentialCommandGroup(
+                        new SleepCommand(DELAY),
+                        new FollowPathCommand(follower, paths[0], true),
+                        robot.launchAll(power), // Score preload
+                        new SleepCommand(500),
+                        new FollowPathCommand(follower, paths[1], false),
+                        robot.runIntake(), // Collect a row
+                        new FollowPathCommand(follower, paths[2], true),
+                        robot.stopIntake(),
+                        new FollowPathCommand(follower, paths[3], true),
+                        robot.launchAll(power) // Score
+                )
         );
     }
 }
