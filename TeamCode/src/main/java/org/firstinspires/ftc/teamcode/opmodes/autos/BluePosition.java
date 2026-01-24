@@ -3,7 +3,7 @@ package org.firstinspires.ftc.teamcode.opmodes.autos;
 import com.pedropathing.geometry.Pose;
 
 public enum BluePosition {
-    SHORT_START(new Pose(18, 120, Math.toRadians(36))),
+    SHORT_START(new Pose(18, 120, Math.toRadians(144))),
     LONG_START(new Pose(56, 8, Math.toRadians(90))),
     SHORT_SHOOT(new Pose(35, 110, Math.toRadians(135))),
     LONG_SHOOT(new Pose(61, 16, Math.toRadians(113))),
