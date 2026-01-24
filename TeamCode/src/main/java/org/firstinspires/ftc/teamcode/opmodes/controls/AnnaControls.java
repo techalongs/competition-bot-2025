@@ -109,6 +109,10 @@ public class AnnaControls extends SubsystemBase implements GamepadControls{
                 .whenPressed(new DeferredCommand(() -> robot.launchMid(launcherPower), null));
         driver2.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT)
                 .whenPressed(new DeferredCommand(() -> robot.launchRight(launcherPower), null));
+
+        driver2.getGamepadButton(GamepadKeys.Button.DPAD_DOWN)
+                .whenPressed(new DeferredCommand(() -> robot.launchAllEventually(launcherPower), null));
+
     }
 
     @Override
