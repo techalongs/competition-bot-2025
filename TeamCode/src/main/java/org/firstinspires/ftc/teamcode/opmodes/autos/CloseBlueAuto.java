@@ -32,7 +32,7 @@ public class CloseBlueAuto extends OpMode {
         buildPaths();
         follower.setStartingPose(BluePosition.SHORT_START.pos);
 
-        AutoCommand auto = new AutoCommand(robot, follower, paths, Launcher.Power.MID);
+        AutoCommand auto = new AutoCommand(robot, follower, paths, Launcher.Power.SHORT);
         auto.schedule();
 
         telemetry.addData("Status", "Initialized");
