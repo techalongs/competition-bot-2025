@@ -3,19 +3,15 @@ package org.firstinspires.ftc.teamcode.opmodes.teleops;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.seattlesolvers.solverslib.command.CommandScheduler;
-import com.seattlesolvers.solverslib.command.ConditionalCommand;
-import com.seattlesolvers.solverslib.command.DeferredCommand;
-import com.seattlesolvers.solverslib.command.InstantCommand;
 import com.seattlesolvers.solverslib.gamepad.GamepadEx;
 import com.seattlesolvers.solverslib.gamepad.GamepadKeys;
 import com.seattlesolvers.solverslib.gamepad.ToggleButtonReader;
 
 import org.firstinspires.ftc.teamcode.Robot;
-import org.firstinspires.ftc.teamcode.subsystems.AnnaControls;
-import org.firstinspires.ftc.teamcode.subsystems.DefaultControls;
+import org.firstinspires.ftc.teamcode.opmodes.controls.AnnaControls;
+import org.firstinspires.ftc.teamcode.opmodes.controls.DefaultControls;
 import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
-import org.firstinspires.ftc.teamcode.subsystems.GamepadControls;
-import org.firstinspires.ftc.teamcode.subsystems.Launcher;
+import org.firstinspires.ftc.teamcode.opmodes.controls.GamepadControls;
 import org.firstinspires.ftc.teamcode.util.REVColorSensor;
 
 import java.util.Arrays;
