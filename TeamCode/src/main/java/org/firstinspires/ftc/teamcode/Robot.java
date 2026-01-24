@@ -51,12 +51,10 @@ public class Robot {
 
     private Command launch(Launcher launcher, Launcher.Power power) {
         return new SequentialCommandGroup(
-                new InstantCommand(launcher::reloadSlow),
-                new SleepCommand(300),
+                new InstantCommand(launcher::reload),
+                new SleepCommand(150),
                 new InstantCommand(() -> launcher.launch(power)),
                 new SleepCommand(150),
-                new InstantCommand(launcher::reload),
-                new SleepCommand(25),
                 new InstantCommand(launcher::stopLauncher)
         );
     }
@@ -83,7 +81,7 @@ public class Robot {
         return new ParallelCommandGroup(
                 launch(leftLauncher, power),
                 new SequentialCommandGroup(
-                        new SleepCommand(100),
+                        new SleepCommand(50),
                         launch(midLauncher, power)
                 ),
                 new SequentialCommandGroup(
