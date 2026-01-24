@@ -5,7 +5,7 @@ import com.pedropathing.geometry.Pose;
 public enum BluePosition {
     SHORT_START(new Pose(18, 120, Math.toRadians(36))),
     LONG_START(new Pose(56, 8, Math.toRadians(90))),
-    SHORT_SHOOT(new Pose(45, 100, Math.toRadians(135))),
+    SHORT_SHOOT(new Pose(35, 110, Math.toRadians(135))),
     LONG_SHOOT(new Pose(61, 16, Math.toRadians(113))),
     SHORT_COLLECT_PREP(new Pose(44, 83.5, Math.toRadians(180))),
     SHORT_COLLECT(new Pose(19, 83.5, Math.toRadians(180))),
