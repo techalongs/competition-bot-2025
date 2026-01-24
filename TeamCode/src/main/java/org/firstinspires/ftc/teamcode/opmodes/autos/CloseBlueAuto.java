@@ -34,6 +34,9 @@ public class CloseBlueAuto extends OpMode {
 
         AutoCommand auto = new AutoCommand(robot, follower, paths, Launcher.Power.MID);
         auto.schedule();
+
+        telemetry.addData("Status", "Initialized");
+        telemetry.update();
     }
 
     @Override
