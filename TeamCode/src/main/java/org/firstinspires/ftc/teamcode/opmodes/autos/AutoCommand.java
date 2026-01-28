@@ -5,6 +5,7 @@ import com.pedropathing.paths.PathChain;
 import com.seattlesolvers.solverslib.command.InstantCommand;
 import com.seattlesolvers.solverslib.command.SequentialCommandGroup;
 import com.seattlesolvers.solverslib.pedroCommand.FollowPathCommand;
+import com.seattlesolvers.solverslib.pedroCommand.TurnCommand;
 
 import org.firstinspires.ftc.teamcode.Robot;
 import org.firstinspires.ftc.teamcode.subsystems.Launcher;
@@ -26,7 +27,9 @@ public class AutoCommand extends SequentialCommandGroup {
                         robot.stopIntake(),
                         new InstantCommand(() -> follower.setMaxPower(1)),
                         new FollowPathCommand(follower, paths[3], true),
-                        robot.launchAll(power) // Score
+                        new SleepCommand(1000),
+                        robot.launchAll(power), // Score
+                        new FollowPathCommand(follower, paths[4], true)
                 )
         );
     }

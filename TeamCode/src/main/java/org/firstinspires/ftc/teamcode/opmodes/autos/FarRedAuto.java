@@ -32,7 +32,7 @@ public class FarRedAuto extends OpMode {
         buildPaths();
         follower.setStartingPose(RedPosition.LONG_START.pos);
 
-        AutoCommand auto = new AutoCommand(robot, follower, paths, Launcher.Power.LONG);
+        AutoCommand auto = new AutoCommand(robot, follower, paths, Launcher.Power.MID);
         auto.schedule();
 
         telemetry.addData("Status", "Initialized");
@@ -57,12 +57,18 @@ public class FarRedAuto extends OpMode {
     }
 
     private void buildPaths() {
-        paths = new PathChain[4];
+        paths = new PathChain[5];
 
-        paths[0] = getPath(RedPosition.LONG_START, RedPosition.LONG_SHOOT); // Score Preload
-        paths[1] = getPath(RedPosition.LONG_SHOOT, RedPosition.LONG_COLLECT_PREP); // Prep to collect
-        paths[2] = getPath(RedPosition.LONG_COLLECT_PREP, RedPosition.LONG_COLLECT); // Collect
-        paths[3] = getPath(RedPosition.LONG_COLLECT, RedPosition.LONG_SHOOT); // Score
+//        paths[0] = getPath(RedPosition.LONG_START, RedPosition.LONG_SHOOT); // Score Preload
+//        paths[1] = getPath(RedPosition.LONG_SHOOT, RedPosition.LONG_COLLECT_PREP); // Prep to collect
+//        paths[2] = getPath(RedPosition.LONG_COLLECT_PREP, RedPosition.LONG_COLLECT); // Collect
+//        paths[3] = getPath(RedPosition.LONG_COLLECT, RedPosition.LONG_SHOOT); // Score
+
+        paths[0] = getPath(RedPosition.LONG_START, RedPosition.SHORT_SHOOT);
+        paths[1] = getPath(RedPosition.SHORT_SHOOT, RedPosition.MID_COLLECT_PREP);
+        paths[2] = getPath(RedPosition.MID_COLLECT_PREP, RedPosition.MID_COLLECT);
+        paths[3] = getPath(RedPosition.MID_COLLECT, RedPosition.SHORT_SHOOT);
+        paths[4] = getPath(RedPosition.SHORT_SHOOT, RedPosition.LONG_END);
     }
 
     private PathChain getPath(RedPosition point1, RedPosition point2) {

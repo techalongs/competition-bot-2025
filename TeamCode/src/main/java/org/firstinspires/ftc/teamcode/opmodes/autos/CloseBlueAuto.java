@@ -57,12 +57,13 @@ public class CloseBlueAuto extends OpMode {
     }
 
     private void buildPaths() {
-        paths = new PathChain[4];
+        paths = new PathChain[5];
 
         paths[0] = getPath(BluePosition.SHORT_START, BluePosition.SHORT_SHOOT); // Score Preload
         paths[1] = getPath(BluePosition.SHORT_SHOOT, BluePosition.SHORT_COLLECT_PREP); // Prep to collect
         paths[2] = getPath(BluePosition.SHORT_COLLECT_PREP, BluePosition.SHORT_COLLECT); // Collect
         paths[3] = getPath(BluePosition.SHORT_COLLECT, BluePosition.SHORT_SHOOT); // Score
+        paths[4] = getPath(BluePosition.SHORT_SHOOT, BluePosition.SHORT_END); // Park
     }
 
     private PathChain getPath(BluePosition point1, BluePosition point2) {

@@ -82,10 +82,7 @@ public class Robot {
                 launch(leftLauncher, power),
                 new SequentialCommandGroup(
                         new SleepCommand(50),
-                        launch(midLauncher, power)
-                ),
-                new SequentialCommandGroup(
-                        new SleepCommand(300),
+                        launch(midLauncher, power),
                         launch(rightLauncher, power)
                 )
         );
