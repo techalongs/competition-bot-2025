@@ -76,6 +76,8 @@ public class DefaultControls extends SubsystemBase implements GamepadControls {
                 .whenPressed(new DeferredCommand(() -> robot.launchColor(Launcher.Color.GREEN, launcherPower), null));
         driver2.getGamepadButton(GamepadKeys.Button.CROSS)
                 .whenPressed(new DeferredCommand(() -> robot.launchAll(launcherPower), null));
+        driver2.getGamepadButton(GamepadKeys.Button.DPAD_DOWN)
+                .whenPressed(new DeferredCommand(() -> robot.launchAllEventually(launcherPower), null));
 
         driver2.getGamepadButton(GamepadKeys.Button.DPAD_LEFT)
                 .whenPressed(new DeferredCommand(() -> robot.launchLeft(launcherPower), null));

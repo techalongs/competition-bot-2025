@@ -110,4 +110,32 @@ public class Robot {
 //    public Command lowerLifts() {
 //        return new InstantCommand(lifts::lower, lifts);
 //    }
+
+    private Command launch(Launcher launcher, Launcher.Power power, int delayMs) {
+        return new SequentialCommandGroup(
+                new SleepCommand(delayMs),
+                new InstantCommand(launcher::reload),
+                new SleepCommand(200),
+                new InstantCommand(() -> launcher.launch(power)),
+                new SleepCommand(250),
+                new InstantCommand(launcher::stopLauncher)
+        );
+    }
+
+    public Command launchAllMaybeMaybeNot(Launcher.Power power) {
+        return new ParallelCommandGroup(
+                launch(leftLauncher, power, 0),
+                launch(midLauncher, power, 50),
+                launch(rightLauncher, power, 200)
+        );
+    }
+
+    public Command launchAllEventually(Launcher.Power power) {
+        return new SequentialCommandGroup(
+                launch(leftLauncher, power),
+                launch(midLauncher, power),
+                launch(rightLauncher, power)
+        );
+    }
+
 }
