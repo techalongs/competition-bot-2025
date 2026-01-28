@@ -129,8 +129,11 @@ public class Robot {
 
     public Command launchAllEventually(Launcher.Power power) {
         return new SequentialCommandGroup(
+                new SleepCommand(500),
                 launch(leftLauncher, power),
+                new SleepCommand(1000),
                 launch(midLauncher, power),
+                new SleepCommand(1000),
                 launch(rightLauncher, power)
         );
     }
