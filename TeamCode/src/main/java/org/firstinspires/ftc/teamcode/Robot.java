@@ -108,7 +108,7 @@ public class Robot {
 //        return new InstantCommand(lifts::lower, lifts);
 //    }
 
-    private Command launch(Launcher launcher, Launcher.Power power, int delayMs) {
+    private Command launchWithDelay(Launcher launcher, Launcher.Power power, int delayMs) {
         return new SequentialCommandGroup(
                 new SleepCommand(delayMs),
                 new InstantCommand(launcher::reload),
@@ -121,9 +121,9 @@ public class Robot {
 
     public Command launchAllMaybeMaybeNot(Launcher.Power power) {
         return new ParallelCommandGroup(
-                launch(leftLauncher, power, 0),
-                launch(midLauncher, power, 50),
-                launch(rightLauncher, power, 200)
+                launchWithDelay(leftLauncher, power, 0),
+                launchWithDelay(midLauncher, power, 50),
+                launchWithDelay(rightLauncher, power, 200)
         );
     }
 
