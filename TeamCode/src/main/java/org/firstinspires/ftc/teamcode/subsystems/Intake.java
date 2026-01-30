@@ -7,6 +7,7 @@ import com.seattlesolvers.solverslib.hardware.motors.MotorEx;
 
 public class Intake extends SubsystemBase {
     private final MotorEx intake;
+    private boolean running = false;
 
     public Intake(HardwareMap hardwareMap, String intakeName) {
         intake = new MotorEx(hardwareMap, intakeName);
@@ -19,9 +20,21 @@ public class Intake extends SubsystemBase {
 
     public void run() {
         intake.set(1);
+        running = true;
+    }
+
+    public void reverse() {
+        intake.set(-1);
+        running = true;
     }
 
     public void stop() {
         intake.set(0);
+        running = false;
     }
+
+    public boolean isRunning() {
+        return running;
+    }
+
 }
