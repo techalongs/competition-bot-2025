@@ -45,6 +45,10 @@ public class Robot {
         return new InstantCommand(intake::run);
     }
 
+    public Command reverseIntake() {
+        return new InstantCommand(intake::reverse);
+    }
+
     public Command stopIntake() {
         return new InstantCommand(intake::stop);
     }
@@ -136,6 +140,10 @@ public class Robot {
                 new SleepCommand(1000),
                 launch(rightLauncher, power)
         );
+    }
+
+    public boolean intakeIsRunning() {
+        return intake.isRunning();
     }
 
 }

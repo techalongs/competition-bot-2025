@@ -9,7 +9,7 @@ import com.seattlesolvers.solverslib.gamepad.ToggleButtonReader;
 
 import org.firstinspires.ftc.teamcode.Robot;
 import org.firstinspires.ftc.teamcode.opmodes.controls.AnnaControls;
-import org.firstinspires.ftc.teamcode.opmodes.controls.DefaultControls;
+import org.firstinspires.ftc.teamcode.opmodes.controls.OtherControls;
 import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
 import org.firstinspires.ftc.teamcode.opmodes.controls.GamepadControls;
 import org.firstinspires.ftc.teamcode.util.REVColorSensor;
@@ -25,15 +25,11 @@ public class TwoControllers extends OpMode {
     private CommandScheduler commandScheduler;
     private ToggleButtonReader toggleDriveSlow;
     private ToggleButtonReader toggleFieldCentric;
-    private boolean intakeState = false;
     private REVColorSensor sensor1;
     private REVColorSensor sensor2;
     private double driveFastSpeedLimit = 1.0;
     private double driveSlowSpeedLimit = 0.5;
     private GamepadControls gamepadControls;
-
-    // Long - red, Mid - blue, Close - green
-    private final int[][] gamepadColors = new int[][]{{255, 0, 0}, {0, 0, 255}, {0, 255, 0}};
 
     @Override
     public void init() {
@@ -45,23 +41,21 @@ public class TwoControllers extends OpMode {
         robot = new Robot(hardwareMap);
         commandScheduler = CommandScheduler.getInstance();
 
-        gamepadControls = new DefaultControls(driver1, driver2, robot);
+        gamepadControls = new AnnaControls(driver1, driver2, robot);
         toggleDriveSlow = gamepadControls.getDriveSlowToggleReader();
         toggleFieldCentric = gamepadControls.getFieldCentricToggleReader();
 
         driver2.getGamepadButton(GamepadKeys.Button.OPTIONS).and(driver2.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER)).toggleWhenActive(() -> {
                     commandScheduler.clearButtons();
-                    gamepadControls = new AnnaControls(driver1, driver2, robot);
+                    gamepadControls = new OtherControls(driver1, driver2, robot);
                     toggleDriveSlow = gamepadControls.getDriveSlowToggleReader();
                     toggleFieldCentric = gamepadControls.getFieldCentricToggleReader();
-
                 },
                 () -> {
                     commandScheduler.clearButtons();
-                    gamepadControls = new DefaultControls(driver1, driver2, robot);
+                    gamepadControls = new AnnaControls(driver1, driver2, robot);
                     toggleDriveSlow = gamepadControls.getDriveSlowToggleReader();
                     toggleFieldCentric = gamepadControls.getFieldCentricToggleReader();
-
                 });
     }
 
@@ -79,8 +73,8 @@ public class TwoControllers extends OpMode {
         telemetry.addData("Launcher Power State", gamepadControls.getLauncherPower().name());
         telemetry.addData("Drive state", getDriveState());
         if (!gamepadControls.isDefault()) {
-            telemetry.addData("Countrols", gamepadControls);
-            telemetry.addLine(" Option + A or Cross to switch back");
+            telemetry.addData("Controls", gamepadControls);
+            telemetry.addLine(" Option + Left Bumper or Cross to switch back");
         }
         telemetry.update();
     }
@@ -108,4 +102,5 @@ public class TwoControllers extends OpMode {
         toggleDriveSlow.readValue();
         toggleFieldCentric.readValue();
     }
+
 }

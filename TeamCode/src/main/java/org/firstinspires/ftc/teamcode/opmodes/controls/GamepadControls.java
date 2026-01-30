@@ -13,7 +13,7 @@ public interface GamepadControls {
     Launcher.Power getLauncherPower();
 
     default boolean isDefault() {
-        return true;
+        return false;
     }
 
 }
