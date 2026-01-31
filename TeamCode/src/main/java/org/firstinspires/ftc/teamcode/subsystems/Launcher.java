@@ -7,7 +7,10 @@ import com.seattlesolvers.solverslib.hardware.motors.MotorEx;
 
 import org.firstinspires.ftc.teamcode.util.REVColorSensor;
 
+import lombok.Getter;
+
 public class Launcher extends SubsystemBase {
+
     private final MotorEx launcher;
     private final REVColorSensor sensor1;
     private final REVColorSensor sensor2;
@@ -27,7 +30,8 @@ public class Launcher extends SubsystemBase {
         MID(0.8),
         SHORT(0.7);
 
-        final double power;
+        public final double power;
+
         Power(double power) {
             this.power = power;
         }
@@ -60,11 +64,25 @@ public class Launcher extends SubsystemBase {
         launcher.set(power.power);
     }
 
+    public void launch(double power) {
+        launcher.set(power);
+    }
+
     public void reload() {
         launcher.set(-1);
+    }
+
+    public void reload(double power) {
+        if (power > 0) { power = -power; }
+        launcher.set(power);
     }
 
     public void stopLauncher() {
         launcher.set(0);
     }
+
+    public MotorEx getMotor() {
+        return launcher;
+    }
+
 }

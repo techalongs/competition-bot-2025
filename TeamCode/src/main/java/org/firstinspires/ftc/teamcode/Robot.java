@@ -17,6 +17,9 @@ import org.firstinspires.ftc.teamcode.util.SleepCommand;
 
 import java.util.ArrayList;
 
+import lombok.Getter;
+
+@Getter
 public class Robot {
     private final Drivetrain drivetrain;
     private final Intake intake;
