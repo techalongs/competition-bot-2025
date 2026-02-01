@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.opmodes.teleops;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.seattlesolvers.solverslib.command.CommandScheduler;
@@ -18,6 +19,7 @@ import org.firstinspires.ftc.teamcode.util.REVColorSensor;
 import java.util.Arrays;
 
 @TeleOp(name = "One Controller TeleOp - Logitech", group = "Logitech Controls")
+@Disabled
 public class OneControllerLogitech extends OpMode {
 
     private GamepadEx driver1;
@@ -29,19 +31,17 @@ public class OneControllerLogitech extends OpMode {
     private boolean intakeState = false;
     private REVColorSensor sensor1;
     private REVColorSensor sensor2;
-    private REVColorSensor sensor3;
     private double driveFastSpeedLimit = 1.0;
     private double driveSlowSpeedLimit = 0.5;
-    private Launcher.Power launcherPower = Launcher.Power.MID;
-    private Launcher.Power[] launcherPowers =
+    private Launcher.Power launcherPower = Launcher.Power.SHORT;
+    private final Launcher.Power[] launcherPowers =
             new Launcher.Power[] {Launcher.Power.LONG, Launcher.Power.MID, Launcher.Power.SHORT};
-    private int launcherState = 1;
+    private int launcherState = 2;
 
     @Override
     public void init() {
-        sensor1 = new REVColorSensor(hardwareMap, "sensor1");
-        sensor2 = new REVColorSensor(hardwareMap, "sensor2");
-        sensor3 = new REVColorSensor(hardwareMap, "sensor3");
+        sensor1 = new REVColorSensor(hardwareMap, "rightSensor1");
+        sensor2 = new REVColorSensor(hardwareMap, "rightSensor2");
 
         driver1 = new GamepadEx(gamepad1);
         driver2 = new GamepadEx(gamepad2);
@@ -82,6 +82,13 @@ public class OneControllerLogitech extends OpMode {
         driver1.getGamepadButton(GamepadKeys.Button.A)
                 .whenPressed(new DeferredCommand(() -> robot.launchAll(launcherPower), null));
 
+        driver1.getGamepadButton(GamepadKeys.Button.DPAD_LEFT)
+                .whenPressed(new DeferredCommand(() -> robot.launchLeft(launcherPower), null));
+        driver1.getGamepadButton(GamepadKeys.Button.DPAD_UP)
+                .whenPressed(new DeferredCommand(() -> robot.launchMid(launcherPower), null));
+        driver1.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT)
+                .whenPressed(new DeferredCommand(() -> robot.launchRight(launcherPower), null));
+
         // Ascent Lifts - Dpad Up and Dpad Down
 //        driver1.getGamepadButton(GamepadKeys.Button.DPAD_UP).whileHeld(robot.raiseLifts());
 //        driver1.getGamepadButton(GamepadKeys.Button.DPAD_DOWN).whileHeld(robot.lowerLifts());
@@ -95,9 +102,8 @@ public class OneControllerLogitech extends OpMode {
         Drivetrain.DriveState driveState = getDriveState();
         robot.drive(driveState, driver1, driveSpeedLimit);
 
-        telemetry.addData("Sensor 1", sensor1.RGBtoHSV(sensor3.red(), sensor3.green(), sensor3.blue(), new float[3])[0]);
-        telemetry.addData("Sensor 2", sensor2.RGBtoHSV(sensor2.red(), sensor2.green(), sensor2.blue(), new float[3])[0]);
-        telemetry.addData("Sensor 3", sensor3.RGBtoHSV(sensor3.red(), sensor3.green(), sensor3.blue(), new float[3])[0]);
+        telemetry.addData("Right Sensor 1", sensor1.RGBtoHSV(sensor1.red(), sensor1.green(), sensor1.blue(), new float[3])[0]);
+        telemetry.addData("Right Sensor 2", sensor2.RGBtoHSV(sensor2.red(), sensor2.green(), sensor2.blue(), new float[3])[0]);
         telemetry.addData("Launcher Colors", Arrays.toString(robot.getLauncherColors()));
         telemetry.addData("Launcher Power State", launcherPower.name());
         telemetry.update();

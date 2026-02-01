@@ -41,10 +41,10 @@ public class Drivetrain extends SubsystemBase {
         backLeft.stopAndResetEncoder();
         backRight.stopAndResetEncoder();
 
-        frontLeft.setRunMode(Motor.RunMode.VelocityControl);
-        frontRight.setRunMode(Motor.RunMode.VelocityControl);
-        backLeft.setRunMode(Motor.RunMode.VelocityControl);
-        backRight.setRunMode(Motor.RunMode.VelocityControl);
+        frontLeft.setRunMode(Motor.RunMode.RawPower);
+        frontRight.setRunMode(Motor.RunMode.RawPower);
+        backLeft.setRunMode(Motor.RunMode.RawPower);
+        backRight.setRunMode(Motor.RunMode.RawPower);
 
         drivetrain = new MecanumDrive(false, frontLeft, frontRight, backLeft, backRight);
         imu = new NewIMU(hardwareMap, "imu");

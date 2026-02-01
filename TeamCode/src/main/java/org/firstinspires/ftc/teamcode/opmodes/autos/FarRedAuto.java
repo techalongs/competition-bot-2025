@@ -18,50 +18,25 @@ public class FarRedAuto extends OpMode {
     private Robot robot;
 
     private Follower follower;
-    private Timer pathTimer, opmodeTimer;
-    private int pathState;
+    private Timer opmodeTimer;
 
     private PathChain[] paths;
-    private Pose[] poses;
-    private final int DELAY = 0; // Milliseconds
-
-    private void initPoses() {
-        Pose startPose = new Pose(86.5, 9.5, Math.toRadians(0));
-        Pose scorePose = new Pose(93, 93, Math.toRadians(45));
-        Pose endPose = new Pose(105, 16, Math.toRadians(0));
-        poses = new Pose[] {startPose, scorePose, endPose};
-    }
-
-    private void buildPaths() {
-        paths = new PathChain[2];
-
-        // Score Preload
-        paths[0] = follower.pathBuilder()
-                .addPath(new BezierLine(poses[0], poses[1]))
-                .setLinearHeadingInterpolation(poses[0].getHeading(), poses[1].getHeading())
-                .build();
-
-        // Park
-        paths[1] = follower.pathBuilder()
-                .addPath(new BezierLine(poses[1], poses[2]))
-                .setLinearHeadingInterpolation(poses[1].getHeading(), poses[2].getHeading())
-                .build();
-    }
 
     @Override
     public void init() {
         robot = new Robot(hardwareMap);
-        pathTimer = new Timer();
         opmodeTimer = new Timer();
         opmodeTimer.resetTimer();
         follower = Constants.createFollower(hardwareMap);
 
-        initPoses();
         buildPaths();
-        follower.setStartingPose(poses[0]);
+        follower.setStartingPose(RedPosition.LONG_START.pos);
 
-        AutoCommand auto = new AutoCommand(robot, follower, paths, Launcher.Power.LONG);
+        AutoCommand auto = new AutoCommand(robot, follower, paths, Launcher.Power.MID);
         auto.schedule();
+
+        telemetry.addData("Status", "Initialized");
+        telemetry.update();
     }
 
     @Override
@@ -75,10 +50,31 @@ public class FarRedAuto extends OpMode {
         CommandScheduler.getInstance().run();
 
         // Feedback to Driver Hub for debugging
-        telemetry.addData("path state", pathState);
         telemetry.addData("x", follower.getPose().getX());
         telemetry.addData("y", follower.getPose().getY());
         telemetry.addData("heading", follower.getPose().getHeading());
         telemetry.update();
+    }
+
+    private void buildPaths() {
+        paths = new PathChain[5];
+
+//        paths[0] = getPath(RedPosition.LONG_START, RedPosition.LONG_SHOOT); // Score Preload
+//        paths[1] = getPath(RedPosition.LONG_SHOOT, RedPosition.LONG_COLLECT_PREP); // Prep to collect
+//        paths[2] = getPath(RedPosition.LONG_COLLECT_PREP, RedPosition.LONG_COLLECT); // Collect
+//        paths[3] = getPath(RedPosition.LONG_COLLECT, RedPosition.LONG_SHOOT); // Score
+
+        paths[0] = getPath(RedPosition.LONG_START, RedPosition.SHORT_SHOOT);
+        paths[1] = getPath(RedPosition.SHORT_SHOOT, RedPosition.MID_COLLECT_PREP);
+        paths[2] = getPath(RedPosition.MID_COLLECT_PREP, RedPosition.MID_COLLECT);
+        paths[3] = getPath(RedPosition.MID_COLLECT, RedPosition.SHORT_SHOOT);
+        paths[4] = getPath(RedPosition.SHORT_SHOOT, RedPosition.LONG_END);
+    }
+
+    private PathChain getPath(RedPosition point1, RedPosition point2) {
+        return follower.pathBuilder()
+                .addPath(new BezierLine(point1.pos, point2.pos))
+                .setLinearHeadingInterpolation(point1.pos.getHeading(), point2.pos.getHeading())
+                .build();
     }
 }

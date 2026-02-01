@@ -18,50 +18,25 @@ public class CloseBlueAuto extends OpMode {
     private Robot robot;
 
     private Follower follower;
-    private Timer pathTimer, opmodeTimer;
-    private int pathState;
+    private Timer opmodeTimer;
 
     private PathChain[] paths;
-    private Pose[] poses;
-    private final int DELAY = 0; // Milliseconds
-
-    private void initPoses() {
-        Pose startPose = new Pose(20, 109, Math.toRadians(320)); // TODO: check angle - increase
-        Pose scorePose = new Pose(50, 73, Math.toRadians(135));
-        Pose endPose = new Pose(40, 15, Math.toRadians(180));
-        poses = new Pose[] {startPose, scorePose, endPose};
-    }
-
-    private void buildPaths() {
-        paths = new PathChain[2];
-
-        // Score Preload
-        paths[0] = follower.pathBuilder()
-                .addPath(new BezierLine(poses[0], poses[1]))
-                .setLinearHeadingInterpolation(poses[0].getHeading(), poses[1].getHeading())
-                .build();
-
-        // Park
-        paths[1] = follower.pathBuilder()
-                .addPath(new BezierLine(poses[1], poses[2]))
-                .setLinearHeadingInterpolation(poses[1].getHeading(), poses[2].getHeading())
-                .build();
-    }
 
     @Override
     public void init() {
         robot = new Robot(hardwareMap);
-        pathTimer = new Timer();
         opmodeTimer = new Timer();
         opmodeTimer.resetTimer();
         follower = Constants.createFollower(hardwareMap);
 
-        initPoses();
         buildPaths();
-        follower.setStartingPose(poses[0]);
+        follower.setStartingPose(BluePosition.SHORT_START.pos);
 
         AutoCommand auto = new AutoCommand(robot, follower, paths, Launcher.Power.SHORT);
         auto.schedule();
+
+        telemetry.addData("Status", "Initialized");
+        telemetry.update();
     }
 
     @Override
@@ -75,10 +50,26 @@ public class CloseBlueAuto extends OpMode {
         CommandScheduler.getInstance().run();
 
         // Feedback to Driver Hub for debugging
-        telemetry.addData("path state", pathState);
         telemetry.addData("x", follower.getPose().getX());
         telemetry.addData("y", follower.getPose().getY());
         telemetry.addData("heading", follower.getPose().getHeading());
         telemetry.update();
+    }
+
+    private void buildPaths() {
+        paths = new PathChain[5];
+
+        paths[0] = getPath(BluePosition.SHORT_START, BluePosition.SHORT_SHOOT); // Score Preload
+        paths[1] = getPath(BluePosition.SHORT_SHOOT, BluePosition.SHORT_COLLECT_PREP); // Prep to collect
+        paths[2] = getPath(BluePosition.SHORT_COLLECT_PREP, BluePosition.SHORT_COLLECT); // Collect
+        paths[3] = getPath(BluePosition.SHORT_COLLECT, BluePosition.SHORT_SHOOT); // Score
+        paths[4] = getPath(BluePosition.SHORT_SHOOT, BluePosition.SHORT_END); // Park
+    }
+
+    private PathChain getPath(BluePosition point1, BluePosition point2) {
+        return follower.pathBuilder()
+                .addPath(new BezierLine(point1.pos, point2.pos))
+                .setLinearHeadingInterpolation(point1.pos.getHeading(), point2.pos.getHeading())
+                .build();
     }
 }

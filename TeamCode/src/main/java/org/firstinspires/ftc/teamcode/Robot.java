@@ -29,9 +29,9 @@ public class Robot {
     public Robot(HardwareMap hardwareMap) {
         drivetrain = new Drivetrain(hardwareMap, "frontLeft", "frontRight", "backLeft", "backRight");
         intake = new Intake(hardwareMap, "intakeLift");
-        leftLauncher = new Launcher(hardwareMap, "leftLauncher", "sensor1", true);
-        midLauncher = new Launcher(hardwareMap, "midLauncher", "sensor2", true);
-        rightLauncher = new Launcher(hardwareMap, "rightLauncher", "sensor3", false);
+        leftLauncher = new Launcher(hardwareMap, "leftLauncher", "leftSensor", true);
+        midLauncher = new Launcher(hardwareMap, "midLauncher", "midSensor", true);
+        rightLauncher = new Launcher(hardwareMap, "rightLauncher", "rightSensor", false);
         camera = new LogitechCamera(hardwareMap, "Webcam 1");
 //        lifts = new Lifter(hardwareMap, "leftLift", "rightLift");
 //        lifts.setDefaultCommand(new PerpetualCommand(new RunCommand(lifts::stop, lifts)));
@@ -45,18 +45,20 @@ public class Robot {
         return new InstantCommand(intake::run);
     }
 
+    public Command reverseIntake() {
+        return new InstantCommand(intake::reverse);
+    }
+
     public Command stopIntake() {
         return new InstantCommand(intake::stop);
     }
 
     private Command launch(Launcher launcher, Launcher.Power power) {
         return new SequentialCommandGroup(
-                new InstantCommand(launcher::reloadSlow),
-                new SleepCommand(300),
-                new InstantCommand(() -> launcher.launch(power)),
-                new SleepCommand(150),
                 new InstantCommand(launcher::reload),
-                new SleepCommand(25),
+                new SleepCommand(200),
+                new InstantCommand(() -> launcher.launch(power)),
+                new SleepCommand(250),
                 new InstantCommand(launcher::stopLauncher)
         );
     }
@@ -83,14 +85,23 @@ public class Robot {
         return new ParallelCommandGroup(
                 launch(leftLauncher, power),
                 new SequentialCommandGroup(
-                        new SleepCommand(100),
-                        launch(midLauncher, power)
-                ),
-                new SequentialCommandGroup(
-                        new SleepCommand(200),
+                        new SleepCommand(50),
+                        launch(midLauncher, power),
                         launch(rightLauncher, power)
                 )
         );
+    }
+
+    public Command launchLeft(Launcher.Power power) {
+        return this.launch(leftLauncher, power);
+    }
+
+    public Command launchMid(Launcher.Power power) {
+        return this.launch(midLauncher, power);
+    }
+
+    public Command launchRight(Launcher.Power power) {
+        return this.launch(rightLauncher, power);
     }
 
 //    public Command raiseLifts() {
@@ -100,4 +111,39 @@ public class Robot {
 //    public Command lowerLifts() {
 //        return new InstantCommand(lifts::lower, lifts);
 //    }
+
+    private Command launchWithDelay(Launcher launcher, Launcher.Power power, int delayMs) {
+        return new SequentialCommandGroup(
+                new SleepCommand(delayMs),
+                new InstantCommand(launcher::reload),
+                new SleepCommand(200),
+                new InstantCommand(() -> launcher.launch(power)),
+                new SleepCommand(250),
+                new InstantCommand(launcher::stopLauncher)
+        );
+    }
+
+    public Command launchAllMaybeMaybeNot(Launcher.Power power) {
+        return new ParallelCommandGroup(
+                launchWithDelay(leftLauncher, power, 0),
+                launchWithDelay(midLauncher, power, 50),
+                launchWithDelay(rightLauncher, power, 200)
+        );
+    }
+
+    public Command launchAllEventually(Launcher.Power power) {
+        return new SequentialCommandGroup(
+                new SleepCommand(500),
+                launch(leftLauncher, power),
+                new SleepCommand(1000),
+                launch(midLauncher, power),
+                new SleepCommand(1000),
+                launch(rightLauncher, power)
+        );
+    }
+
+    public boolean intakeIsRunning() {
+        return intake.isRunning();
+    }
+
 }
