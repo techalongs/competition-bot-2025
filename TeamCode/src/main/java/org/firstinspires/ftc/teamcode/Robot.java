@@ -28,7 +28,7 @@ public class Robot {
     private final Launcher leftLauncher;
     private final Launcher midLauncher;
     private final Launcher rightLauncher;
-    private final List<Subsystem> launchers = new ArrayList<>();
+    private final List<Subsystem> allLaunchers = new ArrayList<>();
     private final LogitechCamera camera;
 //    private final Lifter lifts;
 
@@ -38,9 +38,9 @@ public class Robot {
         leftLauncher = new Launcher(hardwareMap, "leftLauncher", "leftSensor", true);
         midLauncher = new Launcher(hardwareMap, "midLauncher", "midSensor", true);
         rightLauncher = new Launcher(hardwareMap, "rightLauncher", "rightSensor", false);
-        launchers.add(leftLauncher);
-        launchers.add(midLauncher);
-        launchers.add(rightLauncher);
+        allLaunchers.add(leftLauncher);
+        allLaunchers.add(midLauncher);
+        allLaunchers.add(rightLauncher);
         camera = new LogitechCamera(hardwareMap, "Webcam 1");
 //        lifts = new Lifter(hardwareMap, "leftLift", "rightLift");
 //        lifts.setDefaultCommand(new PerpetualCommand(new RunCommand(lifts::stop, lifts)));
@@ -100,7 +100,7 @@ public class Robot {
             if (midLauncher.getColor() == color) return launch(midLauncher, power);
             if (rightLauncher.getColor() == color) return launch(rightLauncher, power);
             return new InstantCommand();
-        }, launchers);
+        }, allLaunchers);
     }
 
     public Launcher.Color[] getLauncherColors() {
@@ -173,6 +173,52 @@ public class Robot {
                 this.launchWithDelay(rightLauncher, power,
                         RobotConfig.sleepBeforeSecondParallelLauncher + RobotConfig.sleepBeforeThirdParallelLauncher)
         );
+    }
+
+    /**
+     * Launch a variable number of launchers sequentially with the configured timing between launches.
+     * This is for the case where you want to launch in an order different than Left-Mid-Right.
+     * For example, in motif order.
+     */
+    public Command launchAllSequential(DoubleSupplier power, Launcher... launchers) {
+        SequentialCommandGroup commands = new SequentialCommandGroup();
+        commands.addCommands(this.launch(launchers[0], power));
+        if (launchers.length > 1) {
+            commands.addCommands(
+                    new SleepCommand(RobotConfig.sleepBetweenSequentialLaunches),
+                    this.launch(launchers[1], power)
+            );
+        }
+        if (launchers.length > 2) {
+            commands.addCommands(
+                    new SleepCommand(RobotConfig.sleepBetweenSequentialLaunches),
+                    this.launch(launchers[2], power)
+            );
+        }
+        return commands;
+    }
+
+    /**
+     * Launch a variable number of launchers in parallel with the configured timing between launches.
+     * This is for the case where you want to launch in an order different than Left-Mid-Right.
+     * For example, in motif order.
+     */
+    public Command launchAllParallel(DoubleSupplier power, Launcher... launchers) {
+        ParallelCommandGroup commands = new ParallelCommandGroup();
+        commands.addCommands(this.launch(launchers[0], power));
+        if (launchers.length > 1) {
+            commands.addCommands(
+                    new SleepCommand(RobotConfig.sleepBeforeSecondParallelLauncher),
+                    this.launch(launchers[1], power)
+            );
+        }
+        if (launchers.length > 2) {
+            commands.addCommands(
+                    new SleepCommand(RobotConfig.sleepBeforeThirdParallelLauncher),
+                    this.launch(launchers[2], power)
+            );
+        }
+        return commands;
     }
 
     /**
