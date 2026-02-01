@@ -12,9 +12,14 @@ import org.firstinspires.ftc.teamcode.opmodes.controls.AnnaControls;
 import org.firstinspires.ftc.teamcode.opmodes.controls.OtherControls;
 import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
 import org.firstinspires.ftc.teamcode.opmodes.controls.GamepadControls;
+import org.firstinspires.ftc.teamcode.util.LogitechCamera;
 import org.firstinspires.ftc.teamcode.util.REVColorSensor;
+import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
+import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 
 import java.util.Arrays;
+import java.util.List;
+import java.util.Locale;
 
 @TeleOp(name = "Two Controller TeleOp - PS4", group = "Normal Controls")
 public class TwoControllers extends OpMode {
@@ -27,6 +32,7 @@ public class TwoControllers extends OpMode {
     private ToggleButtonReader toggleFieldCentric;
     private REVColorSensor sensor1;
     private REVColorSensor sensor2;
+    private LogitechCamera camera;
     private double driveFastSpeedLimit = 1.0;
     private double driveSlowSpeedLimit = 0.5;
     private GamepadControls gamepadControls;
@@ -76,7 +82,25 @@ public class TwoControllers extends OpMode {
             telemetry.addData("Controls", gamepadControls);
             telemetry.addLine(" Option + Left Bumper or Cross to switch back");
         }
-        telemetry.update();
+
+        camera = new LogitechCamera(hardwareMap, "wedcam1");
+        telemetry.addData("DS preview on/off", "3 dots, Camera Stream");
+        telemetry.addData("FPS", camera.visionPortal.getFps());
+
+        // 3. Process Data: Retrieve detections
+        List<AprilTagDetection> currentDetections = camera.processor.getDetections();
+        telemetry.addData("# AprilTags Detected", currentDetections.size());
+
+        for (AprilTagDetection detection : currentDetections) {
+            if (detection.metadata != null) {
+// --- 1. GET POSE VALUES FROM TELEMETRY DATA ---
+                double x = detection.ftcPose.x; // Sideways distance in mm
+                double y = detection.ftcPose.y; // Forward distance in mm
+                double yaw = detection.ftcPose.yaw; // Rotation in degrees
+
+                telemetry.update();
+            }
+        }
     }
 
     public double getDriveSpeedLimit() {

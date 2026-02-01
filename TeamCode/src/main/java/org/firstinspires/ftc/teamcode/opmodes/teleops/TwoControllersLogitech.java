@@ -107,6 +107,7 @@ public class TwoControllersLogitech extends OpMode {
         telemetry.addData("Launcher Colors", Arrays.toString(robot.getLauncherColors()));
         telemetry.addData("Launcher Power State", launcherPower.name());
         telemetry.update();
+        return driveState;
     }
 
     public double getDriveSpeedLimit() {

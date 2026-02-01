@@ -17,8 +17,8 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 public class LogitechCamera implements HardwareDevice {
-    private final AprilTagProcessor processor;
-    private final VisionPortal visionPortal;
+    public final AprilTagProcessor processor;
+    public final VisionPortal visionPortal;
 
     public LogitechCamera(HardwareMap hardwareMap, String id) {
         processor = new AprilTagProcessor.Builder()
