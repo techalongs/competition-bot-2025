@@ -168,8 +168,10 @@ public class Robot {
     public Command launchAllParallel(DoubleSupplier power) {
         return new ParallelCommandGroup(
                 this.launch(leftLauncher, power),
-                this.launchWithDelay(midLauncher, power, RobotConfig.sleepBeforeSecondParallelLauncher),
-                this.launchWithDelay(rightLauncher, power, RobotConfig.sleepBeforeThirdParallelLauncher)
+                this.launchWithDelay(midLauncher, power,
+                        RobotConfig.sleepBeforeSecondParallelLauncher),
+                this.launchWithDelay(rightLauncher, power,
+                        RobotConfig.sleepBeforeSecondParallelLauncher + RobotConfig.sleepBeforeThirdParallelLauncher)
         );
     }
 
