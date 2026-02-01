@@ -5,15 +5,26 @@ import com.seattlesolvers.solverslib.command.SubsystemBase;
 import com.seattlesolvers.solverslib.hardware.motors.Motor;
 import com.seattlesolvers.solverslib.hardware.motors.MotorEx;
 
+import org.firstinspires.ftc.teamcode.RobotConfig;
 import org.firstinspires.ftc.teamcode.util.REVColorSensor;
 
-import lombok.Getter;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.function.DoubleSupplier;
+import java.util.function.Supplier;
 
 public class Launcher extends SubsystemBase {
 
     private final MotorEx launcher;
     private final REVColorSensor sensor1;
     private final REVColorSensor sensor2;
+
+    public final static ArrayList<Power> ALL_POWERS = new ArrayList<>();
+    static {
+        ALL_POWERS.add(Power.LONG);
+        ALL_POWERS.add(Power.MID);
+        ALL_POWERS.add(Power.SHORT);
+    }
 
     public enum Color {
         GREEN(new float[] {60, 190}),
@@ -26,14 +37,18 @@ public class Launcher extends SubsystemBase {
     }
 
     public enum Power {
-        LONG(1),
-        MID(0.8),
-        SHORT(0.7);
+        LONG(() -> RobotConfig.launchPowerLong),
+        MID(() -> RobotConfig.launchPowerMid),
+        SHORT(() -> RobotConfig.launchPowerShort);
 
-        public final double power;
+        public final Supplier<Double> power;
 
-        Power(double power) {
+        Power(Supplier<Double> power) {
             this.power = power;
+        }
+
+        public double power() {
+            return power.get();
         }
     }
 
@@ -43,7 +58,7 @@ public class Launcher extends SubsystemBase {
         this.sensor2 = new REVColorSensor(hardwareMap, sensor + "2");
 
         launcher.setInverted(inverted);
-        launcher.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
+        launcher.setZeroPowerBehavior(Motor.ZeroPowerBehavior.FLOAT);
         launcher.stopAndResetEncoder();
         launcher.setRunMode(MotorEx.RunMode.RawPower);
     }
@@ -61,20 +76,28 @@ public class Launcher extends SubsystemBase {
     }
 
     public void launch(Power power) {
-        launcher.set(power.power);
+        launcher.set(power.power());
     }
 
     public void launch(double power) {
         launcher.set(power);
     }
 
+    public void launch(DoubleSupplier power) {
+        launcher.set(power.getAsDouble());
+    }
+
     public void reload() {
-        launcher.set(-1);
+        launcher.set(RobotConfig.reloadPower);
     }
 
     public void reload(double power) {
-        if (power > 0) { power = -power; }
-        launcher.set(power);
+        launcher.set(power > 0 ? -power : power);
+    }
+
+    public void reload(DoubleSupplier power) {
+        final double p = power.getAsDouble();
+        launcher.set(p > 0 ? -p : p);
     }
 
     public void stopLauncher() {

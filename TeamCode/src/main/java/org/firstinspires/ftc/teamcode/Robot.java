@@ -16,6 +16,8 @@ import org.firstinspires.ftc.teamcode.util.LogitechCamera;
 import org.firstinspires.ftc.teamcode.util.SleepCommand;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.function.DoubleSupplier;
 
 import lombok.Getter;
 
@@ -26,6 +28,7 @@ public class Robot {
     private final Launcher leftLauncher;
     private final Launcher midLauncher;
     private final Launcher rightLauncher;
+    private final List<Subsystem> launchers = new ArrayList<>();
     private final LogitechCamera camera;
 //    private final Lifter lifts;
 
@@ -35,6 +38,9 @@ public class Robot {
         leftLauncher = new Launcher(hardwareMap, "leftLauncher", "leftSensor", true);
         midLauncher = new Launcher(hardwareMap, "midLauncher", "midSensor", true);
         rightLauncher = new Launcher(hardwareMap, "rightLauncher", "rightSensor", false);
+        launchers.add(leftLauncher);
+        launchers.add(midLauncher);
+        launchers.add(rightLauncher);
         camera = new LogitechCamera(hardwareMap, "Webcam 1");
 //        lifts = new Lifter(hardwareMap, "leftLift", "rightLift");
 //        lifts.setDefaultCommand(new PerpetualCommand(new RunCommand(lifts::stop, lifts)));
@@ -57,21 +63,38 @@ public class Robot {
     }
 
     private Command launch(Launcher launcher, Launcher.Power power) {
-        return new SequentialCommandGroup(
+        return launch(launcher, power::power);
+    }
+
+    private Command launch(Launcher launcher, double power) {
+        return launch(launcher, () -> power);
+    }
+
+    private Command launch(Launcher launcher, DoubleSupplier power) {
+        final Command cmd =  new SequentialCommandGroup(
                 new InstantCommand(launcher::reload),
-                new SleepCommand(200),
+                new SleepCommand(RobotConfig.sleepBeforeLaunch),
                 new InstantCommand(() -> launcher.launch(power)),
-                new SleepCommand(250),
+                new SleepCommand(RobotConfig.sleepAfterLaunch),
                 new InstantCommand(launcher::stopLauncher)
         );
+        // TODO: We can remove this if we find there's no reason to sleep before reload.
+        //       This shouldn't be a performance drag.
+        if (RobotConfig.sleepBeforeReload > 0) {
+            return cmd.beforeStarting(new SleepCommand(RobotConfig.sleepBeforeReload));
+        }
+        return cmd;
+    }
+
+    private Command launchWithDelay(Launcher launcher, DoubleSupplier power, int delayMs) {
+        return launch(launcher, power).beforeStarting(new SleepCommand(delayMs));
     }
 
     public Command launchColor(Launcher.Color color, Launcher.Power power) {
-        ArrayList<Subsystem> launchers = new ArrayList<>();
-        launchers.add(leftLauncher);
-        launchers.add(midLauncher);
-        launchers.add(rightLauncher);
+        return launchColor(color, power::power);
+    }
 
+    public Command launchColor(Launcher.Color color, DoubleSupplier power) {
         return new DeferredCommand(() -> {
             if (leftLauncher.getColor() == color) return launch(leftLauncher, power);
             if (midLauncher.getColor() == color) return launch(midLauncher, power);
@@ -79,12 +102,88 @@ public class Robot {
             return new InstantCommand();
         }, launchers);
     }
-    
+
     public Launcher.Color[] getLauncherColors() {
         return new Launcher.Color[] {leftLauncher.getColor(), midLauncher.getColor(), rightLauncher.getColor()};
     }
 
+    public Command launchLeft(DoubleSupplier power) {
+        return this.launch(leftLauncher, power);
+    }
+
+    public Command launchLeft(double power) {
+        return this.launch(leftLauncher, power);
+    }
+
+    public Command launchLeft(Launcher.Power power) {
+        return this.launch(leftLauncher, power);
+    }
+
+    public Command launchMid(DoubleSupplier power) {
+        return this.launch(midLauncher, power);
+    }
+
+    public Command launchMid(double power) {
+        return this.launch(midLauncher, power);
+    }
+
+    public Command launchMid(Launcher.Power power) {
+        return this.launch(midLauncher, power);
+    }
+
+    public Command launchRight(DoubleSupplier power) {
+        return this.launch(rightLauncher, power);
+    }
+
+    public Command launchRight(double power) {
+        return this.launch(rightLauncher, power);
+    }
+
+    public Command launchRight(Launcher.Power power) {
+        return this.launch(rightLauncher, power);
+    }
+
+    public Command launchAll(DoubleSupplier power) {
+        return launchAllSequential(power);
+    }
+
+    public Command launchAll(double power) {
+        return launchAllSequential(() -> power);
+    }
+
     public Command launchAll(Launcher.Power power) {
+        return launchAllSequential(power::power);
+    }
+
+    public Command launchAllSequential(DoubleSupplier power) {
+        return new SequentialCommandGroup(
+                this.launch(leftLauncher, power),
+                new SleepCommand(RobotConfig.sleepBetweenSequentialLaunches),
+                this.launch(midLauncher, power),
+                new SleepCommand(RobotConfig.sleepBetweenSequentialLaunches),
+                this.launch(rightLauncher, power)
+        );
+    }
+
+    public Command launchAllParallel(DoubleSupplier power) {
+        return new ParallelCommandGroup(
+                this.launch(leftLauncher, power),
+                this.launchWithDelay(midLauncher, power, RobotConfig.sleepBeforeSecondParallelLauncher),
+                this.launchWithDelay(rightLauncher, power, RobotConfig.sleepBeforeThirdParallelLauncher)
+        );
+    }
+
+    /**
+     * Old launchAll for posterity.
+     */
+    public Command launchAll_Old(Launcher.Power power) {
+        return launchAll_Old(power::power);
+    }
+
+    /**
+     * Old launchAll for posterity.
+     */
+    public Command launchAll_Old(DoubleSupplier power) {
         return new ParallelCommandGroup(
                 launch(leftLauncher, power),
                 new SequentialCommandGroup(
@@ -95,18 +194,6 @@ public class Robot {
         );
     }
 
-    public Command launchLeft(Launcher.Power power) {
-        return this.launch(leftLauncher, power);
-    }
-
-    public Command launchMid(Launcher.Power power) {
-        return this.launch(midLauncher, power);
-    }
-
-    public Command launchRight(Launcher.Power power) {
-        return this.launch(rightLauncher, power);
-    }
-
 //    public Command raiseLifts() {
 //        return new InstantCommand(lifts::raise, lifts);
 //    }
@@ -114,36 +201,6 @@ public class Robot {
 //    public Command lowerLifts() {
 //        return new InstantCommand(lifts::lower, lifts);
 //    }
-
-    private Command launchWithDelay(Launcher launcher, Launcher.Power power, int delayMs) {
-        return new SequentialCommandGroup(
-                new SleepCommand(delayMs),
-                new InstantCommand(launcher::reload),
-                new SleepCommand(200),
-                new InstantCommand(() -> launcher.launch(power)),
-                new SleepCommand(250),
-                new InstantCommand(launcher::stopLauncher)
-        );
-    }
-
-    public Command launchAllMaybeMaybeNot(Launcher.Power power) {
-        return new ParallelCommandGroup(
-                launchWithDelay(leftLauncher, power, 0),
-                launchWithDelay(midLauncher, power, 50),
-                launchWithDelay(rightLauncher, power, 200)
-        );
-    }
-
-    public Command launchAllEventually(Launcher.Power power) {
-        return new SequentialCommandGroup(
-                new SleepCommand(500),
-                launch(leftLauncher, power),
-                new SleepCommand(1000),
-                launch(midLauncher, power),
-                new SleepCommand(1000),
-                launch(rightLauncher, power)
-        );
-    }
 
     public boolean intakeIsRunning() {
         return intake.isRunning();

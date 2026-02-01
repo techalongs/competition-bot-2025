@@ -11,6 +11,7 @@ import com.seattlesolvers.solverslib.gamepad.GamepadKeys;
 import com.seattlesolvers.solverslib.gamepad.ToggleButtonReader;
 
 import org.firstinspires.ftc.teamcode.Robot;
+import org.firstinspires.ftc.teamcode.RobotConfig;
 import org.firstinspires.ftc.teamcode.subsystems.Launcher;
 
 public class OtherControls implements GamepadControls {
@@ -24,7 +25,6 @@ public class OtherControls implements GamepadControls {
     private final int[][] gamepadColors = new int[][]{{255, 0, 0}, {0, 0, 255}, {0, 255, 0}};
 
     private boolean intakeState = false;
-    private Launcher.Power launcherPower = Launcher.Power.SHORT;
     private int launcherState = 2;
 
     public OtherControls(GamepadEx driver1, GamepadEx driver2, Robot robot) {
@@ -47,12 +47,8 @@ public class OtherControls implements GamepadControls {
                 .whenPressed(
                         new InstantCommand(() -> {
                             int index = ++launcherState % launcherPowers.length;
-                            launcherPower = launcherPowers[index];
-                            driver2.gamepad.setLedColor(
-                                    gamepadColors[index][0],
-                                    gamepadColors[index][1],
-                                    gamepadColors[index][2],
-                                    5000);
+                            RobotConfig.setLauncherPower(launcherPowers[index]);
+                            setGamepadColors(driver2, RobotConfig.launcherPower);
                         })
                 );
 
@@ -79,22 +75,22 @@ public class OtherControls implements GamepadControls {
 
         // Launchers
         driver2.getGamepadButton(GamepadKeys.Button.SQUARE)
-                .whenPressed(new DeferredCommand(() -> robot.launchColor(Launcher.Color.PURPLE, launcherPower), null));
+                .whenPressed(new DeferredCommand(() -> robot.launchColor(Launcher.Color.PURPLE, () -> RobotConfig.launchRawPower), null));
         driver2.getGamepadButton(GamepadKeys.Button.CIRCLE)
-                .whenPressed(new DeferredCommand(() -> robot.launchColor(Launcher.Color.GREEN, launcherPower), null));
+                .whenPressed(new DeferredCommand(() -> robot.launchColor(Launcher.Color.GREEN, () -> RobotConfig.launchRawPower), null));
         driver2.getGamepadButton(GamepadKeys.Button.CROSS)
-                .whenPressed(new DeferredCommand(() -> robot.launchAll(launcherPower), null));
+                .whenPressed(new DeferredCommand(() -> robot.launchAll(RobotConfig.launchRawPower), null));
 
         driver2.getGamepadButton(GamepadKeys.Button.DPAD_LEFT)
-                .whenPressed(new DeferredCommand(() -> robot.launchLeft(launcherPower), null));
+                .whenPressed(new DeferredCommand(() -> robot.launchLeft(RobotConfig.launchRawPower), null));
         driver2.getGamepadButton(GamepadKeys.Button.DPAD_UP)
-                .whenPressed(new DeferredCommand(() -> robot.launchMid(launcherPower), null));
+                .whenPressed(new DeferredCommand(() -> robot.launchMid(RobotConfig.launchRawPower), null));
         driver2.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT)
-                .whenPressed(new DeferredCommand(() -> robot.launchRight(launcherPower), null));
+                .whenPressed(new DeferredCommand(() -> robot.launchRight(RobotConfig.launchRawPower), null));
 
         // TODO: Temporary
         driver2.getGamepadButton(GamepadKeys.Button.DPAD_DOWN)
-                .whenPressed(new DeferredCommand(() -> robot.launchAllEventually(launcherPower), null));
+                .whenPressed(new DeferredCommand(() -> robot.launchAllParallel(() -> RobotConfig.launchRawPower), null));
 
         // Ascent Lifts - Dpad Up and Dpad Down
 //        driver1.getGamepadButton(GamepadKeys.Button.DPAD_UP).whileHeld(robot.raiseLifts());
@@ -113,7 +109,7 @@ public class OtherControls implements GamepadControls {
 
     @Override
     public Launcher.Power getLauncherPower() {
-        return launcherPower;
+        return RobotConfig.launcherPower;
     }
 
     @NonNull
