@@ -164,6 +164,7 @@ public class TuneHammersOpMode extends OpMode {
 
         telemetry.addLine("HUBS ==========");
         for (LynxModule hub : allHubs) {
+            String hubType = hub.isParent() ? "Control Hub" : "Expansion Hub";
             // Battery voltage (12V input from XT30 connector)
             double voltage = hub.getInputVoltage(VoltageUnit.VOLTS);
 
@@ -174,7 +175,7 @@ public class TuneHammersOpMode extends OpMode {
 //            double gpioCurrent = hub.getGpioBusCurrent(CurrentUnit.MILLIAMPS);
 //            double i2cCurrent = hub.getI2cBusCurrent(CurrentUnit.MILLIAMPS);
 
-            telemetry.addData("  Hub", hub.getDeviceName());
+            telemetry.addData("  Hub", hubType);
             telemetry.addData("    • Voltage", "%.2f V", voltage);
             telemetry.addData("    • Total Current", "%.2f A", totalCurrent);
 //            telemetry.addData("    • GPIO Bus", "%.1f mA", gpioCurrent);
