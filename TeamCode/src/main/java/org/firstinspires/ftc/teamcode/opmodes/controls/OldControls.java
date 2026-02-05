@@ -5,7 +5,6 @@ import androidx.annotation.NonNull;
 import com.seattlesolvers.solverslib.command.ConditionalCommand;
 import com.seattlesolvers.solverslib.command.DeferredCommand;
 import com.seattlesolvers.solverslib.command.InstantCommand;
-import com.seattlesolvers.solverslib.command.SubsystemBase;
 import com.seattlesolvers.solverslib.gamepad.GamepadEx;
 import com.seattlesolvers.solverslib.gamepad.GamepadKeys;
 import com.seattlesolvers.solverslib.gamepad.ToggleButtonReader;
@@ -14,7 +13,7 @@ import org.firstinspires.ftc.teamcode.Robot;
 import org.firstinspires.ftc.teamcode.RobotConfig;
 import org.firstinspires.ftc.teamcode.subsystems.Launcher;
 
-public class OtherControls implements GamepadControls {
+public class OldControls implements GamepadControls {
 
     private final GamepadEx driver1;
     private final GamepadEx driver2;
@@ -27,7 +26,7 @@ public class OtherControls implements GamepadControls {
     private boolean intakeState = false;
     private int launcherState = 2;
 
-    public OtherControls(GamepadEx driver1, GamepadEx driver2, Robot robot) {
+    public OldControls(GamepadEx driver1, GamepadEx driver2, Robot robot) {
 
         this.driver1 = driver1;
         this.driver2 = driver2;
@@ -115,7 +114,7 @@ public class OtherControls implements GamepadControls {
     @NonNull
     @Override
     public String toString() {
-        return "V1";
+        return "Old";
     }
 
 }

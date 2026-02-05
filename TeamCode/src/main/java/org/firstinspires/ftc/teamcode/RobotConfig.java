@@ -14,18 +14,18 @@ import java.util.HashMap;
 public class RobotConfig {
 
     // Launch Powers
-    public static Launcher.Power launcherPower = Launcher.Power.SHORT;
-    public static double launchPowerShort = Launcher.Power.SHORT.power();
-    public static double launchPowerMid = Launcher.Power.MID.power();
-    public static double launchPowerLong = Launcher.Power.LONG.power();
-    public static double launchRawPower = Launcher.Power.SHORT.power();
-
+    public static volatile double launchPowerShort = 0.7;
+    public static volatile double launchPowerMid = 0.8;
+    public static volatile double launchPowerLong = 1;
+    // Default is Short -- Change BOTH of these if you change the default
+    public static volatile double launchRawPower = launchPowerShort;
+    public static volatile Launcher.Power launcherPower = Launcher.Power.SHORT;
 
     // Launcher Timing
     // Sleep after hammer swings back for reload, before launch
-    public static int sleepBeforeLaunch = 130;
+    public static volatile int sleepBeforeLaunch = 130;
     // Sleep after hammer hits the artifact
-    public static int sleepAfterLaunch = 210;
+    public static volatile int sleepAfterLaunch = 210;
 
     // Parallel Timing
     // ----------
@@ -34,14 +34,14 @@ public class RobotConfig {
     // These values should be the number of milliseconds after the previous launcher, not after the first launcher.
     // ----------
     // Sleep after first (left) launcher and before second (mid)
-    public static int sleepBeforeSecondParallelLauncher = 100;
+    public static volatile int sleepBeforeSecondParallelLauncher = 150;
     // Sleep after second (mid) launcher and before third (right)
-    public static int sleepBeforeThirdParallelLauncher = 100;
+    public static volatile int sleepBeforeThirdParallelLauncher = 150;
 
     // These can be safely ignored unless you want to try different ideas
-    public static double reloadPower = -1.0;
-    public static int sleepBeforeReload = 0;
-    public static int sleepBetweenSequentialLaunches = 0;
+    public static volatile double reloadPower = -1.0;
+    public static volatile int sleepBeforeReload = 0;
+    public static volatile int sleepBetweenSequentialLaunches = 0;
 
     public static HashMap<Launcher.Power, int[]> gamepadColors = new HashMap<Launcher.Power, int[]>() {{
         put(Launcher.Power.SHORT, new int[]{0,255,0});

@@ -87,7 +87,15 @@ public class Robot {
     }
 
     private Command launchWithDelay(Launcher launcher, DoubleSupplier power, int delayMs) {
-        return launch(launcher, power).beforeStarting(new SleepCommand(delayMs));
+        final Command cmd = new SequentialCommandGroup(
+                new SleepCommand(delayMs),
+                new InstantCommand(launcher::reload),
+                new SleepCommand(RobotConfig.sleepBeforeLaunch),
+                new InstantCommand(() -> launcher.launch(power)),
+                new SleepCommand(RobotConfig.sleepAfterLaunch),
+                new InstantCommand(launcher::stopLauncher)
+        );
+        return cmd;
     }
 
     public Command launchColor(Launcher.Color color, Launcher.Power power) {
