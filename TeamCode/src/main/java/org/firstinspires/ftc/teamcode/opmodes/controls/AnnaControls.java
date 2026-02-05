@@ -133,7 +133,7 @@ public class AnnaControls implements GamepadControls {
 
     @NonNull
     public String toString() {
-        return "Anna";
+        return "Anna (Option + Left Bumper to Switch)";
     }
 
 }
