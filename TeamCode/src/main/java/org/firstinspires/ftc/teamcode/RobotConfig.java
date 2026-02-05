@@ -14,12 +14,12 @@ import java.util.HashMap;
 public class RobotConfig {
 
     // Launch Powers
+    public static volatile double launchPowerShort = 0.7;
+    public static volatile double launchPowerMid = 0.8;
+    public static volatile double launchPowerLong = 1;
+    // Default is Short -- Change BOTH of these if you change the default
+    public static volatile double launchRawPower = launchPowerShort;
     public static volatile Launcher.Power launcherPower = Launcher.Power.SHORT;
-    public static volatile double launchPowerShort = Launcher.Power.SHORT.power();
-    public static volatile double launchPowerMid = Launcher.Power.MID.power();
-    public static volatile double launchPowerLong = Launcher.Power.LONG.power();
-    public static volatile double launchRawPower = Launcher.Power.SHORT.power();
-
 
     // Launcher Timing
     // Sleep after hammer swings back for reload, before launch
@@ -34,9 +34,9 @@ public class RobotConfig {
     // These values should be the number of milliseconds after the previous launcher, not after the first launcher.
     // ----------
     // Sleep after first (left) launcher and before second (mid)
-    public static volatile int sleepBeforeSecondParallelLauncher = 100;
+    public static volatile int sleepBeforeSecondParallelLauncher = 150;
     // Sleep after second (mid) launcher and before third (right)
-    public static volatile int sleepBeforeThirdParallelLauncher = 100;
+    public static volatile int sleepBeforeThirdParallelLauncher = 150;
 
     // These can be safely ignored unless you want to try different ideas
     public static volatile double reloadPower = -1.0;
