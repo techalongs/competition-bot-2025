@@ -86,6 +86,10 @@ public class AnnaControls implements GamepadControls {
                         robot::intakeIsRunning
                 ));
 
+        // "Plinko fork" - Dpad Down
+        driver1.getGamepadButton(GamepadKeys.Button.DPAD_DOWN)
+                .whenPressed(robot.testFork());
+
         // Launch Purple
         driver2.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER)
                 .whenPressed(new DeferredCommand(() -> robot.launchColor(Launcher.Color.PURPLE, RobotConfig.launcherPower), null));
