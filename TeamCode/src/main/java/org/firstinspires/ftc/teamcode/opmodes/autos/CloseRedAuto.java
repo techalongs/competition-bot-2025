@@ -56,13 +56,16 @@ public class CloseRedAuto extends OpMode {
     }
 
     private void buildPaths() {
-        paths = new PathChain[5];
+        paths = new PathChain[8];
 
         paths[0] = getPath(RedPosition.SHORT_START, RedPosition.SHORT_SHOOT); // Score Preload
         paths[1] = getPath(RedPosition.SHORT_SHOOT, RedPosition.SHORT_COLLECT_PREP); // Prep to collect
         paths[2] = getPath(RedPosition.SHORT_COLLECT_PREP, RedPosition.SHORT_COLLECT); // Collect
         paths[3] = getPath(RedPosition.SHORT_COLLECT, RedPosition.SHORT_SHOOT); // Score
-        paths[4] = getPath(RedPosition.SHORT_SHOOT, RedPosition.SHORT_END); // Park
+        paths[4] = getPath(RedPosition.SHORT_SHOOT, RedPosition.MID_COLLECT_PREP); // Prep to collect
+        paths[5] = getPath(RedPosition.MID_COLLECT_PREP, RedPosition.MID_COLLECT); // Collect
+        paths[6] = getPath(RedPosition.MID_COLLECT, RedPosition.SHORT_SHOOT); // Score
+        paths[7] = getPath(RedPosition.SHORT_SHOOT, RedPosition.SHORT_END); // Park
     }
 
     private PathChain getPath(RedPosition point1, RedPosition point2) {
