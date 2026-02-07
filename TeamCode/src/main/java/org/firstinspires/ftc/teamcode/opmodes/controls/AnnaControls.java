@@ -88,7 +88,7 @@ public class AnnaControls implements GamepadControls {
 
         // "Plinko fork" - Dpad Down
         driver1.getGamepadButton(GamepadKeys.Button.DPAD_DOWN)
-                .whenPressed(robot.testFork());
+                .whenPressed(robot.turnFork());
 
         // Launch Purple
         driver2.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER)

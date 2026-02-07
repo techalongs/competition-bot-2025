@@ -65,23 +65,29 @@ public class Robot {
         );
     }
 
+//    public Command turnFork() {
+//        return new DeferredCommand(() -> {
+//            if (rightLauncher.getColor() == null && leftLauncher.getColor() == null)
+//                return null;
+//
+//            if (midLauncher.getColor() != null && rightLauncher.getColor() == null)
+//                return new InstantCommand(intake::turnForkRight);
+//
+//            if (midLauncher.getColor() != null && leftLauncher.getColor() == null)
+//                return new InstantCommand(intake::turnForkLeft);
+//
+//            return null;
+//        }, null);
+//    }
+
     public Command turnFork() {
-        return new DeferredCommand(() -> {
-            if (rightLauncher.getColor() == null && leftLauncher.getColor() == null)
-                return null;
-
-            if (midLauncher.getColor() != null && rightLauncher.getColor() == null)
-                return new InstantCommand(intake::turnForkRight);
-
-            if (midLauncher.getColor() != null && leftLauncher.getColor() == null)
-                return new InstantCommand(intake::turnForkLeft);
-
-            return null;
-        }, null);
-    }
-
-    public Command testFork() {
-        return new InstantCommand(intake::turnForkRight);
+        return new SequentialCommandGroup(
+                new InstantCommand(intake::turnForkRight),
+                new SleepCommand(500),
+                new InstantCommand(intake::turnForkLeft),
+                new SleepCommand(500),
+                new InstantCommand(intake::resetFork)
+        );
     }
 
     private Command launch(Launcher launcher, Launcher.Power power) {

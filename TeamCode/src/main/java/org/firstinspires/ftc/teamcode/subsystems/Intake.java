@@ -5,15 +5,16 @@ import com.seattlesolvers.solverslib.command.SubsystemBase;
 import com.seattlesolvers.solverslib.hardware.motors.CRServoEx;
 import com.seattlesolvers.solverslib.hardware.motors.Motor;
 import com.seattlesolvers.solverslib.hardware.motors.MotorEx;
+import com.seattlesolvers.solverslib.hardware.servos.ServoEx;
 
 public class Intake extends SubsystemBase {
     private final MotorEx intake;
-    private final CRServoEx fork;
+    private final ServoEx fork;
     private boolean running = false;
 
     public Intake(HardwareMap hardwareMap, String intakeName, String forkName) {
         intake = new MotorEx(hardwareMap, intakeName);
-        fork = new CRServoEx(hardwareMap, forkName);
+        fork = new ServoEx(hardwareMap, forkName);
 
         intake.setInverted(false);
         intake.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
@@ -48,5 +49,9 @@ public class Intake extends SubsystemBase {
 
     public void turnForkLeft() {
         fork.set(0);
+    }
+
+    public void resetFork() {
+        fork.set(0.4);
     }
 }
