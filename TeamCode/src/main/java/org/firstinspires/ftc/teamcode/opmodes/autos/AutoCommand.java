@@ -26,20 +26,33 @@ public class AutoCommand extends SequentialCommandGroup {
                         new SleepCommand(3000),
                         robot.stopIntake(),
                         new InstantCommand(() -> follower.setMaxPower(1)),
-                        new FollowPathCommand(follower, paths[3], true),
+                        new FollowPathCommand(follower, paths[3], false),
+                        new SleepCommand(500),
+                        new FollowPathCommand(follower, paths[4], true), // Dump
                         new SleepCommand(1000),
+                        new FollowPathCommand(follower, paths[5], true),
                         robot.launchAll(power), // Score
-                        new FollowPathCommand(follower, paths[4], false),
+                        new FollowPathCommand(follower, paths[6], false),
                         robot.runIntake(), // Collect a row
                         new InstantCommand(() -> follower.setMaxPower(0.3)),
-                        new FollowPathCommand(follower, paths[5], true),
+                        new FollowPathCommand(follower, paths[7], true),
                         new SleepCommand(3000),
                         robot.stopIntake(),
                         new InstantCommand(() -> follower.setMaxPower(1)),
-                        new FollowPathCommand(follower, paths[6], true),
+                        new FollowPathCommand(follower, paths[8], true),
                         new SleepCommand(1000),
                         robot.launchAll(power), // Score
-                        new FollowPathCommand(follower, paths[7], true)
+                        new FollowPathCommand(follower, paths[9], false),
+                        robot.runIntake(), // Collect a row
+                        new InstantCommand(() -> follower.setMaxPower(0.3)),
+                        new FollowPathCommand(follower, paths[10], true),
+                        new SleepCommand(3000),
+                        robot.stopIntake(),
+                        new InstantCommand(() -> follower.setMaxPower(1)),
+                        new FollowPathCommand(follower, paths[11], true),
+                        new SleepCommand(1000),
+                        robot.launchAll(power), // Score
+                        new FollowPathCommand(follower, paths[12], true)
                 )
         );
     }

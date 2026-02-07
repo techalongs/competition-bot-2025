@@ -9,12 +9,12 @@ public enum RedPosition {
     LONG_SHOOT(new Pose(56, 36, Math.toRadians(67))),
     SHORT_COLLECT_PREP(new Pose(95, 84.5, Math.toRadians(0))),
     SHORT_COLLECT(new Pose(120, 84.5, Math.toRadians(0))),
-    MID_COLLECT_PREP(new Pose(95, 67, Math.toRadians(0))),
-    MID_COLLECT(new Pose(120, 67, Math.toRadians(0))),
+    MID_COLLECT_PREP(new Pose(95, 55, Math.toRadians(0))),
+    MID_COLLECT(new Pose(118, 55, Math.toRadians(0))),
     LONG_COLLECT_PREP(new Pose(95, 35, Math.toRadians(0))),
     LONG_COLLECT(new Pose(120, 35, Math.toRadians(0))),
-    DUMP_PREP(new Pose(118, 73, Math.toRadians(90))),
-    DUMP(new Pose(123, 73, Math.toRadians(90))),
+    DUMP_PREP(new Pose(118, 80, Math.toRadians(90))),
+    DUMP(new Pose(128, 80, Math.toRadians(90))),
     SHORT_END(new Pose(112, 85, Math.toRadians(0))),
     LONG_END(new Pose(105, 16, Math.toRadians(0)));
 
