@@ -57,7 +57,7 @@ public class FarBlueAuto extends OpMode {
     }
 
     private void buildPaths() {
-        paths = new PathChain[5];
+        paths = new PathChain[13];
 
 //        paths[0] = getPath(BluePosition.LONG_START, BluePosition.LONG_SHOOT); // Score Preload
 //        paths[1] = getPath(BluePosition.LONG_SHOOT, BluePosition.LONG_COLLECT_PREP); // Prep to collect

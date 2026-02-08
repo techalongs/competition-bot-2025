@@ -18,12 +18,14 @@ public class AutoCommand extends SequentialCommandGroup {
                 new SequentialCommandGroup(
                         new SleepCommand(DELAY),
                         new FollowPathCommand(follower, paths[0], true),
-                        robot.launchAll(power), // Score preload
+                        robot.launchLeft(power), // Score preload
+                        robot.launchMid(power),
+                        robot.launchRight(power),
                         new FollowPathCommand(follower, paths[1], false),
                         robot.runIntake(), // Collect a row
                         new InstantCommand(() -> follower.setMaxPower(0.3)),
                         new FollowPathCommand(follower, paths[2], true),
-                        new SleepCommand(3000),
+                        new SleepCommand(2000),
                         robot.stopIntake(),
                         new InstantCommand(() -> follower.setMaxPower(1)),
                         new FollowPathCommand(follower, paths[3], false),
@@ -31,27 +33,33 @@ public class AutoCommand extends SequentialCommandGroup {
                         new FollowPathCommand(follower, paths[4], true), // Dump
                         new SleepCommand(1000),
                         new FollowPathCommand(follower, paths[5], true),
-                        robot.launchAll(power), // Score
+                        robot.launchLeft(power), // Score
+                        robot.launchMid(power),
+                        robot.launchRight(power),
                         new FollowPathCommand(follower, paths[6], false),
                         robot.runIntake(), // Collect a row
                         new InstantCommand(() -> follower.setMaxPower(0.3)),
                         new FollowPathCommand(follower, paths[7], true),
-                        new SleepCommand(3000),
+                        new SleepCommand(2000),
                         robot.stopIntake(),
                         new InstantCommand(() -> follower.setMaxPower(1)),
                         new FollowPathCommand(follower, paths[8], true),
                         new SleepCommand(1000),
-                        robot.launchAll(power), // Score
+                        robot.launchLeft(power), // Score
+                        robot.launchMid(power),
+                        robot.launchRight(power),
                         new FollowPathCommand(follower, paths[9], false),
                         robot.runIntake(), // Collect a row
                         new InstantCommand(() -> follower.setMaxPower(0.3)),
                         new FollowPathCommand(follower, paths[10], true),
-                        new SleepCommand(3000),
+                        new SleepCommand(2000),
                         robot.stopIntake(),
                         new InstantCommand(() -> follower.setMaxPower(1)),
                         new FollowPathCommand(follower, paths[11], true),
                         new SleepCommand(1000),
-                        robot.launchAll(power), // Score
+                        robot.launchLeft(power), // Score
+                        robot.launchMid(power),
+                        robot.launchRight(power),
                         new FollowPathCommand(follower, paths[12], true)
                 )
         );

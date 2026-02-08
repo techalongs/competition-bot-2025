@@ -57,7 +57,7 @@ public class FarRedAuto extends OpMode {
     }
 
     private void buildPaths() {
-        paths = new PathChain[5];
+        paths = new PathChain[13];
 
 //        paths[0] = getPath(RedPosition.LONG_START, RedPosition.LONG_SHOOT); // Score Preload
 //        paths[1] = getPath(RedPosition.LONG_SHOOT, RedPosition.LONG_COLLECT_PREP); // Prep to collect

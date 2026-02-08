@@ -23,7 +23,7 @@ public class RobotConfig {
 
     // Launcher Timing
     // Sleep after hammer swings back for reload, before launch
-    public static volatile int sleepBeforeLaunch = 130;
+    public static volatile int sleepBeforeLaunch = 380;
     // Sleep after hammer hits the artifact
     public static volatile int sleepAfterLaunch = 210;
 
@@ -39,7 +39,7 @@ public class RobotConfig {
     public static volatile int sleepBeforeThirdParallelLauncher = 150;
 
     // These can be safely ignored unless you want to try different ideas
-    public static volatile double reloadPower = -1.0;
+    public static volatile double reloadPower = -0.7;
     public static volatile int sleepBeforeReload = 0;
     public static volatile int sleepBetweenSequentialLaunches = 0;
 
