@@ -14,8 +14,8 @@ import java.util.HashMap;
 public class RobotConfig {
 
     // Launch Powers
-    public static volatile double launchPowerShort = 0.7;
-    public static volatile double launchPowerMid = 0.8;
+    public static volatile double launchPowerShort = 0.8;
+    public static volatile double launchPowerMid = 1;
     public static volatile double launchPowerLong = 1;
     // Default is Short -- Change BOTH of these if you change the default
     public static volatile double launchRawPower = launchPowerShort;
