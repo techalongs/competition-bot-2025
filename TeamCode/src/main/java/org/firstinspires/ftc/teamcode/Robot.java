@@ -201,29 +201,11 @@ public class Robot {
         );
     }
 
-//    public Command launchAllParallel(DoubleSupplier power) {
-//        return new ParallelCommandGroup(
-//                this.launch(leftLauncher, power),
-//                this.launchWithDelay(midLauncher, power,
-//                        RobotConfig.sleepBeforeSecondParallelLauncher),
-//                this.launchWithDelay(rightLauncher, power,
-//                        RobotConfig.sleepBeforeSecondParallelLauncher + RobotConfig.sleepBeforeThirdParallelLauncher)
-//        );
-//    }
-
     public Command launchAllParallel(DoubleSupplier power) {
         return new ParallelCommandGroup(
                 launch(leftLauncher, power),
-                new SequentialCommandGroup(
-                        new SleepCommand(500),
-                        new ParallelCommandGroup(
-                                launch(midLauncher, power),
-                                new SequentialCommandGroup(
-                                        new SleepCommand(500),
-                                        launch(rightLauncher, power)
-                                )
-                        )
-                )
+                launch(midLauncher, power),
+                launch(rightLauncher, power)
         );
     }
 
