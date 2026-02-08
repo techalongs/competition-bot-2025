@@ -14,7 +14,6 @@ import org.firstinspires.ftc.teamcode.subsystems.Launcher;
 
 @Autonomous(name = "Close Red Auto", group = "Autos")
 public class CloseRedAuto extends OpMode {
-    private Robot robot;
 
     private Follower follower;
     private Timer opmodeTimer;
@@ -23,7 +22,6 @@ public class CloseRedAuto extends OpMode {
 
     @Override
     public void init() {
-        robot = new Robot(hardwareMap);
         opmodeTimer = new Timer();
         opmodeTimer.resetTimer();
         follower = Constants.createFollower(hardwareMap);
@@ -31,7 +29,7 @@ public class CloseRedAuto extends OpMode {
         buildPaths();
         follower.setStartingPose(RedPosition.SHORT_START.pos);
 
-        AutoCommand auto = new AutoCommand(robot, follower, paths, Launcher.Power.MID);
+        AutoCommand auto = new AutoCommand(new Robot(hardwareMap), follower, paths, Launcher.Power.MID);
         auto.schedule();
 
         telemetry.addData("Status", "Initialized");

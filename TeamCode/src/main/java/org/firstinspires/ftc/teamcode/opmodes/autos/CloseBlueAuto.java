@@ -2,7 +2,6 @@ package org.firstinspires.ftc.teamcode.opmodes.autos;
 
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.BezierLine;
-import com.pedropathing.geometry.Pose;
 import com.pedropathing.paths.PathChain;
 import com.pedropathing.util.Timer;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -15,7 +14,6 @@ import org.firstinspires.ftc.teamcode.subsystems.Launcher;
 
 @Autonomous(name = "Close Blue Auto", group = "Autos")
 public class CloseBlueAuto extends OpMode {
-    private Robot robot;
 
     private Follower follower;
     private Timer opmodeTimer;
@@ -24,7 +22,6 @@ public class CloseBlueAuto extends OpMode {
 
     @Override
     public void init() {
-        robot = new Robot(hardwareMap);
         opmodeTimer = new Timer();
         opmodeTimer.resetTimer();
         follower = Constants.createFollower(hardwareMap);
@@ -32,7 +29,7 @@ public class CloseBlueAuto extends OpMode {
         buildPaths();
         follower.setStartingPose(BluePosition.SHORT_START.pos);
 
-        AutoCommand auto = new AutoCommand(robot, follower, paths, Launcher.Power.MID);
+        AutoCommand auto = new AutoCommand(new Robot(hardwareMap), follower, paths, Launcher.Power.MID);
         auto.schedule();
 
         telemetry.addData("Status", "Initialized");
