@@ -6,31 +6,32 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.seattlesolvers.solverslib.command.CommandScheduler;
 import com.seattlesolvers.solverslib.gamepad.GamepadEx;
-import com.seattlesolvers.solverslib.gamepad.GamepadKeys;
 import com.seattlesolvers.solverslib.gamepad.ToggleButtonReader;
 
 import org.firstinspires.ftc.teamcode.Robot;
-import org.firstinspires.ftc.teamcode.opmodes.controls.AnnaControls;
-import org.firstinspires.ftc.teamcode.opmodes.controls.OldControls;
+import org.firstinspires.ftc.teamcode.RobotConfig;
+import org.firstinspires.ftc.teamcode.opmodes.controls.ControlsV2;
 import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
 import org.firstinspires.ftc.teamcode.opmodes.controls.GamepadControls;
 import org.firstinspires.ftc.teamcode.util.REVColorSensor;
 
 import java.util.Arrays;
 
-@TeleOp(name = "Two Controller TeleOp - PS4", group = "Normal Controls")
+import lombok.Setter;
+
+@TeleOp(name = "Two Controller TeleOp", group = "Normal Controls")
 public class TwoControllers extends OpMode {
 
     private GamepadEx driver1;
     private GamepadEx driver2;
     private Robot robot;
     private CommandScheduler commandScheduler;
-    private ToggleButtonReader toggleDriveSlow;
-    private ToggleButtonReader toggleFieldCentric;
     private REVColorSensor sensor1;
     private REVColorSensor sensor2;
-    private double driveFastSpeedLimit = 1.0;
-    private double driveSlowSpeedLimit = 0.5;
+
+    private Drivetrain.DriveState driveState = Drivetrain.DriveState.ROBOT_CENTRIC;
+    @Setter
+    private volatile double driveSpeedLimit = RobotConfig.driveFastSpeedLimit;
     private GamepadControls gamepadControls;
 
     @Override
@@ -44,64 +45,28 @@ public class TwoControllers extends OpMode {
         robot = new Robot(hardwareMap);
         commandScheduler = CommandScheduler.getInstance();
 
-        gamepadControls = new AnnaControls(driver1, driver2, robot);
-        toggleDriveSlow = gamepadControls.getDriveSlowToggleReader();
-        toggleFieldCentric = gamepadControls.getFieldCentricToggleReader();
-
-        driver2.getGamepadButton(GamepadKeys.Button.OPTIONS).and(driver2.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER)).toggleWhenActive(() -> {
-                    commandScheduler.clearButtons();
-                    gamepadControls = new OldControls(driver1, driver2, robot);
-                    toggleDriveSlow = gamepadControls.getDriveSlowToggleReader();
-                    toggleFieldCentric = gamepadControls.getFieldCentricToggleReader();
-                },
-                () -> {
-                    commandScheduler.clearButtons();
-                    gamepadControls = new AnnaControls(driver1, driver2, robot);
-                    toggleDriveSlow = gamepadControls.getDriveSlowToggleReader();
-                    toggleFieldCentric = gamepadControls.getFieldCentricToggleReader();
-                });
+        gamepadControls = new ControlsV2(driver1, driver2, robot, this::setDriveSpeedLimit);
     }
 
     @Override
     public void loop() {
         loopReadStuff();
 
-        double driveSpeedLimit = getDriveSpeedLimit();
-        Drivetrain.DriveState driveState = getDriveState();
         robot.drive(driveState, driver1, driveSpeedLimit);
 
         telemetry.addData("Launcher Colors", Arrays.toString(robot.getLauncherColors()));
-        telemetry.addData("Launcher Power State", gamepadControls.getLauncherPower().name());
-        telemetry.addData("Drive", getDriveState());
-        telemetry.addData("Controls", gamepadControls);
+        telemetry.addData("Launcher Power State", RobotConfig.launcherPower.name());
         // Are these needed anymore?
+        //telemetry.addData("Drive", getDriveState());
         //telemetry.addData("Sensor 1", sensor1.RGBtoHSV(sensor1.red(), sensor1.green(), sensor1.blue(), new float[3])[0]);
         //telemetry.addData("Sensor 2", sensor2.RGBtoHSV(sensor2.red(), sensor2.green(), sensor2.blue(), new float[3])[0]);
         telemetry.update();
-    }
-
-    public double getDriveSpeedLimit() {
-        if (toggleDriveSlow.getState()) {
-            return driveSlowSpeedLimit;
-        } else {
-            return driveFastSpeedLimit;
-        }
-    }
-
-    public Drivetrain.DriveState getDriveState() {
-        if (toggleFieldCentric.getState()) {
-            return Drivetrain.DriveState.FIELD_CENTRIC;
-        } else {
-            return Drivetrain.DriveState.ROBOT_CENTRIC;
-        }
     }
 
     public void loopReadStuff() {
         commandScheduler.run();
         driver1.readButtons();
         driver2.readButtons();
-        toggleDriveSlow.readValue();
-        toggleFieldCentric.readValue();
     }
 
 }
