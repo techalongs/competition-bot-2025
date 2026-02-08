@@ -43,6 +43,9 @@ public class RobotConfig {
     public static volatile int sleepBeforeReload = 0;
     public static volatile int sleepBetweenSequentialLaunches = 0;
 
+    public static volatile double driveFastSpeedLimit = 1.0;
+    public static volatile double driveSlowSpeedLimit = 0.5;
+
     public static HashMap<Launcher.Power, int[]> gamepadColors = new HashMap<Launcher.Power, int[]>() {{
         put(Launcher.Power.SHORT, new int[]{0,255,0});
         put(Launcher.Power.MID, new int[]{0,0,255});
