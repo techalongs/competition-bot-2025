@@ -86,7 +86,7 @@ public class ControlsV2 implements GamepadControls {
                 .whenPressed(new DeferredCommand(() -> robot.launchColor(Launcher.Color.GREEN, RobotConfig.launcherPower), null));
         // Launch All
         new Trigger(() -> driver2.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) > 0.5)
-                .whenActive(new DeferredCommand(() -> robot.launchAll(() -> RobotConfig.launchRawPower), null));
+                .whenActive(() -> robot.launchAllParallel(() -> RobotConfig.launchRawPower));
         // Launch Left
         driver2.getGamepadButton(GamepadKeys.Button.DPAD_LEFT)
                 .whenPressed(new DeferredCommand(() -> robot.launchLeft(RobotConfig.launchRawPower), null));
