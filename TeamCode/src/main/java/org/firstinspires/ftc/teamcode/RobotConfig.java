@@ -6,6 +6,8 @@ import org.firstinspires.ftc.teamcode.subsystems.Launcher;
 
 import java.util.HashMap;
 
+import lombok.Getter;
+
 /**
  * Robot configuration. This is configurable so it can also be managed via Panels.
  * Note: Static fields require their own @Getter annotation separate from @Data.
@@ -18,6 +20,7 @@ public class RobotConfig {
     public static volatile double launchPowerMid = 1;
     public static volatile double launchPowerLong = 1;
     // Default is Short -- Change BOTH of these if you change the default
+    @Getter
     public static volatile double launchRawPower = launchPowerShort;
     public static volatile Launcher.Power launcherPower = Launcher.Power.SHORT;
 

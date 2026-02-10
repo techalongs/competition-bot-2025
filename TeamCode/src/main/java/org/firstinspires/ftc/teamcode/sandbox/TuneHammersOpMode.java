@@ -59,12 +59,6 @@ public class TuneHammersOpMode extends OpMode {
 
         driver = new GamepadEx(gamepad1);
 
-        // Launch Power
-        // Short: SQUARE, Mid: TRIANGLE, Long: CIRCLE
-//        driver.getGamepadButton(GamepadKeys.Button.SQUARE).whenPressed(new InstantCommand(() -> TH_launchPower = LAUNCH_POWER_SHORT));
-//        driver.getGamepadButton(GamepadKeys.Button.TRIANGLE).whenPressed(new InstantCommand(() -> TH_launchPower = LAUNCH_POWER_MID));
-//        driver.getGamepadButton(GamepadKeys.Button.CIRCLE).whenPressed(new InstantCommand(() -> TH_launchPower = LAUNCH_POWER_LONG));
-
         driver.getGamepadButton(GamepadKeys.Button.SHARE).and(driver.getGamepadButton(GamepadKeys.Button.DPAD_UP)).whenActive(() -> {
             RobotConfig.launchRawPower += 0.05;
         });
@@ -98,20 +92,12 @@ public class TuneHammersOpMode extends OpMode {
 
         // Launch All
         new Trigger(() -> driver.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) > 0.5)
-                .whenActive(new DeferredCommand(() -> robot.launchAll(() -> RobotConfig.launchRawPower), null));
+                .whenActive(new DeferredCommand(() -> robot.launchAll(RobotConfig::getLaunchRawPower), null));
         new Trigger(() -> driver.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > 0.5)
-                .whenActive(new DeferredCommand(() -> robot.launchLeft(RobotConfig.launchRawPower), null));
+                .whenActive(new DeferredCommand(() -> robot.launchLeft(RobotConfig::getLaunchRawPower), null));
         // Launch Left
         driver.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER)
-                .whenPressed(new DeferredCommand(() -> robot.launchLeft(RobotConfig.launchRawPower), null));
-//        driver.getGamepadButton(GamepadKeys.Button.DPAD_LEFT)
-//                .whenPressed(new DeferredCommand(() -> this.launchLeft(TH_launchPower), null));
-//        // Launch Mid
-//        driver.getGamepadButton(GamepadKeys.Button.DPAD_UP)
-//                .whenPressed(new DeferredCommand(() -> this.launchMid(TH_launchPower), null));
-//        // Launch Right
-//        driver.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT)
-//                .whenPressed(new DeferredCommand(() -> this.launchRight(TH_launchPower), null));
+                .whenPressed(new DeferredCommand(() -> robot.launchLeft(RobotConfig::getLaunchRawPower), null));
 
         telemetry.addData("Status", "Initialized");
     }

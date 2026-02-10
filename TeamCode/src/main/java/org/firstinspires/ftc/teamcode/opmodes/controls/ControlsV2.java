@@ -77,26 +77,24 @@ public class ControlsV2 implements GamepadControls {
                 .whenPressed(robot.turnFork());
 
         // Launch All
-//        new Trigger(() -> driver2.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) > 0.5)
-//                .whenActive(new DeferredCommand(() -> robot.launchAll(() -> RobotConfig.launchRawPower), null));
         new Trigger(() -> driver2.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) > 0.5)
-                .whenActive(() -> robot.launchAll(() -> RobotConfig.launchRawPower));
+                .whenActive(robot.launchAll(RobotConfig::getLaunchRawPower));
         // Launch Left
         driver2.getGamepadButton(GamepadKeys.Button.DPAD_LEFT)
-                .whenPressed(new DeferredCommand(() -> robot.launchLeft(RobotConfig.launchRawPower), null));
+                .whenPressed(new DeferredCommand(() -> robot.launchLeft(RobotConfig::getLaunchRawPower), null));
         // Launch Mid
         driver2.getGamepadButton(GamepadKeys.Button.DPAD_UP)
-                .whenPressed(new DeferredCommand(() -> robot.launchMid(RobotConfig.launchRawPower), null));
+                .whenPressed(new DeferredCommand(() -> robot.launchMid(RobotConfig::getLaunchRawPower), null));
         // Launch Right
         driver2.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT)
-                .whenPressed(new DeferredCommand(() -> robot.launchRight(RobotConfig.launchRawPower), null));
+                .whenPressed(new DeferredCommand(() -> robot.launchRight(RobotConfig::getLaunchRawPower), null));
         if (!singleController) {
             // Launch Purple
             driver2.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER)
-                    .whenPressed(new DeferredCommand(() -> robot.launchColor(Launcher.Color.PURPLE, RobotConfig.launcherPower), null));
+                    .whenPressed(new DeferredCommand(() -> robot.launchColor(Launcher.Color.PURPLE, RobotConfig::getLaunchRawPower), null));
             // Launch Green
             driver2.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER)
-                    .whenPressed(new DeferredCommand(() -> robot.launchColor(Launcher.Color.GREEN, RobotConfig.launcherPower), null));
+                    .whenPressed(new DeferredCommand(() -> robot.launchColor(Launcher.Color.GREEN, RobotConfig::getLaunchRawPower), null));
         }
     }
 

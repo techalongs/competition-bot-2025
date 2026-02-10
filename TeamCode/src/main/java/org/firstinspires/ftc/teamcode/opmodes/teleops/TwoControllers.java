@@ -15,8 +15,6 @@ import org.firstinspires.ftc.teamcode.opmodes.controls.GamepadControls;
 
 import java.util.Arrays;
 
-import lombok.Setter;
-
 @TeleOp(name = "Two Controller TeleOp", group = "Normal Controls")
 public class TwoControllers extends OpMode {
 
@@ -25,8 +23,6 @@ public class TwoControllers extends OpMode {
     private Robot robot;
 
     private GamepadControls gamepadControls;
-    @Setter
-    private volatile double driveSpeedLimit = RobotConfig.driveFastSpeedLimit;
 
     @Override
     public void init() {
@@ -41,10 +37,11 @@ public class TwoControllers extends OpMode {
     public void loop() {
         loopReadStuff();
 
-        robot.drive(Drivetrain.DriveState.ROBOT_CENTRIC, driver1, driveSpeedLimit);
+        robot.drive(Drivetrain.DriveState.ROBOT_CENTRIC, driver1, RobotConfig.driveSpeedLimit);
 
         telemetry.addData("Launcher Colors", Arrays.toString(robot.getLauncherColors()));
         telemetry.addData("Launcher Power State", RobotConfig.launcherPower.name());
+        telemetry.addData("Drive Speed", RobotConfig.driveSpeedLimit);
         telemetry.update();
     }
 
