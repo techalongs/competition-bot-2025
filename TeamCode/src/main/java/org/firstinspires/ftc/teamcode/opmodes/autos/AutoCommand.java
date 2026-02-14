@@ -19,7 +19,7 @@ public class AutoCommand extends SequentialCommandGroup {
 
                         // Score preload
                         new FollowPathCommand(follower, paths[0], true),
-                        robot.launchAll(power),
+                        robot.launchAll(power.power),
 
                         // Collect first row
                         new FollowPathCommand(follower, paths[1], false),
@@ -33,7 +33,7 @@ public class AutoCommand extends SequentialCommandGroup {
                         // Score first row
                         new FollowPathCommand(follower, paths[3], true),
                         new SleepCommand(500),
-                        robot.launchAll(power),
+                        robot.launchAll(power.power),
 
                         // Collect second row
                         new FollowPathCommand(follower, paths[4], false),
@@ -53,7 +53,7 @@ public class AutoCommand extends SequentialCommandGroup {
                         // Score second row
                         new FollowPathCommand(follower, paths[8], true),
                         new SleepCommand(500),
-                        robot.launchAll(power),
+                        robot.launchAll(power.power),
 
                         // Collect third row
                         new FollowPathCommand(follower, paths[9], false),
@@ -67,7 +67,7 @@ public class AutoCommand extends SequentialCommandGroup {
                         // Score third row
                         new FollowPathCommand(follower, paths[11], true),
                         new SleepCommand(500),
-                        robot.launchAll(power),
+                        robot.launchAll(power.power),
 
                         // Park
                         new FollowPathCommand(follower, paths[12], true)

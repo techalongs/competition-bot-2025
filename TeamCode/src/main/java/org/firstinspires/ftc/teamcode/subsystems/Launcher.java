@@ -41,14 +41,14 @@ public class Launcher extends SubsystemBase {
         MID(() -> RobotConfig.launchPowerMid),
         SHORT(() -> RobotConfig.launchPowerShort);
 
-        public final Supplier<Double> power;
+        public final DoubleSupplier power;
 
-        Power(Supplier<Double> power) {
+        Power(DoubleSupplier power) {
             this.power = power;
         }
 
         public double power() {
-            return power.get();
+            return power.getAsDouble();
         }
     }
 

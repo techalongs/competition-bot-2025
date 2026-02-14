@@ -90,44 +90,14 @@ public class Robot {
         );
     }
 
-    private Command launch(Launcher launcher, Launcher.Power power) {
-        return launch(launcher, power::power);
-    }
-
-    private Command launch(Launcher launcher, double power) {
-        return launch(launcher, () -> power);
-    }
-
     private Command launch(Launcher launcher, DoubleSupplier power) {
-        final Command cmd =  new SequentialCommandGroup(
+        return new SequentialCommandGroup(
                 new InstantCommand(launcher::reload),
                 new SleepCommand(RobotConfig.sleepBeforeLaunch),
                 new InstantCommand(() -> launcher.launch(power)),
                 new SleepCommand(RobotConfig.sleepAfterLaunch),
                 new InstantCommand(launcher::stopLauncher)
         );
-        // TODO: We can remove this if we find there's no reason to sleep before reload.
-        //       This shouldn't be a performance drag.
-        if (RobotConfig.sleepBeforeReload > 0) {
-            return cmd.beforeStarting(new SleepCommand(RobotConfig.sleepBeforeReload));
-        }
-        return cmd;
-    }
-
-    private Command launchWithDelay(Launcher launcher, DoubleSupplier power, int delayMs) {
-        final Command cmd = new SequentialCommandGroup(
-                new SleepCommand(delayMs),
-                new InstantCommand(launcher::reload),
-                new SleepCommand(RobotConfig.sleepBeforeLaunch),
-                new InstantCommand(() -> launcher.launch(power)),
-                new SleepCommand(RobotConfig.sleepAfterLaunch),
-                new InstantCommand(launcher::stopLauncher)
-        );
-        return cmd;
-    }
-
-    public Command launchColor(Launcher.Color color, Launcher.Power power) {
-        return launchColor(color, power::power);
     }
 
     public Command launchColor(Launcher.Color color, DoubleSupplier power) {
@@ -147,132 +117,18 @@ public class Robot {
         return this.launch(leftLauncher, power);
     }
 
-    public Command launchLeft(double power) {
-        return this.launch(leftLauncher, power);
-    }
-
-    public Command launchLeft(Launcher.Power power) {
-        return this.launch(leftLauncher, power);
-    }
-
     public Command launchMid(DoubleSupplier power) {
-        return this.launch(midLauncher, power);
-    }
-
-    public Command launchMid(double power) {
-        return this.launch(midLauncher, power);
-    }
-
-    public Command launchMid(Launcher.Power power) {
         return this.launch(midLauncher, power);
     }
 
     public Command launchRight(DoubleSupplier power) {
         return this.launch(rightLauncher, power);
     }
-
-    public Command launchRight(double power) {
-        return this.launch(rightLauncher, power);
-    }
-
-    public Command launchRight(Launcher.Power power) {
-        return this.launch(rightLauncher, power);
-    }
-
     public Command launchAll(DoubleSupplier power) {
-        return launchAllSequential(power);
-    }
-
-    public Command launchAll(double power) {
-        return launchAllSequential(() -> power);
-    }
-
-    public Command launchAll(Launcher.Power power) {
-        return launchAllSequential(power::power);
-    }
-
-    public Command launchAllSequential(DoubleSupplier power) {
-        return new SequentialCommandGroup(
-                this.launch(leftLauncher, power),
-                new SleepCommand(RobotConfig.sleepBetweenSequentialLaunches),
-                this.launch(midLauncher, power),
-                new SleepCommand(RobotConfig.sleepBetweenSequentialLaunches),
-                this.launch(rightLauncher, power)
-        );
-    }
-
-    public Command launchAllParallel(DoubleSupplier power) {
         return new ParallelCommandGroup(
                 launch(leftLauncher, power),
                 launch(midLauncher, power),
                 launch(rightLauncher, power)
-        );
-    }
-
-    /**
-     * Launch a variable number of launchers sequentially with the configured timing between launches.
-     * This is for the case where you want to launch in an order different than Left-Mid-Right.
-     * For example, in motif order.
-     */
-    public Command launchAllSequential(DoubleSupplier power, Launcher... launchers) {
-        SequentialCommandGroup commands = new SequentialCommandGroup();
-        commands.addCommands(this.launch(launchers[0], power));
-        if (launchers.length > 1) {
-            commands.addCommands(
-                    new SleepCommand(RobotConfig.sleepBetweenSequentialLaunches),
-                    this.launch(launchers[1], power)
-            );
-        }
-        if (launchers.length > 2) {
-            commands.addCommands(
-                    new SleepCommand(RobotConfig.sleepBetweenSequentialLaunches),
-                    this.launch(launchers[2], power)
-            );
-        }
-        return commands;
-    }
-
-    /**
-     * Launch a variable number of launchers in parallel with the configured timing between launches.
-     * This is for the case where you want to launch in an order different than Left-Mid-Right.
-     * For example, in motif order.
-     */
-    public Command launchAllParallel(DoubleSupplier power, Launcher... launchers) {
-        ParallelCommandGroup commands = new ParallelCommandGroup();
-        commands.addCommands(this.launch(launchers[0], power));
-        if (launchers.length > 1) {
-            commands.addCommands(
-                    new SleepCommand(RobotConfig.sleepBeforeSecondParallelLauncher),
-                    this.launch(launchers[1], power)
-            );
-        }
-        if (launchers.length > 2) {
-            commands.addCommands(
-                    new SleepCommand(RobotConfig.sleepBeforeThirdParallelLauncher),
-                    this.launch(launchers[2], power)
-            );
-        }
-        return commands;
-    }
-
-    /**
-     * Old launchAll for posterity.
-     */
-    public Command launchAll_Old(Launcher.Power power) {
-        return launchAll_Old(power::power);
-    }
-
-    /**
-     * Old launchAll for posterity.
-     */
-    public Command launchAll_Old(DoubleSupplier power) {
-        return new ParallelCommandGroup(
-                launch(leftLauncher, power),
-                new SequentialCommandGroup(
-                        new SleepCommand(50),
-                        launch(midLauncher, power),
-                        launch(rightLauncher, power)
-                )
         );
     }
 
