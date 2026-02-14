@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.opmodes.teleops;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.util.Range;
 import com.seattlesolvers.solverslib.command.CommandScheduler;
 import com.seattlesolvers.solverslib.gamepad.GamepadEx;
 import com.seattlesolvers.solverslib.gamepad.GamepadKeys;
@@ -36,6 +37,18 @@ public class TwoControllers extends OpMode {
     private double driveFastSpeedLimit = 1.0;
     private double driveSlowSpeedLimit = 0.5;
     private GamepadControls gamepadControls;
+    // ------------------------------ //
+    double forward, strafe, rotate;
+    double kP = 0.019;
+    double error = 0;
+    double lastError = 0;
+    double goalX = 0; // offset here
+    double angleTolerance = 0.4;
+    double kD = 0.0001;
+    double curTime = 0;
+    double lastTime = 0;
+    double[] stepSizes = {0.1, 0.001, 0.0001};
+    int stepIndex = 1;
 
     @Override
     public void init() {
@@ -63,6 +76,11 @@ public class TwoControllers extends OpMode {
                     toggleDriveSlow = gamepadControls.getDriveSlowToggleReader();
                     toggleFieldCentric = gamepadControls.getFieldCentricToggleReader();
                 });
+    }
+
+    public void start() {
+        resetRuntime();
+        curTime = getRuntime();
     }
 
     @Override
@@ -101,6 +119,42 @@ public class TwoControllers extends OpMode {
                 telemetry.update();
             }
         }
+        // ------------- get mecanum drive inputs ---------------
+        forward = -gamepad1.left_stick_y;
+        strafe = gamepad1.left_stick_x;
+        rotate = gamepad1.right_stick_x;
+
+        // ---------------- get april tag info -----------------
+         camera.upadate();
+        AprilTagDetection id20 = camera.getTagBySpecificId(20);
+
+        if (gamepad1.left_trigger > 0.3) {
+            if (id20 != null) {
+                error = goalX - id20.ftcPose.bearing; // tx
+
+                if (Math.abs(error) < angleTolerance) {
+                    rotate = 0;
+                } else {
+                    double pTerm = error * kP;
+
+                    curTime = getRuntime();
+                    double dT = curTime - lastTime;
+                    double dTerm = ((error - lastError) / dT) * kD;
+
+                    rotate = Range.clip(pTerm + dTerm, -0.4, 0.4);
+
+                    lastError = error;
+                    lastTime = curTime;
+                }
+            } else {
+                lastTime = getRuntime();
+                lastError = 0;
+            }
+        } else {
+            lastError = 0;
+            lastTime = getRuntime();
+        }
+
     }
 
     public double getDriveSpeedLimit() {

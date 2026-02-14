@@ -13,12 +13,14 @@ import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 import org.firstinspires.ftc.vision.apriltag.AprilTagGameDatabase;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 public class LogitechCamera implements HardwareDevice {
     public final AprilTagProcessor processor;
     public final VisionPortal visionPortal;
+    private List<AprilTagDetection> detectedTags = new ArrayList<>();
 
     public LogitechCamera(HardwareMap hardwareMap, String id) {
         processor = new AprilTagProcessor.Builder()
@@ -48,6 +50,20 @@ public class LogitechCamera implements HardwareDevice {
     public List<AprilTagDetection> getDetections() {
         return processor.getDetections();
     }
+    public void upadate() {
+        detectedTags = processor.getDetections();
+    }
+
+    public AprilTagDetection getTagBySpecificId(int id) {
+        for (AprilTagDetection detection : detectedTags) {
+            if (detection.id == id){
+                return detection;
+            }
+        }
+        return null;
+    }
+
+
 
     @Override
     public void disable() {
