@@ -1,144 +1,54 @@
 package org.firstinspires.ftc.teamcode.opmodes.teleops;
 
+import com.bylazar.telemetry.JoinedTelemetry;
+import com.bylazar.telemetry.PanelsTelemetry;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.seattlesolvers.solverslib.command.CommandScheduler;
-import com.seattlesolvers.solverslib.command.ConditionalCommand;
-import com.seattlesolvers.solverslib.command.DeferredCommand;
-import com.seattlesolvers.solverslib.command.InstantCommand;
 import com.seattlesolvers.solverslib.gamepad.GamepadEx;
-import com.seattlesolvers.solverslib.gamepad.GamepadKeys;
-import com.seattlesolvers.solverslib.gamepad.ToggleButtonReader;
 
 import org.firstinspires.ftc.teamcode.Robot;
+import org.firstinspires.ftc.teamcode.RobotConfig;
+import org.firstinspires.ftc.teamcode.opmodes.controls.ControlsV2;
+import org.firstinspires.ftc.teamcode.opmodes.controls.GamepadControls;
 import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
-import org.firstinspires.ftc.teamcode.subsystems.Launcher;
-import org.firstinspires.ftc.teamcode.util.REVColorSensor;
 
 import java.util.Arrays;
 
-@TeleOp(name = "One Controller TeleOp - PS4", group = "Normal Controls")
+import lombok.Setter;
+
+@TeleOp(name = "One Controller TeleOp", group = "Normal Controls")
 public class OneController extends OpMode {
 
     private GamepadEx driver1;
-    private GamepadEx driver2;
     private Robot robot;
-    private CommandScheduler commandScheduler;
-    private ToggleButtonReader toggleDriveSlow;
-    private ToggleButtonReader toggleFieldCentric;
-    private boolean intakeState = false;
-    private REVColorSensor sensor1;
-    private REVColorSensor sensor2;
-    private double driveFastSpeedLimit = 1.0;
-    private double driveSlowSpeedLimit = 0.5;
-    private Launcher.Power launcherPower = Launcher.Power.SHORT;
-    private final Launcher.Power[] launcherPowers =
-            new Launcher.Power[] {Launcher.Power.LONG, Launcher.Power.MID, Launcher.Power.SHORT};
-    private int launcherState = 2;
 
-    // Long - red, Mid - blue, Close - green
-    private final int[][] gamepadColors = new int[][] {{255, 0, 0}, {0, 0, 255}, {0, 255, 0}};
+    private GamepadControls gamepadControls;
+    @Setter
+    private volatile double driveSpeedLimit = RobotConfig.driveFastSpeedLimit;
 
     @Override
     public void init() {
-        sensor1 = new REVColorSensor(hardwareMap, "rightSensor1");
-        sensor2 = new REVColorSensor(hardwareMap, "rightSensor2");
-
+        this.telemetry = new JoinedTelemetry(this.telemetry, PanelsTelemetry.INSTANCE.getFtcTelemetry());
         driver1 = new GamepadEx(gamepad1);
-        driver2 = new GamepadEx(gamepad2);
         robot = new Robot(hardwareMap);
-        commandScheduler = CommandScheduler.getInstance();
-
-        // With multi button toggles there is and enter before the .and
-        //  Drive Slow Toggle = Options + Left Bumper
-        toggleDriveSlow = new ToggleButtonReader(driver1.getGamepadButton(GamepadKeys.Button.OPTIONS)
-                .and(driver1.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER))::get);
-
-        // Drive Field Centric Toggle = Options + X
-        toggleFieldCentric = new ToggleButtonReader(driver1.getGamepadButton(GamepadKeys.Button.OPTIONS)
-                .and(driver1.getGamepadButton(GamepadKeys.Button.SQUARE))::get);
-
-        // Launcher Power Toggle - Right Bumper
-        driver1.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER)
-                .whenPressed(
-                        new InstantCommand(() -> {
-                            int index = ++launcherState % launcherPowers.length;
-                            launcherPower = launcherPowers[index];
-                            gamepad1.setLedColor(
-                                    gamepadColors[index][0],
-                                    gamepadColors[index][1],
-                                    gamepadColors[index][2],
-                                    5000);
-                        })
-                );
-
-        // Intake - Y
-        driver1.getGamepadButton(GamepadKeys.Button.TRIANGLE)
-                .whenPressed(new ConditionalCommand(
-                        robot.runIntake(),
-                        robot.stopIntake(),
-                        () -> {
-                            intakeState = !intakeState;
-                            return intakeState;
-                        }
-                ));
-
-        // Launchers - X
-        driver1.getGamepadButton(GamepadKeys.Button.SQUARE)
-                .whenPressed(new DeferredCommand(() -> robot.launchColor(Launcher.Color.PURPLE, launcherPower), null));
-        driver1.getGamepadButton(GamepadKeys.Button.CIRCLE)
-                .whenPressed(new DeferredCommand(() -> robot.launchColor(Launcher.Color.GREEN, launcherPower), null));
-        driver1.getGamepadButton(GamepadKeys.Button.CROSS)
-                .whenPressed(new DeferredCommand(() -> robot.launchAll(launcherPower), null));
-
-        driver1.getGamepadButton(GamepadKeys.Button.DPAD_LEFT)
-                .whenPressed(new DeferredCommand(() -> robot.launchLeft(launcherPower), null));
-        driver1.getGamepadButton(GamepadKeys.Button.DPAD_UP)
-                .whenPressed(new DeferredCommand(() -> robot.launchMid(launcherPower), null));
-        driver1.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT)
-                .whenPressed(new DeferredCommand(() -> robot.launchRight(launcherPower), null));
-
-        // Ascent Lifts - Dpad Up and Dpad Down
-//        driver1.getGamepadButton(GamepadKeys.Button.DPAD_UP).whileHeld(robot.raiseLifts());
-//        driver1.getGamepadButton(GamepadKeys.Button.DPAD_DOWN).whileHeld(robot.lowerLifts());
+        gamepadControls = new ControlsV2(driver1, driver1, robot);
     }
 
     @Override
     public void loop() {
         loopReadStuff();
 
-        double driveSpeedLimit = getDriveSpeedLimit();
-        Drivetrain.DriveState driveState = getDriveState();
-        robot.drive(driveState, driver1, driveSpeedLimit);
+        robot.drive(Drivetrain.DriveState.ROBOT_CENTRIC, driver1, driveSpeedLimit);
 
-        telemetry.addData("Right Sensor 1", sensor1.RGBtoHSV(sensor1.red(), sensor1.green(), sensor1.blue(), new float[3])[0]);
-        telemetry.addData("Right Sensor 2", sensor2.RGBtoHSV(sensor2.red(), sensor2.green(), sensor2.blue(), new float[3])[0]);
         telemetry.addData("Launcher Colors", Arrays.toString(robot.getLauncherColors()));
-        telemetry.addData("Launcher Power State", launcherPower.name());
+        telemetry.addData("Launcher Power State", RobotConfig.launcherPower.name());
         telemetry.update();
     }
 
-    public double getDriveSpeedLimit() {
-        if (toggleDriveSlow.getState()) {
-            return driveSlowSpeedLimit;
-        } else {
-            return driveFastSpeedLimit;
-        }
-    }
-
-    public Drivetrain.DriveState getDriveState() {
-        if (toggleFieldCentric.getState()) {
-            return Drivetrain.DriveState.FIELD_CENTRIC;
-        } else {
-            return Drivetrain.DriveState.ROBOT_CENTRIC;
-        }
-    }
-
     public void loopReadStuff() {
-        commandScheduler.run();
+        CommandScheduler.getInstance().run();
         driver1.readButtons();
-        driver2.readButtons();
-        toggleDriveSlow.readValue();
-        toggleFieldCentric.readValue();
     }
+
 }

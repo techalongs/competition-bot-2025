@@ -34,7 +34,7 @@ public class Robot {
 
     public Robot(HardwareMap hardwareMap) {
         drivetrain = new Drivetrain(hardwareMap, "frontLeft", "frontRight", "backLeft", "backRight");
-        intake = new Intake(hardwareMap, "intakeLift");
+        intake = new Intake(hardwareMap, "intakeLift", "intakeFork");
         leftLauncher = new Launcher(hardwareMap, "leftLauncher", "leftSensor", true);
         midLauncher = new Launcher(hardwareMap, "midLauncher", "midSensor", true);
         rightLauncher = new Launcher(hardwareMap, "rightLauncher", "rightSensor", false);
@@ -59,7 +59,35 @@ public class Robot {
     }
 
     public Command stopIntake() {
-        return new InstantCommand(intake::stop);
+        return new SequentialCommandGroup(
+                new InstantCommand(intake::stop),
+                turnFork()
+        );
+    }
+
+//    public Command turnFork() {
+//        return new DeferredCommand(() -> {
+//            if (rightLauncher.getColor() == null && leftLauncher.getColor() == null)
+//                return null;
+//
+//            if (midLauncher.getColor() != null && rightLauncher.getColor() == null)
+//                return new InstantCommand(intake::turnForkRight);
+//
+//            if (midLauncher.getColor() != null && leftLauncher.getColor() == null)
+//                return new InstantCommand(intake::turnForkLeft);
+//
+//            return null;
+//        }, null);
+//    }
+
+    public Command turnFork() {
+        return new SequentialCommandGroup(
+                new InstantCommand(intake::turnForkRight),
+                new SleepCommand(500),
+                new InstantCommand(intake::turnForkLeft),
+                new SleepCommand(500),
+                new InstantCommand(intake::resetFork)
+        );
     }
 
     private Command launch(Launcher launcher, Launcher.Power power) {
@@ -175,11 +203,9 @@ public class Robot {
 
     public Command launchAllParallel(DoubleSupplier power) {
         return new ParallelCommandGroup(
-                this.launch(leftLauncher, power),
-                this.launchWithDelay(midLauncher, power,
-                        RobotConfig.sleepBeforeSecondParallelLauncher),
-                this.launchWithDelay(rightLauncher, power,
-                        RobotConfig.sleepBeforeSecondParallelLauncher + RobotConfig.sleepBeforeThirdParallelLauncher)
+                launch(leftLauncher, power),
+                launch(midLauncher, power),
+                launch(rightLauncher, power)
         );
     }
 

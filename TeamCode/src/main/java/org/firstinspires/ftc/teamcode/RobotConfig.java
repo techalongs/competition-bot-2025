@@ -14,8 +14,8 @@ import java.util.HashMap;
 public class RobotConfig {
 
     // Launch Powers
-    public static volatile double launchPowerShort = 0.7;
-    public static volatile double launchPowerMid = 0.8;
+    public static volatile double launchPowerShort = 0.8;
+    public static volatile double launchPowerMid = 1;
     public static volatile double launchPowerLong = 1;
     // Default is Short -- Change BOTH of these if you change the default
     public static volatile double launchRawPower = launchPowerShort;
@@ -23,7 +23,7 @@ public class RobotConfig {
 
     // Launcher Timing
     // Sleep after hammer swings back for reload, before launch
-    public static volatile int sleepBeforeLaunch = 130;
+    public static volatile int sleepBeforeLaunch = 380;
     // Sleep after hammer hits the artifact
     public static volatile int sleepAfterLaunch = 210;
 
@@ -39,9 +39,13 @@ public class RobotConfig {
     public static volatile int sleepBeforeThirdParallelLauncher = 150;
 
     // These can be safely ignored unless you want to try different ideas
-    public static volatile double reloadPower = -1.0;
+    public static volatile double reloadPower = -0.7;
     public static volatile int sleepBeforeReload = 0;
     public static volatile int sleepBetweenSequentialLaunches = 0;
+
+    public static volatile double driveFastSpeedLimit = 1.0;
+    public static volatile double driveSlowSpeedLimit = 0.5;
+    public static volatile double driveSpeedLimit = driveFastSpeedLimit;
 
     public static HashMap<Launcher.Power, int[]> gamepadColors = new HashMap<Launcher.Power, int[]>() {{
         put(Launcher.Power.SHORT, new int[]{0,255,0});
