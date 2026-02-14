@@ -53,7 +53,6 @@ public class CloseRedAuto extends OpMode {
         telemetry.addData("y", follower.getPose().getY());
         telemetry.addData("heading", follower.getPose().getHeading());
         telemetry.update();
-        return null;
     }
 
     private void buildPaths() {

@@ -83,6 +83,5 @@ public class ConceptBlackboard extends OpMode {
             blackboard.put(ALLIANCE_KEY, "BLUE");
         }
         telemetry.addData("Alliance", blackboard.get(ALLIANCE_KEY));
-        return null;
     }
 }
