@@ -24,6 +24,7 @@ public class RobotCentricDrive extends OpMode {
     @Override
     public void loop() {
         robot.drive(Drivetrain.DriveState.ROBOT_CENTRIC, driver1, 0.5);
+        return null;
     }
 
 }

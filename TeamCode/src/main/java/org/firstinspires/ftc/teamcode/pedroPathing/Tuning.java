@@ -168,6 +168,7 @@ class LocalizationTest extends OpMode {
         telemetryM.update(telemetry);
 
         drawCurrentAndHistory();
+        return null;
     }
 }
 
@@ -217,6 +218,7 @@ class ForwardTuner extends OpMode {
         telemetryM.update(telemetry);
 
         drawCurrentAndHistory();
+        return null;
     }
 }
 
@@ -266,6 +268,7 @@ class LateralTuner extends OpMode {
         telemetryM.update(telemetry);
 
         drawCurrentAndHistory();
+        return null;
     }
 }
 
@@ -316,6 +319,7 @@ class TurnTuner extends OpMode {
         telemetryM.update(telemetry);
 
         drawCurrentAndHistory();
+        return null;
     }
 }
 
@@ -426,6 +430,7 @@ class ForwardVelocityTuner extends OpMode {
                 changes.add(message);
             }
         }
+        return null;
     }
 }
 
@@ -529,6 +534,7 @@ class LateralVelocityTuner extends OpMode {
                 changes.add(message);
             }
         }
+        return null;
     }
 }
 
@@ -641,6 +647,7 @@ class ForwardZeroPowerAccelerationTuner extends OpMode {
                 changes.add(message);
             }
         }
+        return null;
     }
 }
 
@@ -751,6 +758,7 @@ class LateralZeroPowerAccelerationTuner extends OpMode {
                 changes.add(message);
             }
         }
+        return null;
     }
 }
 
@@ -819,6 +827,7 @@ class TranslationalTuner extends OpMode {
 
         telemetryM.debug("Push the robot laterally to test the Translational PIDF(s).");
         telemetryM.update(telemetry);
+        return null;
     }
 }
 
@@ -890,6 +899,7 @@ class HeadingTuner extends OpMode {
 
         telemetryM.debug("Turn the robot manually to test the Heading PIDF(s).");
         telemetryM.update(telemetry);
+        return null;
     }
 }
 
@@ -968,6 +978,7 @@ class DriveTuner extends OpMode {
 
         telemetryM.debug("Driving forward?: " + forward);
         telemetryM.update(telemetry);
+        return null;
     }
 }
 
@@ -1035,6 +1046,7 @@ class Line extends OpMode {
 
         telemetryM.debug("Driving Forward?: " + forward);
         telemetryM.update(telemetry);
+        return null;
     }
 }
 
@@ -1108,6 +1120,7 @@ class CentripetalTuner extends OpMode {
 
         telemetryM.debug("Driving away from the origin along the curve?: " + forward);
         telemetryM.update(telemetry);
+        return null;
     }
 }
 
@@ -1139,6 +1152,7 @@ class Triangle extends OpMode {
         if (follower.atParametricEnd()) {
             follower.followPath(triangle, true);
         }
+        return null;
     }
 
     @Override
@@ -1229,6 +1243,7 @@ class Circle extends OpMode {
         if (follower.atParametricEnd()) {
             follower.followPath(circle);
         }
+        return null;
     }
 }
 
