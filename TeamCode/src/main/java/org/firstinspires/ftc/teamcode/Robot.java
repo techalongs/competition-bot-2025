@@ -34,7 +34,7 @@ public class Robot {
 
     public Robot(HardwareMap hardwareMap) {
         drivetrain = new Drivetrain(hardwareMap, "frontLeft", "frontRight", "backLeft", "backRight");
-        intake = new Intake(hardwareMap, "intakeLift", "intakeFork");
+        intake = new Intake(hardwareMap, "intakeLift", "rightFork", "leftFork");
         leftLauncher = new Launcher(hardwareMap, "leftLauncher", "leftSensor", true);
         midLauncher = new Launcher(hardwareMap, "midLauncher", "midSensor", true);
         rightLauncher = new Launcher(hardwareMap, "rightLauncher", "rightSensor", false);
@@ -65,30 +65,38 @@ public class Robot {
         );
     }
 
-//    public Command turnFork() {
-//        return new DeferredCommand(() -> {
-//            if (rightLauncher.getColor() == null && leftLauncher.getColor() == null)
-//                return null;
-//
-//            if (midLauncher.getColor() != null && rightLauncher.getColor() == null)
-//                return new InstantCommand(intake::turnForkRight);
-//
-//            if (midLauncher.getColor() != null && leftLauncher.getColor() == null)
-//                return new InstantCommand(intake::turnForkLeft);
-//
-//            return null;
-//        }, null);
-//    }
-
     public Command turnFork() {
-        return new SequentialCommandGroup(
-                new InstantCommand(intake::turnForkRight),
-                new SleepCommand(500),
-                new InstantCommand(intake::turnForkLeft),
-                new SleepCommand(500),
-                new InstantCommand(intake::resetFork)
-        );
+        return new DeferredCommand(() -> {
+            if (rightLauncher.getColor() == null && leftLauncher.getColor() == null)
+                return new InstantCommand();
+
+            if (midLauncher.getColor() != null && rightLauncher.getColor() == null)
+                return new SequentialCommandGroup(
+                        new InstantCommand(intake::turnRightFork),
+                        new SleepCommand(1000),
+                        new InstantCommand(intake::resetRightFork)
+                );
+
+            if (midLauncher.getColor() != null && leftLauncher.getColor() == null)
+                return new SequentialCommandGroup(
+                        new InstantCommand(intake::turnLeftFork),
+                        new SleepCommand(1500),
+                        new InstantCommand(intake::resetLeftFork)
+                );
+
+            return new InstantCommand();
+        }, null);
     }
+
+//    public Command turnFork() {
+//        return new SequentialCommandGroup(
+//                new InstantCommand(intake::turnForkRight),
+//                new SleepCommand(500),
+//                new InstantCommand(intake::turnForkLeft),
+//                new SleepCommand(500),
+//                new InstantCommand(intake::resetFork)
+//        );
+//    }
 
     private Command launch(Launcher launcher, DoubleSupplier power) {
         return new SequentialCommandGroup(
