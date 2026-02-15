@@ -59,16 +59,19 @@ public class FarBlueAuto extends OpMode {
     private void buildPaths() {
         paths = new PathChain[13];
 
-//        paths[0] = getPath(BluePosition.LONG_START, BluePosition.LONG_SHOOT); // Score Preload
-//        paths[1] = getPath(BluePosition.LONG_SHOOT, BluePosition.LONG_COLLECT_PREP); // Prep to collect
-//        paths[2] = getPath(BluePosition.LONG_COLLECT_PREP, BluePosition.LONG_COLLECT); // Collect
-//        paths[3] = getPath(BluePosition.LONG_COLLECT, BluePosition.LONG_SHOOT); // Score
-
-        paths[0] = getPath(BluePosition.LONG_START, BluePosition.SHORT_SHOOT);
-        paths[1] = getPath(BluePosition.SHORT_SHOOT, BluePosition.MID_COLLECT_PREP);
-        paths[2] = getPath(BluePosition.MID_COLLECT_PREP, BluePosition.MID_COLLECT);
-        paths[3] = getPath(BluePosition.MID_COLLECT, BluePosition.SHORT_SHOOT);
-        paths[4] = getPath(BluePosition.SHORT_SHOOT, BluePosition.LONG_END);
+        paths[0] = getPath(BluePosition.LONG_START, BluePosition.SHORT_SHOOT); // Score Preload
+        paths[1] = getPath(BluePosition.SHORT_SHOOT, BluePosition.SHORT_COLLECT_PREP); // Prep to collect
+        paths[2] = getPath(BluePosition.SHORT_COLLECT_PREP, BluePosition.SHORT_COLLECT); // Collect
+        paths[3] = getPath(BluePosition.SHORT_COLLECT, BluePosition.SHORT_SHOOT); // Score
+        paths[4] = getPath(BluePosition.SHORT_SHOOT, BluePosition.MID_COLLECT_PREP); // Prep to collect
+        paths[5] = getPath(BluePosition.MID_COLLECT_PREP, BluePosition.MID_COLLECT); // Collect
+        paths[6] = getPath(BluePosition.MID_COLLECT, BluePosition.DUMP_PREP); // Prep to dump
+        paths[7] = getPath(BluePosition.DUMP_PREP, BluePosition.DUMP); // Dump
+        paths[8] = getPath(BluePosition.DUMP, BluePosition.SHORT_SHOOT); // Score
+        paths[9] = getPath(BluePosition.SHORT_SHOOT, BluePosition.LONG_COLLECT_PREP); // Prep to collect
+        paths[10] = getPath(BluePosition.LONG_COLLECT_PREP, BluePosition.LONG_COLLECT); // Collect
+        paths[11] = getPath(BluePosition.LONG_COLLECT, BluePosition.SHORT_SHOOT); // Score
+        paths[12] = getPath(BluePosition.SHORT_SHOOT, BluePosition.SHORT_END); // Park
     }
 
     private PathChain getPath(BluePosition point1, BluePosition point2) {
