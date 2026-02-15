@@ -32,7 +32,7 @@ public class FarRedAuto extends OpMode {
         buildPaths();
         follower.setStartingPose(RedPosition.LONG_START.pos);
 
-        AutoCommand auto = new AutoCommand(robot, follower, paths, Launcher.Power.MID);
+        AutoCommand auto = new AutoCommand(robot, follower, paths, Launcher.Power.SHORT);
         auto.schedule();
 
         telemetry.addData("Status", "Initialized");

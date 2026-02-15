@@ -29,7 +29,7 @@ public class CloseRedAuto extends OpMode {
         buildPaths();
         follower.setStartingPose(RedPosition.SHORT_START.pos);
 
-        AutoCommand auto = new AutoCommand(new Robot(hardwareMap), follower, paths, Launcher.Power.MID);
+        AutoCommand auto = new AutoCommand(new Robot(hardwareMap), follower, paths, Launcher.Power.SHORT);
         auto.schedule();
 
         telemetry.addData("Status", "Initialized");
