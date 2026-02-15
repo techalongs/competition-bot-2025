@@ -26,7 +26,7 @@ public class RobotConfig {
 
     // Launcher Timing
     // Sleep after hammer swings back for reload, before launch
-    public static volatile int sleepBeforeLaunch = 380;
+    public static volatile int sleepBeforeLaunch = 150;
     // Sleep after hammer hits the artifact
     public static volatile int sleepAfterLaunch = 210;
 

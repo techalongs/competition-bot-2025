@@ -9,19 +9,22 @@ import com.seattlesolvers.solverslib.hardware.servos.ServoEx;
 
 public class Intake extends SubsystemBase {
     private final MotorEx intake;
-    private final ServoEx fork;
+    private final ServoEx rightFork;
+    private final ServoEx leftFork;
     private boolean running = false;
 
-    public Intake(HardwareMap hardwareMap, String intakeName, String forkName) {
+    public Intake(HardwareMap hardwareMap, String intakeName, String rightForkName, String leftForkName) {
         intake = new MotorEx(hardwareMap, intakeName);
-        fork = new ServoEx(hardwareMap, forkName);
+        rightFork = new ServoEx(hardwareMap, rightForkName);
+        leftFork = new ServoEx(hardwareMap, leftForkName);
 
         intake.setInverted(false);
         intake.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
         intake.stopAndResetEncoder();
         intake.setRunMode(Motor.RunMode.RawPower);
 
-        fork.setInverted(false);
+        rightFork.setInverted(false);
+        leftFork.setInverted(true);
     }
 
     public void run() {
@@ -43,15 +46,18 @@ public class Intake extends SubsystemBase {
         return running;
     }
 
-    public void turnForkRight() {
-        fork.set(1);
+    public void turnLeftFork() {
+        leftFork.set(0);
+    }
+    public void turnRightFork() {
+        rightFork.set(0.6);
     }
 
-    public void turnForkLeft() {
-        fork.set(0);
+    public void resetLeftFork() {
+        leftFork.set(0.6);
     }
 
-    public void resetFork() {
-        fork.set(0.4);
+    public void resetRightFork() {
+        rightFork.set(0);
     }
 }
