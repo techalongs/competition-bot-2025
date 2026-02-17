@@ -29,7 +29,7 @@ public class CloseBlueAuto extends OpMode {
         buildPaths();
         follower.setStartingPose(BluePosition.SHORT_START.pos);
 
-        AutoCommand auto = new AutoCommand(new Robot(hardwareMap), follower, paths, Launcher.Power.MID);
+        AutoCommand auto = new AutoCommand(new Robot(hardwareMap), follower, paths, Launcher.Power.SHORT);
         auto.schedule();
 
         telemetry.addData("Status", "Initialized");
@@ -62,9 +62,9 @@ public class CloseBlueAuto extends OpMode {
         paths[3] = getPath(BluePosition.SHORT_COLLECT, BluePosition.SHORT_SHOOT); // Score
         paths[4] = getPath(BluePosition.SHORT_SHOOT, BluePosition.MID_COLLECT_PREP); // Prep to collect
         paths[5] = getPath(BluePosition.MID_COLLECT_PREP, BluePosition.MID_COLLECT); // Collect
-        paths[6] = getPath(BluePosition.MID_COLLECT, BluePosition.DUMP_PREP); // Prep to dump
-        paths[7] = getPath(BluePosition.DUMP_PREP, BluePosition.DUMP); // Dump
-        paths[8] = getPath(BluePosition.DUMP, BluePosition.SHORT_SHOOT); // Score
+//        paths[6] = getPath(BluePosition.MID_COLLECT, BluePosition.DUMP_PREP); // Prep to dump
+//        paths[7] = getPath(BluePosition.DUMP_PREP, BluePosition.DUMP); // Dump
+        paths[8] = getPath(BluePosition.MID_COLLECT, BluePosition.SHORT_SHOOT); // Score
         paths[9] = getPath(BluePosition.SHORT_SHOOT, BluePosition.LONG_COLLECT_PREP); // Prep to collect
         paths[10] = getPath(BluePosition.LONG_COLLECT_PREP, BluePosition.LONG_COLLECT); // Collect
         paths[11] = getPath(BluePosition.LONG_COLLECT, BluePosition.SHORT_SHOOT); // Score
