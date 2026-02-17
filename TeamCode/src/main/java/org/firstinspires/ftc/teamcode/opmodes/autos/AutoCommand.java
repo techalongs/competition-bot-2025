@@ -26,7 +26,7 @@ public class AutoCommand extends SequentialCommandGroup {
                         robot.runIntake(),
                         new InstantCommand(() -> follower.setMaxPower(0.3)),
                         new FollowPathCommand(follower, paths[2], true),
-                        new SleepCommand(2000),
+                        new SleepCommand(1000),
                         robot.stopIntake(),
                         new InstantCommand(() -> follower.setMaxPower(1)),
 
@@ -40,7 +40,7 @@ public class AutoCommand extends SequentialCommandGroup {
                         robot.runIntake(),
                         new InstantCommand(() -> follower.setMaxPower(0.3)),
                         new FollowPathCommand(follower, paths[5], true),
-                        new SleepCommand(2000),
+                        new SleepCommand(1000),
                         robot.stopIntake(),
                         new InstantCommand(() -> follower.setMaxPower(1)),
 
@@ -60,7 +60,7 @@ public class AutoCommand extends SequentialCommandGroup {
                         robot.runIntake(), // Collect a row
                         new InstantCommand(() -> follower.setMaxPower(0.3)),
                         new FollowPathCommand(follower, paths[10], true),
-                        new SleepCommand(2000),
+                        new SleepCommand(1000),
                         robot.stopIntake(),
                         new InstantCommand(() -> follower.setMaxPower(1)),
 
