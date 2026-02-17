@@ -44,11 +44,11 @@ public class AutoCommand extends SequentialCommandGroup {
                         robot.stopIntake(),
                         new InstantCommand(() -> follower.setMaxPower(1)),
 
-                        // Dump
-                        new FollowPathCommand(follower, paths[6], false),
-                        new SleepCommand(500),
-                        new FollowPathCommand(follower, paths[7], true),
-                        new SleepCommand(1000),
+//                        // Dump
+//                        new FollowPathCommand(follower, paths[6], false),
+//                        new SleepCommand(500),
+//                        new FollowPathCommand(follower, paths[7], true),
+//                        new SleepCommand(1000),
 
                         // Score second row
                         new FollowPathCommand(follower, paths[8], true),
