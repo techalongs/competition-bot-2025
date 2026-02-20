@@ -24,7 +24,7 @@ public class Intake extends SubsystemBase {
         intake.setRunMode(Motor.RunMode.RawPower);
 
         rightFork.setInverted(false);
-        leftFork.setInverted(true);
+        leftFork.setInverted(false);
     }
 
     public void run() {
