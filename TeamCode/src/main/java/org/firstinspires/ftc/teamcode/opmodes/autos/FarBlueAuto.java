@@ -2,7 +2,6 @@ package org.firstinspires.ftc.teamcode.opmodes.autos;
 
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.BezierLine;
-import com.pedropathing.geometry.Pose;
 import com.pedropathing.paths.PathChain;
 import com.pedropathing.util.Timer;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -10,8 +9,10 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.seattlesolvers.solverslib.command.CommandScheduler;
 
 import org.firstinspires.ftc.teamcode.Robot;
+import org.firstinspires.ftc.teamcode.RobotConfig;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 import org.firstinspires.ftc.teamcode.subsystems.Launcher;
+import org.firstinspires.ftc.teamcode.util.TeamColor;
 
 @Autonomous(name = "Far Blue Auto", group = "Autos")
 public class FarBlueAuto extends OpMode {
@@ -34,6 +35,8 @@ public class FarBlueAuto extends OpMode {
 
         AutoCommand auto = new AutoCommand(robot, follower, paths, Launcher.Power.SHORT);
         auto.schedule();
+
+        RobotConfig.setTeamColor(TeamColor.BLUE);
 
         telemetry.addData("Status", "Initialized");
         telemetry.update();

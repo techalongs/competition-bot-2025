@@ -10,8 +10,7 @@ import com.seattlesolvers.solverslib.gamepad.GamepadKeys;
 import org.firstinspires.ftc.teamcode.Robot;
 import org.firstinspires.ftc.teamcode.RobotConfig;
 import org.firstinspires.ftc.teamcode.subsystems.Launcher;
-
-import java.util.function.DoubleConsumer;
+import org.firstinspires.ftc.teamcode.util.TeamColor;
 
 /**
  *
@@ -96,6 +95,23 @@ public class ControlsV2 implements GamepadControls {
             driver2.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER)
                     .whenPressed(new DeferredCommand(() -> robot.launchColor(Launcher.Color.GREEN, RobotConfig::getLaunchRawPower), null));
         }
+
+        // Switch team color when pressing the touchpad.
+        // When set to blue, the LED changes to blue and you get one rumble.
+        // When set to red, the LED changes to red and you get two rumbles.
+        driver2.getGamepadButton(GamepadKeys.Button.TOUCHPAD).toggleWhenActive(
+                () -> {
+                    RobotConfig.setTeamColor(TeamColor.BLUE);
+                    driver2.gamepad.setLedColor(0, 0, 1, 5000);
+                    driver2.gamepad.rumbleBlips(1);
+                },
+                () -> {
+                    RobotConfig.setTeamColor(TeamColor.RED);
+                    driver2.gamepad.setLedColor(1, 0, 0, 5000);
+                    driver2.gamepad.rumbleBlips(2);
+                }
+        );
+
     }
 
     public String toString() {

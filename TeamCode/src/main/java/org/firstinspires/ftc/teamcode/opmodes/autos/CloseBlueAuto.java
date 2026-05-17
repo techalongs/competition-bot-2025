@@ -9,8 +9,10 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.seattlesolvers.solverslib.command.CommandScheduler;
 
 import org.firstinspires.ftc.teamcode.Robot;
+import org.firstinspires.ftc.teamcode.RobotConfig;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 import org.firstinspires.ftc.teamcode.subsystems.Launcher;
+import org.firstinspires.ftc.teamcode.util.TeamColor;
 
 @Autonomous(name = "Close Blue Auto", group = "Autos")
 public class CloseBlueAuto extends OpMode {
@@ -31,6 +33,8 @@ public class CloseBlueAuto extends OpMode {
 
         AutoCommand auto = new AutoCommand(new Robot(hardwareMap), follower, paths, Launcher.Power.MID);
         auto.schedule();
+
+        RobotConfig.setTeamColor(TeamColor.BLUE);
 
         telemetry.addData("Status", "Initialized");
         telemetry.update();

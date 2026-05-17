@@ -12,7 +12,7 @@ import com.seattlesolvers.solverslib.gamepad.GamepadEx;
 import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.Launcher;
-import org.firstinspires.ftc.teamcode.util.LogitechCamera;
+import org.firstinspires.ftc.teamcode.subsystems.WebcamVision;
 import org.firstinspires.ftc.teamcode.util.SleepCommand;
 
 import java.util.ArrayList;
@@ -29,7 +29,7 @@ public class Robot {
     private final Launcher midLauncher;
     private final Launcher rightLauncher;
     private final List<Subsystem> allLaunchers = new ArrayList<>();
-    private final LogitechCamera camera;
+    private final WebcamVision vision;
 //    private final Lifter lifts;
 
     public Robot(HardwareMap hardwareMap) {
@@ -41,7 +41,7 @@ public class Robot {
         allLaunchers.add(leftLauncher);
         allLaunchers.add(midLauncher);
         allLaunchers.add(rightLauncher);
-        camera = new LogitechCamera(hardwareMap, "Webcam 1");
+        vision = new WebcamVision(hardwareMap, "Webcam 1");
 //        lifts = new Lifter(hardwareMap, "leftLift", "rightLift");
 //        lifts.setDefaultCommand(new PerpetualCommand(new RunCommand(lifts::stop, lifts)));
     }

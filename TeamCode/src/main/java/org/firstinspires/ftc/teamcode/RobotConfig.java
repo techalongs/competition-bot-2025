@@ -1,8 +1,14 @@
 package org.firstinspires.ftc.teamcode;
 
+import android.util.Size;
+
+import androidx.annotation.Nullable;
+
 import com.bylazar.configurables.annotations.Configurable;
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 import org.firstinspires.ftc.teamcode.subsystems.Launcher;
+import org.firstinspires.ftc.teamcode.util.TeamColor;
 
 import java.util.HashMap;
 
@@ -49,6 +55,29 @@ public class RobotConfig {
     public static volatile double driveFastSpeedLimit = 1.0;
     public static volatile double driveSlowSpeedLimit = 0.5;
     public static volatile double driveSpeedLimit = driveFastSpeedLimit;
+
+    // Vision
+    // These intrinsics are tied to the resolution.
+    public static Size webcamResolution = new Size(1920, 1080);
+    public static double webcamLensIntrinsicsFx1920x1080 = 1440.381342;
+    public static double webcamLensIntrinsicsFy1920x1080 = 1435.602662;
+    public static double webcamLensIntrinsicsCx1920x1080 = 959.8105025;
+    public static double webcamLensIntrinsicsCy1920x1080 = 525.3844601;
+
+    // Game
+    private static volatile TeamColor teamColor;
+
+    public static void setTeamColor(TeamColor color) {
+        teamColor = color;
+        OpMode.blackboard.put(TeamColor.class.getSimpleName(), teamColor);
+    }
+
+    public static @Nullable TeamColor getTeamColor() {
+        if (teamColor == null) {
+            teamColor = (TeamColor) OpMode.blackboard.get(TeamColor.class.getSimpleName());
+        }
+        return teamColor;
+    }
 
     public static HashMap<Launcher.Power, int[]> gamepadColors = new HashMap<Launcher.Power, int[]>() {{
         put(Launcher.Power.SHORT, new int[]{0,255,0});
