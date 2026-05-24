@@ -54,7 +54,7 @@ public class CloseBlueAuto extends OpMode {
     }
 
     private void buildPaths() {
-        paths = new PathChain[13];
+        paths = new PathChain[14];
 
         paths[0] = getPath(BluePosition.SHORT_START, BluePosition.SHORT_SHOOT); // Score Preload
         paths[1] = getPath(BluePosition.SHORT_SHOOT, BluePosition.SHORT_COLLECT_PREP); // Prep to collect
@@ -64,11 +64,12 @@ public class CloseBlueAuto extends OpMode {
         paths[5] = getPath(BluePosition.MID_COLLECT_PREP, BluePosition.MID_COLLECT); // Collect
 //        paths[6] = getPath(BluePosition.MID_COLLECT, BluePosition.DUMP_PREP); // Prep to dump
 //        paths[7] = getPath(BluePosition.DUMP_PREP, BluePosition.DUMP); // Dump
-        paths[8] = getPath(BluePosition.MID_COLLECT, BluePosition.SHORT_SHOOT); // Score
-        paths[9] = getPath(BluePosition.SHORT_SHOOT, BluePosition.LONG_COLLECT_PREP); // Prep to collect
-        paths[10] = getPath(BluePosition.LONG_COLLECT_PREP, BluePosition.LONG_COLLECT); // Collect
-        paths[11] = getPath(BluePosition.LONG_COLLECT, BluePosition.SHORT_SHOOT); // Score
-        paths[12] = getPath(BluePosition.SHORT_SHOOT, BluePosition.SHORT_END); // Park
+        paths[8] = getPath(BluePosition.MID_COLLECT, BluePosition.MID_COLLECT_PREP); // Back up
+        paths[9] = getPath(BluePosition.MID_COLLECT_PREP, BluePosition.SHORT_SHOOT); // Score
+        paths[10] = getPath(BluePosition.SHORT_SHOOT, BluePosition.LONG_COLLECT_PREP); // Prep to collect
+        paths[11] = getPath(BluePosition.LONG_COLLECT_PREP, BluePosition.LONG_COLLECT); // Collect
+        paths[12] = getPath(BluePosition.LONG_COLLECT, BluePosition.SHORT_SHOOT); // Score
+        paths[13] = getPath(BluePosition.SHORT_SHOOT, BluePosition.SHORT_END); // Park
     }
 
     private PathChain getPath(BluePosition point1, BluePosition point2) {

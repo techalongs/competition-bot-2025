@@ -50,26 +50,27 @@ public class AutoCommand extends SequentialCommandGroup {
 //                        new SleepCommand(1000),
 
                         // Score second row
-                        new FollowPathCommand(follower, paths[8], true),
+                        new FollowPathCommand(follower, paths[8], false),
+                        new FollowPathCommand(follower, paths[9], true),
                         robot.stopIntake(),
                         new SleepCommand(500),
                         robot.launchAll(power.power),
 
                         // Collect third row
-                        new FollowPathCommand(follower, paths[9], false),
+                        new FollowPathCommand(follower, paths[10], false),
                         robot.runIntake(), // Collect a row
                         new InstantCommand(() -> follower.setMaxPower(COLLECT_SPEED)),
-                        new FollowPathCommand(follower, paths[10], true),
+                        new FollowPathCommand(follower, paths[11], true),
                         new InstantCommand(() -> follower.setMaxPower(1)),
 
                         // Score third row
-                        new FollowPathCommand(follower, paths[11], true),
+                        new FollowPathCommand(follower, paths[12], true),
                         robot.stopIntake(),
                         new SleepCommand(500),
                         robot.launchAll(power.power),
 
                         // Park
-                        new FollowPathCommand(follower, paths[12], true)
+                        new FollowPathCommand(follower, paths[13], true)
                 )
         );
     }
